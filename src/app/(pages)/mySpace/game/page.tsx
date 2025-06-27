@@ -490,7 +490,7 @@ export default function ADHDMemoryGame() {
                           >
                             {/* Back of tile (hidden state) */}
                             <div className="absolute inset-0 w-full h-full backface-hidden ">
-                              <div className="w-full h-full bg-muted rounded-2xl border-2 border-border flex items-center justify-center shadow-lg hover:bg-muted/80 transition-colors bg-[#b2e1eb]">
+                              <div className="w-full h-full bg-muted rounded-2xl border-2 border-border flex items-center justify-center shadow-lg hover:bg-muted/80 transition-colors bg-[#8acfd1]">
                                 <div className="w-8 h-8 bg-muted-foreground/20 rounded-full "></div>
                               </div>
                             </div>
