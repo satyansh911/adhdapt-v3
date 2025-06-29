@@ -9,6 +9,14 @@ import { Brain, Gamepad2, Trophy, Star, Zap, Target, Menu, Home, Grid3X3, Puzzle
 import TileMemoryGame from "./tile-memory-game/page"
 import GameIcon from "@/components/ui/gamification"
 import ArcadeIcon from "@/components/ui/ArcadeIcon"
+import TrophyIcon from "@/components/ui/trophyIcon"
+import LightningIcon from "@/components/ui/lightningIcon"
+import StarIcon from "@/components/ui/starIcon"
+import TileIcon from "@/components/ui/tileGame"
+import ScienceIcon from "@/components/ui/scienceIcon"
+import EngageIcon from "@/components/ui/engagingIcon"
+import FocusFlowIcon from "@/components/ui/focusFlowIcon"
+import MindMazeIcon from "@/components/ui/mindMazeIcon"
 
 type GameType = "welcome" | "tile-memory" | "coming-soon-1" | "coming-soon-2"
 
@@ -29,8 +37,8 @@ export default function GameHub() {
     {
       id: "tile-memory" as GameType,
       name: "TileTango",
-      description: "Match tiles and boost your memory",
-      icon: Grid3X3,
+      description: "Match tiles & boost your memory",
+      icon: TileIcon,
       color: "bg-pink-500",
       available: true,
       difficulty: "Medium",
@@ -40,7 +48,7 @@ export default function GameHub() {
       id: "coming-soon-1" as GameType,
       name: "Focus Flow",
       description: "Attention training exercises",
-      icon: Target,
+      icon: FocusFlowIcon,
       color: "bg-blue-500",
       available: false,
       difficulty: "Easy",
@@ -50,7 +58,7 @@ export default function GameHub() {
       id: "coming-soon-2" as GameType,
       name: "Mind Maze",
       description: "Navigate complex puzzles",
-      icon: Puzzle,
+      icon: MindMazeIcon,
       color: "bg-green-500",
       available: false,
       difficulty: "Hard",
@@ -82,25 +90,25 @@ export default function GameHub() {
 
         {/* Stats Overview */}
         <div className="grid md:grid-cols-3 gap-6 mb-12 animate-slide-in">
-          <Card className="border shadow-lg rounded-3xl bg-gradient-to-br from-blue-50 to-blue-100 dark:from-blue-950 dark:to-blue-900">
+          <Card className="border rounded-3xl bg-[#fdedc9] shadow-[5px_5px_0px_0px_#d04f99] border-[#d04f99]">
             <CardContent className="p-6 text-center">
-              <Trophy className="w-12 h-12 text-blue-600 mx-auto mb-4" />
-              <h3 className="text-2xl font-bold text-blue-800 dark:text-blue-200">3</h3>
-              <p className="text-blue-600 dark:text-blue-300 font-medium">Games Available</p>
+              <TrophyIcon/>
+              <h3 className="text-2xl font-bold text-[#d04f99]">3</h3>
+              <p className="text-[#d04f99] font-medium">Games Available</p>
             </CardContent>
           </Card>
-          <Card className="border shadow-lg rounded-3xl bg-gradient-to-br from-green-50 to-green-100 dark:from-green-950 dark:to-green-900">
+          <Card className="border rounded-3xl bg-[#fdedc9] shadow-[5px_5px_0px_0px_#d04f99] border-[#d04f99]">
             <CardContent className="p-6 text-center">
-              <Zap className="w-12 h-12 text-green-600 mx-auto mb-4" />
-              <h3 className="text-2xl font-bold text-green-800 dark:text-green-200">∞</h3>
-              <p className="text-green-600 dark:text-green-300 font-medium">Skill Building</p>
+              <LightningIcon/>
+              <h3 className="text-2xl font-bold text-[#d04f99]">&infin;</h3>
+              <p className="text-[#d04f99] font-medium">Skill Building</p>
             </CardContent>
           </Card>
-          <Card className="border shadow-lg rounded-3xl bg-gradient-to-br from-purple-50 to-purple-100 dark:from-purple-950 dark:to-purple-900">
+          <Card className="border rounded-3xl bg-[#fdedc9] shadow-[5px_5px_0px_0px_#d04f99] border-[#d04f99]">
             <CardContent className="p-6 text-center">
-              <Star className="w-12 h-12 text-purple-600 mx-auto mb-4" />
-              <h3 className="text-2xl font-bold text-purple-800 dark:text-purple-200">Fun</h3>
-              <p className="text-purple-600 dark:text-purple-300 font-medium">Learning Style</p>
+              <StarIcon/>
+              <h3 className="text-2xl font-bold text-[#d04f99]">Fun</h3>
+              <p className="text-[#d04f99] font-medium">Learning Style</p>
             </CardContent>
           </Card>
         </div>
@@ -114,7 +122,7 @@ export default function GameHub() {
               return (
                 <Card
                   key={game.id}
-                  className={`border shadow-lg rounded-3xl transition-all duration-300 hover:shadow-xl hover:scale-105 cursor-pointer animate-slide-in ${
+                  className={`border bg-[#fdedc9] shadow-[5px_5px_0px_0px_#d04f99] border-[#d04f99] rounded-3xl transition-all duration-300 hover:shadow-xl hover:scale-105 cursor-pointer animate-slide-in ${
                     !game.available ? "opacity-60" : ""
                   }`}
                   style={{ animationDelay: `${index * 0.1}s` }}
@@ -147,7 +155,7 @@ export default function GameHub() {
                       </div>
                     </div>
                     <Button
-                      className="w-full rounded-2xl font-semibold"
+                      className="w-full rounded-2xl font-semibold bg-[#8acfd1] hover:bg-[#ffffff] shadow-[5px_5px_0px_0px_#d04f99] border-[#d04f99]"
                       disabled={!game.available}
                       onClick={(e) => {
                         e.stopPropagation()
@@ -165,20 +173,28 @@ export default function GameHub() {
 
         {/* Features Section */}
         <div className="mt-16 animate-fade-in-up" style={{ animationDelay: "0.5s" }}>
-          <h2 className="text-3xl font-bold text-center mb-8 text-foreground">Why ADHDapt Arcade?</h2>
-          <div className="grid md:grid-cols-2 gap-8">
-            <div className="text-center">
+          <div className="mb-5">
+                <div className="flex items-center justify-center gap-4">
+                    <h1 className="text-5xl md:text-6xl font-bold text-foreground">Why ADHDapt?</h1>
+                </div>
+                <div className="h-5">
+                    <h1 className="font-bold relative tracking-[0.6em] left-[570px] -top-2">ARCA</h1>
+                    <h1 className="font-bold tracking-[0.6em] relative left-[670px] -top-8">DE</h1>
+                </div>
+            </div>
+          <div className="grid md:grid-cols-2 gap-3">
+            <div className="text-center mb-10">
               <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4">
-                <Brain className="w-8 h-8 text-primary" />
+                <ScienceIcon/>
               </div>
               <h3 className="text-xl font-bold mb-2">Science-Based</h3>
               <p className="text-muted-foreground">
                 Games designed with cognitive science principles to effectively train attention and memory skills.
               </p>
             </div>
-            <div className="text-center">
+            <div className="text-center mb-10">
               <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4">
-                <Gamepad2 className="w-8 h-8 text-primary" />
+                <EngageIcon/>
               </div>
               <h3 className="text-xl font-bold mb-2">Engaging & Fun</h3>
               <p className="text-muted-foreground">
@@ -238,7 +254,7 @@ export default function GameHub() {
     <div className="flex min-h-screen bg-background">
       {/* Sidebar */}
       <div
-        className={`${sidebarOpen ? "w-80" : "w-16"} transition-all duration-300 bg-card border-r border-border flex flex-col animate-slide-in`}
+        className={`${sidebarOpen ? "w-80" : "w-16"} transition-all duration-300 border-r border-border flex flex-col animate-slide-in bg-[#f8d8ea]`}
       >
         {/* Sidebar Header */}
         <div className="p-4 border-b border-border">
@@ -286,13 +302,13 @@ export default function GameHub() {
                 <Button
                   key={game.id}
                   variant={currentGame === game.id ? "default" : "ghost"}
-                  className={`w-full justify-start rounded-2xl ${!sidebarOpen ? "px-2" : ""} ${
+                  className={`w-full justify-start rounded-2xl ${!sidebarOpen ? "px-0" : "px-2"} ${
                     !game.available ? "opacity-50" : ""
                   }`}
                   onClick={() => game.available && setCurrentGame(game.id)}
                   disabled={!game.available}
                 >
-                  <IconComponent className="w-5 h-5" />
+                  <IconComponent className="relative left-10 w-5 h-5" />
                   {sidebarOpen && (
                     <div className="ml-3 flex-1 text-left">
                       <div className="flex items-center justify-between">
