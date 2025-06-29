@@ -406,9 +406,9 @@ export default function ADHDMemoryGame() {
 
         <div className="grid lg:grid-cols-4 gap-8">
           {/* Game Board */}
-          <div className="lg:col-span-3 animate-slide-in ">
-            <Card className="border shadow-lg rounded-3xl">
-              <CardHeader className="bg-primary text-primary-foreground rounded-t-3xl bg-[#fdedc9]">
+          <div className="lg:col-span-3 animate-slide-in">
+            <Card className="border shadow-[5px_5px_0px_0px_#d04f99] border-[#d04f99] rounded-3xl bg-[#fdedc9]">
+              <CardHeader className="bg-primary text-[#FFFFFF] rounded-t-3xl bg-[#d04f99]">
                 <div className="flex flex-wrap items-center justify-between gap-4   ">
                   <CardTitle className="flex items-center gap-2 text-xl font-semibold">
                     <Trophy className="w-6 h-6" />
@@ -490,7 +490,7 @@ export default function ADHDMemoryGame() {
                           >
                             {/* Back of tile (hidden state) */}
                             <div className="absolute inset-0 w-full h-full backface-hidden ">
-                              <div className="w-full h-full bg-muted rounded-2xl border-2 border-border flex items-center justify-center shadow-lg hover:bg-muted/80 transition-colors bg-[#8acfd1]">
+                              <div className="w-full h-full rounded-2xl border-2 border-border flex items-center justify-center shadow-lg transition-colors bg-[#8acfd1]">
                                 <div className="w-8 h-8 bg-muted-foreground/20 rounded-full "></div>
                               </div>
                             </div>
@@ -531,8 +531,8 @@ export default function ADHDMemoryGame() {
           {/* Sidebar */}
           <div className="lg:col-span-1 space-y-6">
             {/* Current Session Stats */}
-            <Card className="border shadow-lg animate-slide-in-right rounded-3xl">
-              <CardHeader className="bg-primary text-primary-foreground rounded-t-3xl bg-[#fdedc9]">
+            <Card className="border animate-slide-in-right rounded-3xl shadow-[5px_5px_0px_0px_#d04f99] border-[#d04f99] bg-[#fdedc9]">
+              <CardHeader className="bg-primary text-[#ffffff] rounded-t-3xl bg-[#d04f99]">
                 <CardTitle className="text-sm flex items-center gap-2 font-semibold">
                   <Star className="w-4 h-4" />
                   Current Session
@@ -563,8 +563,8 @@ export default function ADHDMemoryGame() {
             </Card>
 
             {/* Leaderboard */}
-            <Card className="border shadow-lg animate-slide-in-right rounded-3xl" style={{ animationDelay: "0.1s" }}>
-              <CardHeader className="bg-primary text-primary-foreground rounded-t-3xl bg-[#fdedc9]">
+            <Card className="border animate-slide-in-right rounded-3xl shadow-[5px_5px_0px_0px_#d04f99] border-[#d04f99] bg-[#fdedc9]" style={{ animationDelay: "0.1s" }}>
+              <CardHeader className="bg-primary text-[#ffffff] rounded-t-3xl bg-[#d04f99]">
                 <CardTitle className="flex items-center gap-2 font-semibold">
                   <Trophy className="w-5 h-5" />
                   Leaderboard
@@ -621,8 +621,8 @@ export default function ADHDMemoryGame() {
             </Card>
 
             {/* Instructions */}
-            <Card className="border shadow-lg animate-slide-in-right rounded-3xl" style={{ animationDelay: "0.2s" }}>
-              <CardHeader className="bg-primary text-primary-foreground rounded-t-3xl bg-[#fdedc9]">
+            <Card className="border animate-slide-in-right rounded-3xl shadow-[5px_5px_0px_0px_#d04f99] border-[#d04f99] bg-[#fdedc9]" style={{ animationDelay: "0.2s" }}>
+              <CardHeader className="bg-primary text-[#ffffff] rounded-t-3xl bg-[#d04f99]">
                 <CardTitle className="text-sm font-semibold">How to Play</CardTitle>
               </CardHeader>
               <CardContent className="text-xs space-y-2 p-4 font-medium">
