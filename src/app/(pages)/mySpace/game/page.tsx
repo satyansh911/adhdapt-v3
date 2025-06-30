@@ -17,6 +17,8 @@ import ScienceIcon from "@/components/ui/scienceIcon"
 import EngageIcon from "@/components/ui/engagingIcon"
 import FocusFlowIcon from "@/components/ui/focusFlowIcon"
 import MindMazeIcon from "@/components/ui/mindMazeIcon"
+import HomeIcon from "@/components/ui/homeIcon"
+import SidebarIcon from "@/components/ui/sidebarLogo"
 
 type GameType = "welcome" | "tile-memory" | "coming-soon-1" | "coming-soon-2"
 
@@ -257,17 +259,22 @@ export default function GameHub() {
         className={`${sidebarOpen ? "w-80" : "w-16"} transition-all duration-300 border-r border-border flex flex-col animate-slide-in bg-[#f8d8ea]`}
       >
         {/* Sidebar Header */}
-        <div className="p-4 border-b border-border">
+        <div className="p-2 border-b border-border">
           <div className="flex items-center justify-between">
             {sidebarOpen && (
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 bg-primary/10 rounded-full flex items-center justify-center">
-                  <Gamepad2 className="w-5 h-5 text-primary" />
+                <div className="relative left-4 w-10 h-10 bg-primary/10 rounded-full flex items-center justify-center">
+                  <SidebarIcon/>
                 </div>
-                <div>
-                  <h2 className="font-bold text-foreground">ADHDapt</h2>
-                  <p className="text-xs text-muted-foreground">Arcade</p>
+                <div className="relative left-4 top-2">
+                <div className="flex items-center justify-center gap-4">
+                    <h1 className="text-lg font-bold text-foreground">ADHDapt</h1>
                 </div>
+                <div className="h-5">
+                    <h1 className="text-[0.5rem] font-bold relative tracking-[0.6em] left-[25px] -top-2">ARCA</h1>
+                    <h1 className="text-[0.5rem] font-bold tracking-[0.6em] relative left-[72px] -top-5">DE</h1>
+                </div>
+            </div>
               </div>
             )}
             <Button variant="ghost" size="sm" onClick={() => setSidebarOpen(!sidebarOpen)} className="rounded-full">
@@ -282,10 +289,10 @@ export default function GameHub() {
             {/* Home */}
             <Button
               variant={currentGame === "welcome" ? "default" : "ghost"}
-              className={`w-full justify-start rounded-2xl ${!sidebarOpen ? "px-2" : ""}`}
+              className={`justify-start rounded-3xl ${!sidebarOpen ? "px-1.5 w-[40px]" : "w-full relative left-2 px-1.5"}`}
               onClick={() => setCurrentGame("welcome")}
             >
-              <Home className="w-5 h-5" />
+              <HomeIcon/>
               {sidebarOpen && <span className="ml-3">Home</span>}
             </Button>
 
