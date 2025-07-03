@@ -16,7 +16,7 @@ import {
   DialogDescription,
   DialogFooter,
 } from "@/components/ui/dialog"
-import { ThemeToggle } from "@/components/theme-toggle"
+import Switch from "@/components/theme-toggle"
 import { Timer, Trophy, RotateCcw, Play, Zap, Star, Flame, Brain, Target, Clock, Award } from "lucide-react"
 import GameIcon from "@/components/ui/gamification"
 import TileIcon from "@/components/ui/tileGame"
@@ -401,7 +401,7 @@ export default function ADHDMemoryGame() {
               The fun way to stay sharp — match, remember, repeat!
             </p>
           </div>
-          <ThemeToggle />
+          <Switch />
         </div>
 
         <div className="grid lg:grid-cols-4 gap-8">
