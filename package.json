@@ -14,6 +14,7 @@
     "@heroui/navbar": "^2.2.20",
     "@heroui/system": "^2.4.18",
     "@heroui/theme": "^2.4.17",
+    "@lottiefiles/react-lottie-player": "^3.6.0",
     "@radix-ui/react-dialog": "^1.1.14",
     "@radix-ui/react-dropdown-menu": "^2.1.15",
     "@radix-ui/react-label": "^2.1.7",

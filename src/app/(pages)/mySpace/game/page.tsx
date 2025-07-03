@@ -18,6 +18,8 @@ import {
 } from "@/components/ui/dialog"
 import { ThemeToggle } from "@/components/theme-toggle"
 import { Timer, Trophy, RotateCcw, Play, Zap, Star, Flame, Brain, Target, Clock, Award } from "lucide-react"
+import GameIcon from "@/components/ui/gamification"
+import TileIcon from "@/components/ui/tileGame"
 
 interface Tile {
   id: number
@@ -57,7 +59,7 @@ export default function ADHDMemoryGame() {
   useEffect(() => {
     const timer = setTimeout(() => {
       setIsLoading(false)
-    }, 1000)
+    }, 3000)
     return () => clearTimeout(timer)
   }, [])
 
@@ -281,10 +283,8 @@ export default function ADHDMemoryGame() {
     return (
       <div className="min-h-screen bg-background flex items-center justify-center">
         <div className="text-center animate-fade-in-scale">
-          <div className="w-24 h-24 bg-primary/10 rounded-full flex items-center justify-center text-4xl mx-auto mb-6 animate-bounce">
-            🧠
-          </div>
-          <h2 className="text-2xl font-bold text-foreground mb-2">Loading ADHDapt Memory Challenge</h2>
+          <GameIcon/>
+          <h2 className="text-2xl font-bold text-foreground mb-2">Entering the arcade...</h2>
           <p className="text-muted-foreground">Preparing your brain training experience...</p>
         </div>
       </div>
@@ -393,12 +393,12 @@ export default function ADHDMemoryGame() {
         {/* Header */}
         <div className="flex items-center justify-between mb-8 animate-fade-in-up">
           <div className="text-center flex-1">
-            <h1 className="text-4xl md:text-5xl font-bold text-foreground mb-2 flex items-center justify-center gap-3">
-              <Brain className="w-10 h-10 md:w-12 md:h-12 text-primary" />
-              ADHDapt Memory Challenge
+            <h1 className="text-4xl md:text-5xl font-bold text-foreground  flex items-center justify-center">
+              <TileIcon/>
+              TileTango
             </h1>
             <p className="text-muted-foreground text-lg font-medium">
-              Boost your attention and memory skills with this engaging tile matching adventure!
+              The fun way to stay sharp — match, remember, repeat!
             </p>
           </div>
           <ThemeToggle />
@@ -406,15 +406,15 @@ export default function ADHDMemoryGame() {
 
         <div className="grid lg:grid-cols-4 gap-8">
           {/* Game Board */}
-          <div className="lg:col-span-3 animate-slide-in">
+          <div className="lg:col-span-3 animate-slide-in ">
             <Card className="border shadow-lg rounded-3xl">
-              <CardHeader className="bg-primary text-primary-foreground rounded-t-3xl">
-                <div className="flex flex-wrap items-center justify-between gap-4">
+              <CardHeader className="bg-primary text-primary-foreground rounded-t-3xl bg-[#fdedc9]">
+                <div className="flex flex-wrap items-center justify-between gap-4   ">
                   <CardTitle className="flex items-center gap-2 text-xl font-semibold">
                     <Trophy className="w-6 h-6" />
                     Memory Challenge
                   </CardTitle>
-                  <div className="flex flex-wrap items-center gap-3">
+                  <div className="flex flex-wrap items-center gap-3 ">
                     <Badge variant="secondary" className="flex items-center gap-1 px-3 py-1 font-medium rounded-full">
                       <Timer className="w-4 h-4" />
                       {formatTime(time)}
@@ -429,7 +429,7 @@ export default function ADHDMemoryGame() {
                     </Badge>
                     <Badge
                       variant={getStreakBadgeVariant(streak)}
-                      className={`flex items-center gap-1 px-3 py-1 font-medium rounded-full ${streak >= 3 ? "animate-pulse" : ""}`}
+                      className={`flex items-center stroke-black gap-1 px-3 py-1 font-medium rounded-full ${streak >= 3 ? "animate-pulse" : ""}`}
                     >
                       <Flame className="w-4 h-4" />
                       {streak} streak
@@ -438,7 +438,7 @@ export default function ADHDMemoryGame() {
                 </div>
                 {gamePhase === "playing" && (
                   <div className="mt-4">
-                    <div className="flex items-center justify-between text-sm mb-2">
+                    <div className="flex items-center justify-between text-sm mb-2 ">
                       <span>Progress</span>
                       <span>{Math.round(gameProgress)}%</span>
                     </div>
@@ -489,9 +489,9 @@ export default function ADHDMemoryGame() {
                             } ${tile.isFlipping ? "animate-fast-flip" : ""}`}
                           >
                             {/* Back of tile (hidden state) */}
-                            <div className="absolute inset-0 w-full h-full backface-hidden">
-                              <div className="w-full h-full bg-muted rounded-2xl border-2 border-border flex items-center justify-center shadow-lg hover:bg-muted/80 transition-colors">
-                                <div className="w-8 h-8 bg-muted-foreground/20 rounded-full"></div>
+                            <div className="absolute inset-0 w-full h-full backface-hidden ">
+                              <div className="w-full h-full bg-muted rounded-2xl border-2 border-border flex items-center justify-center shadow-lg hover:bg-muted/80 transition-colors bg-[#b2e1eb]">
+                                <div className="w-8 h-8 bg-muted-foreground/20 rounded-full "></div>
                               </div>
                             </div>
 
@@ -532,7 +532,7 @@ export default function ADHDMemoryGame() {
           <div className="lg:col-span-1 space-y-6">
             {/* Current Session Stats */}
             <Card className="border shadow-lg animate-slide-in-right rounded-3xl">
-              <CardHeader className="bg-primary text-primary-foreground rounded-t-3xl">
+              <CardHeader className="bg-primary text-primary-foreground rounded-t-3xl bg-[#fdedc9]">
                 <CardTitle className="text-sm flex items-center gap-2 font-semibold">
                   <Star className="w-4 h-4" />
                   Current Session
@@ -564,7 +564,7 @@ export default function ADHDMemoryGame() {
 
             {/* Leaderboard */}
             <Card className="border shadow-lg animate-slide-in-right rounded-3xl" style={{ animationDelay: "0.1s" }}>
-              <CardHeader className="bg-primary text-primary-foreground rounded-t-3xl">
+              <CardHeader className="bg-primary text-primary-foreground rounded-t-3xl bg-[#fdedc9]">
                 <CardTitle className="flex items-center gap-2 font-semibold">
                   <Trophy className="w-5 h-5" />
                   Leaderboard
@@ -622,7 +622,7 @@ export default function ADHDMemoryGame() {
 
             {/* Instructions */}
             <Card className="border shadow-lg animate-slide-in-right rounded-3xl" style={{ animationDelay: "0.2s" }}>
-              <CardHeader className="bg-primary text-primary-foreground rounded-t-3xl">
+              <CardHeader className="bg-primary text-primary-foreground rounded-t-3xl bg-[#fdedc9]">
                 <CardTitle className="text-sm font-semibold">How to Play</CardTitle>
               </CardHeader>
               <CardContent className="text-xs space-y-2 p-4 font-medium">
@@ -639,7 +639,7 @@ export default function ADHDMemoryGame() {
 
       {/* Game Completion Dialog */}
       <Dialog open={showCompletionDialog} onOpenChange={setShowCompletionDialog}>
-        <DialogContent className="sm:max-w-md rounded-3xl">
+        <DialogContent className="sm:max-w-md rounded-3xl bg-[#fdedc9]">
           <DialogHeader>
             <DialogTitle className="text-center text-2xl flex items-center justify-center gap-2 font-bold">
               <Trophy className="w-8 h-8 text-primary" />
