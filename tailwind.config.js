@@ -1,97 +1,185 @@
-const {heroui} = require('@heroui/theme');
-/** @type {import('tailwindcss').Config} */
-module.exports = {
+const config = {
   darkMode: ["class"],
   content: [
-    "./app/**/*.{js,ts,jsx,tsx,mdx}",
-    "./pages/**/*.{js,ts,jsx,tsx,mdx}",
-    "./components/**/*.{js,ts,jsx,tsx,mdx}",
-    "// Or if using `src` directory:\\\\n    \\\\\\\"./src/**/*.{js,ts,jsx,tsx,mdx}\\\\\\\"",
-    "./node_modules/@heroui/theme/dist/components/(button|link|navbar|ripple|spinner).js"
+    "./pages/**/*.{ts,tsx}",
+    "./components/**/*.{ts,tsx}",
+    "./app/**/*.{ts,tsx}",
+    "./src/**/*.{ts,tsx}",
+    "*.{js,ts,jsx,tsx,mdx}",
   ],
+  prefix: "",
   theme: {
+    container: {
+      center: true,
+      padding: "2rem",
+      screens: {
+        "2xl": "1400px",
+      },
+    },
     extend: {
-      borderRadius: {
-        lg: 'var(--radius)',
-        md: 'calc(var(--radius) - 2px)',
-        sm: 'calc(var(--radius) - 4px)',
+      fontFamily: {
+        sans: [
+          "system-ui",
+          "-apple-system",
+          "BlinkMacSystemFont",
+          "Segoe UI",
+          "Roboto",
+          "Oxygen",
+          "Ubuntu",
+          "Cantarell",
+          "Open Sans",
+          "Helvetica Neue",
+          "sans-serif",
+        ],
       },
       colors: {
-        background: 'hsl(var(--background))',
-        foreground: 'hsl(var(--foreground))',
-        card: {
-          DEFAULT: 'hsl(var(--card))',
-          foreground: 'hsl(var(--card-foreground))',
-        },
-        popover: {
-          DEFAULT: 'hsl(var(--popover))',
-          foreground: 'hsl(var(--popover-foreground))',
-        },
+        border: "hsl(var(--border))",
+        input: "hsl(var(--input))",
+        ring: "hsl(var(--ring))",
+        background: "hsl(var(--background))",
+        foreground: "hsl(var(--foreground))",
         primary: {
-          DEFAULT: 'hsl(var(--primary))',
-          foreground: 'hsl(var(--primary-foreground))',
+          DEFAULT: "hsl(var(--primary))",
+          foreground: "hsl(var(--primary-foreground))",
         },
         secondary: {
-          DEFAULT: 'hsl(var(--secondary))',
-          foreground: 'hsl(var(--secondary-foreground))',
-        },
-        muted: {
-          DEFAULT: 'hsl(var(--muted))',
-          foreground: 'hsl(var(--muted-foreground))',
-        },
-        accent: {
-          DEFAULT: 'hsl(var(--accent))',
-          foreground: 'hsl(var(--accent-foreground))',
+          DEFAULT: "hsl(var(--secondary))",
+          foreground: "hsl(var(--secondary-foreground))",
         },
         destructive: {
-          DEFAULT: 'hsl(var(--destructive))',
-          foreground: 'hsl(var(--destructive-foreground))',
+          DEFAULT: "hsl(var(--destructive))",
+          foreground: "hsl(var(--destructive-foreground))",
         },
-        border: 'hsl(var(--border))',
-        input: 'hsl(var(--input))',
-        ring: 'hsl(var(--ring))',
-        chart: {
-          '1': 'hsl(var(--chart-1))',
-          '2': 'hsl(var(--chart-2))',
-          '3': 'hsl(var(--chart-3))',
-          '4': 'hsl(var(--chart-4))',
-          '5': 'hsl(var(--chart-5))',
+        muted: {
+          DEFAULT: "hsl(var(--muted))",
+          foreground: "hsl(var(--muted-foreground))",
         },
-        sidebar: {
-          DEFAULT: 'hsl(var(--sidebar))',
-          foreground: 'hsl(var(--sidebar-foreground))',
-          primary: 'hsl(var(--sidebar-primary))',
-          primaryForeground: 'hsl(var(--sidebar-primary-foreground))',
-          accent: 'hsl(var(--sidebar-accent))',
-          accentForeground: 'hsl(var(--sidebar-accent-foreground))',
-          border: 'hsl(var(--sidebar-border))',
-          ring: 'hsl(var(--sidebar-ring))',
+        accent: {
+          DEFAULT: "hsl(var(--accent))",
+          foreground: "hsl(var(--accent-foreground))",
+        },
+        popover: {
+          DEFAULT: "hsl(var(--popover))",
+          foreground: "hsl(var(--popover-foreground))",
+        },
+        card: {
+          DEFAULT: "hsl(var(--card))",
+          foreground: "hsl(var(--card-foreground))",
         },
       },
-      fontFamily: {
-        sans: ['var(--font-sans)'],
-        serif: ['var(--font-serif)'],
-        mono: ['var(--font-mono)'],
+      borderRadius: {
+        lg: "var(--radius)",
+        md: "calc(var(--radius) - 2px)",
+        sm: "calc(var(--radius) - 4px)",
       },
-      boxShadow: {
-        '2xs': 'var(--shadow-2xs)',
-        xs: 'var(--shadow-xs)',
-        sm: 'var(--shadow-sm)',
-        DEFAULT: 'var(--shadow)',
-        md: 'var(--shadow-md)',
-        lg: 'var(--shadow-lg)',
-        xl: 'var(--shadow-xl)',
-        '2xl': 'var(--shadow-2xl)',
+      keyframes: {
+        "accordion-down": {
+          from: { height: "0" },
+          to: { height: "var(--radix-accordion-content-height)" },
+        },
+        "accordion-up": {
+          from: { height: "var(--radix-accordion-content-height)" },
+          to: { height: "0" },
+        },
+        "fast-flip": {
+          "0%": { transform: "rotateY(0deg)" },
+          "50%": { transform: "rotateY(90deg)" },
+          "100%": { transform: "rotateY(0deg)" },
+        },
+        "fade-in": {
+          "0%": { opacity: "0", transform: "translateY(20px)" },
+          "100%": { opacity: "1", transform: "translateY(0)" },
+        },
+        "fade-in-up": {
+          "0%": { opacity: "0", transform: "translateY(30px)" },
+          "100%": { opacity: "1", transform: "translateY(0)" },
+        },
+        "fade-in-scale": {
+          "0%": { opacity: "0", transform: "scale(0.95)" },
+          "100%": { opacity: "1", transform: "scale(1)" },
+        },
+        "slide-in": {
+          "0%": { opacity: "0", transform: "translateX(-20px)" },
+          "100%": { opacity: "1", transform: "translateX(0)" },
+        },
+        "slide-in-right": {
+          "0%": { opacity: "0", transform: "translateX(20px)" },
+          "100%": { opacity: "1", transform: "translateX(0)" },
+        },
+        "confetti-fall": {
+          "0%": { transform: "translateY(-100vh) rotate(0deg)", opacity: "1" },
+          "100%": { transform: "translateY(100vh) rotate(720deg)", opacity: "0" },
+        },
+        firework: {
+          "0%": { transform: "scale(0) rotate(0deg)", opacity: "1" },
+          "50%": { transform: "scale(1) rotate(180deg)", opacity: "1" },
+          "100%": { transform: "scale(1.5) rotate(360deg)", opacity: "0" },
+        },
+        "celebration-bounce": {
+          "0%, 20%, 50%, 80%, 100%": { transform: "translateY(0)" },
+          "40%": { transform: "translateY(-30px)" },
+          "60%": { transform: "translateY(-15px)" },
+        },
+        sparkle: {
+          "0%": { transform: "scale(0) rotate(0deg)", opacity: "0" },
+          "50%": { transform: "scale(1) rotate(180deg)", opacity: "1" },
+          "100%": { transform: "scale(0) rotate(360deg)", opacity: "0" },
+        },
+        "celebration-pulse": {
+          "0%": { transform: "scale(1)", opacity: "1" },
+          "50%": { transform: "scale(1.1)", opacity: "0.8" },
+          "100%": { transform: "scale(1)", opacity: "1" },
+        },
       },
-      letterSpacing: {
-        tighter: 'calc(var(--tracking-normal) - 0.05em)',
-        tight: 'calc(var(--tracking-normal) - 0.025em)',
-        normal: 'var(--tracking-normal)',
-        wide: 'calc(var(--tracking-normal) + 0.025em)',
-        wider: 'calc(var(--tracking-normal) + 0.05em)',
-        widest: 'calc(var(--tracking-normal) + 0.1em)',
+      animation: {
+        "accordion-down": "accordion-down 0.2s ease-out",
+        "accordion-up": "accordion-up 0.2s ease-out",
+        "fast-flip": "fast-flip 0.3s ease-in-out",
+        "fade-in": "fade-in 0.6s ease-out",
+        "fade-in-up": "fade-in-up 0.8s ease-out",
+        "fade-in-scale": "fade-in-scale 0.5s ease-out",
+        "slide-in": "slide-in 0.5s ease-out",
+        "slide-in-right": "slide-in-right 0.6s ease-out",
+        "confetti-fall": "confetti-fall 3s linear infinite",
+        firework: "firework 1s ease-out",
+        "celebration-bounce": "celebration-bounce 2s ease-in-out infinite",
+        sparkle: "sparkle 1.5s ease-in-out infinite",
+        "celebration-pulse": "celebration-pulse 1s ease-in-out infinite",
+      },
+      perspective: {
+        "1000": "1000px",
+      },
+      transformStyle: {
+        "preserve-3d": "preserve-3d",
+      },
+      backfaceVisibility: {
+        hidden: "hidden",
+      },
+      rotate: {
+        "y-180": "rotateY(180deg)",
       },
     },
   },
-  plugins: [require("tailwindcss-animate"),heroui()],
-};
+  plugins: [
+    require("tailwindcss-animate"),
+    ({ addUtilities }) => {
+      const newUtilities = {
+        ".perspective-1000": {
+          perspective: "1000px",
+        },
+        ".preserve-3d": {
+          transformStyle: "preserve-3d",
+        },
+        ".backface-hidden": {
+          backfaceVisibility: "hidden",
+        },
+        ".rotate-y-180": {
+          transform: "rotateY(180deg)",
+        },
+      }
+      addUtilities(newUtilities)
+    },
+  ],
+}
+
+export default config
