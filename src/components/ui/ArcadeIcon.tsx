@@ -8,15 +8,15 @@ interface Props extends LucideProps {
   isActive?: boolean;
 }
 
-const TileIcon: React.FC<Props> = ({ size = 40 }) => {
+const ArcadeIcon: React.FC<Props> = ({ size = 120 }) => {
   return (
     <Player
       autoplay
       loop
-      src="/tileGame.json"
+      src="/Arcade.json"
       style={{ height: size, width: size }}
     />
   );
 };
 
-export default TileIcon;
+export default ArcadeIcon;

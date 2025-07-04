@@ -1,61 +1,23 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { Separator } from "@/components/ui/separator"
-import { Progress } from "@/components/ui/progress"
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogDescription,
-  DialogFooter,
-} from "@/components/ui/dialog"
-import Switch from "@/components/theme-toggle"
-import { Timer, Trophy, RotateCcw, Play, Zap, Star, Flame, Brain, Target, Clock, Award } from "lucide-react"
+import ThemeToggle from "@/components/theme-toggle"
+import { Brain, Gamepad2, Trophy, Star, Zap, Target, Menu, Home, Grid3X3, Puzzle, Timer, Users } from "lucide-react"
+import TileMemoryGame from "./tile-memory-game/page"
 import GameIcon from "@/components/ui/gamification"
-import TileIcon from "@/components/ui/tileGame"
+import ArcadeIcon from "@/components/ui/ArcadeIcon"
 
-interface Tile {
-  id: number
-  imageId: number
-  isFlipped: boolean
-  isMatched: boolean
-  isFlipping: boolean
-}
+type GameType = "welcome" | "tile-memory" | "coming-soon-1" | "coming-soon-2"
 
-interface LeaderboardEntry {
-  name: string
-  time: number
-  moves: number
-  streak: number
-  date: string
-}
-
-export default function ADHDMemoryGame() {
-  const [tiles, setTiles] = useState<Tile[]>([])
-  const [flippedTiles, setFlippedTiles] = useState<number[]>([])
-  const [matchedPairs, setMatchedPairs] = useState(0)
-  const [moves, setMoves] = useState(0)
-  const [time, setTime] = useState(0)
-  const [streak, setStreak] = useState(0)
-  const [bestStreak, setBestStreak] = useState(0)
-  const [isGameActive, setIsGameActive] = useState(false)
-  const [gamePhase, setGamePhase] = useState<"preview" | "playing" | "finished">("preview")
-  const [leaderboard, setLeaderboard] = useState<LeaderboardEntry[]>([])
-  const [playerName, setPlayerName] = useState("")
-  const [showCompletionDialog, setShowCompletionDialog] = useState(false)
-  const [showStreakEffect, setShowStreakEffect] = useState(false)
-  const [previewCountdown, setPreviewCountdown] = useState(3)
+export default function GameHub() {
+  const [currentGame, setCurrentGame] = useState<GameType>("welcome")
+  const [sidebarOpen, setSidebarOpen] = useState(true)
   const [isLoading, setIsLoading] = useState(true)
-  const [showCelebration, setShowCelebration] = useState(false)
 
-  // Loading effect
+  // Loading effect - same as your original
   useEffect(() => {
     const timer = setTimeout(() => {
       setIsLoading(false)
@@ -63,222 +25,203 @@ export default function ADHDMemoryGame() {
     return () => clearTimeout(timer)
   }, [])
 
-  // Generate unique image patterns for tiles
-  const generateTiles = (): Tile[] => {
-    const imageIds = Array.from({ length: 18 }, (_, i) => i + 1)
-    const pairedIds = [...imageIds, ...imageIds]
-    const shuffled = pairedIds.sort(() => Math.random() - 0.5)
+  const games = [
+    {
+      id: "tile-memory" as GameType,
+      name: "TileTango",
+      description: "Match tiles and boost your memory",
+      icon: Grid3X3,
+      color: "bg-pink-500",
+      available: true,
+      difficulty: "Medium",
+      players: "Single Player",
+    },
+    {
+      id: "coming-soon-1" as GameType,
+      name: "Focus Flow",
+      description: "Attention training exercises",
+      icon: Target,
+      color: "bg-blue-500",
+      available: false,
+      difficulty: "Easy",
+      players: "Single Player",
+    },
+    {
+      id: "coming-soon-2" as GameType,
+      name: "Mind Maze",
+      description: "Navigate complex puzzles",
+      icon: Puzzle,
+      color: "bg-green-500",
+      available: false,
+      difficulty: "Hard",
+      players: "Single Player",
+    },
+  ]
 
-    return shuffled.map((imageId, index) => ({
-      id: index,
-      imageId,
-      isFlipped: true,
-      isMatched: false,
-      isFlipping: false,
-    }))
-  }
+  const WelcomePage = () => (
+    <div className="min-h-screen bg-background p-2 animate-fade-in">
+      <div className="max-w-5xl mx-auto">
+        {/* Welcome Header */}
+        <div className="text-center mb-10 animate-fade-in-up">
+            <div className="mb-5">
+                <ArcadeIcon/>
+                <div className="flex items-center justify-center gap-4">
+                    <h1 className="text-5xl md:text-6xl font-bold text-foreground">ADHDapt</h1>
+                </div>
+                <div className="h-5">
+                    <h1 className="font-bold relative tracking-[0.6em] left-[38px] -top-2">ARCA</h1>
+                    <h1 className="font-bold tracking-[0.6em] relative left-[117px] -top-8">DE</h1>
+                </div>
+            </div>
+          
+          <p className="text-xl text-muted-foreground font-medium max-w-2xl mx-auto">
+            Welcome to your personal brain training center! Choose from our collection of engaging games designed to
+            boost attention, memory, and cognitive skills.
+          </p>
+        </div>
 
-  // Load leaderboard from localStorage
-  useEffect(() => {
-    const savedLeaderboard = localStorage.getItem("adhd-memory-leaderboard")
-    if (savedLeaderboard) {
-      setLeaderboard(JSON.parse(savedLeaderboard))
-    }
-  }, [])
+        {/* Stats Overview */}
+        <div className="grid md:grid-cols-3 gap-6 mb-12 animate-slide-in">
+          <Card className="border shadow-lg rounded-3xl bg-gradient-to-br from-blue-50 to-blue-100 dark:from-blue-950 dark:to-blue-900">
+            <CardContent className="p-6 text-center">
+              <Trophy className="w-12 h-12 text-blue-600 mx-auto mb-4" />
+              <h3 className="text-2xl font-bold text-blue-800 dark:text-blue-200">3</h3>
+              <p className="text-blue-600 dark:text-blue-300 font-medium">Games Available</p>
+            </CardContent>
+          </Card>
+          <Card className="border shadow-lg rounded-3xl bg-gradient-to-br from-green-50 to-green-100 dark:from-green-950 dark:to-green-900">
+            <CardContent className="p-6 text-center">
+              <Zap className="w-12 h-12 text-green-600 mx-auto mb-4" />
+              <h3 className="text-2xl font-bold text-green-800 dark:text-green-200">∞</h3>
+              <p className="text-green-600 dark:text-green-300 font-medium">Skill Building</p>
+            </CardContent>
+          </Card>
+          <Card className="border shadow-lg rounded-3xl bg-gradient-to-br from-purple-50 to-purple-100 dark:from-purple-950 dark:to-purple-900">
+            <CardContent className="p-6 text-center">
+              <Star className="w-12 h-12 text-purple-600 mx-auto mb-4" />
+              <h3 className="text-2xl font-bold text-purple-800 dark:text-purple-200">Fun</h3>
+              <p className="text-purple-600 dark:text-purple-300 font-medium">Learning Style</p>
+            </CardContent>
+          </Card>
+        </div>
 
-  // Timer effect
-  useEffect(() => {
-    let interval: NodeJS.Timeout
-    if (isGameActive && gamePhase === "playing") {
-      interval = setInterval(() => {
-        setTime((prev) => prev + 1)
-      }, 1000)
-    }
-    return () => clearInterval(interval)
-  }, [isGameActive, gamePhase])
+        {/* Game Selection */}
+        <div className="animate-fade-in-up" style={{ animationDelay: "0.3s" }}>
+          <h2 className="text-3xl font-bold text-center mb-8 text-foreground">Choose Your Challenge</h2>
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {games.map((game, index) => {
+              const IconComponent = game.icon
+              return (
+                <Card
+                  key={game.id}
+                  className={`border shadow-lg rounded-3xl transition-all duration-300 hover:shadow-xl hover:scale-105 cursor-pointer animate-slide-in ${
+                    !game.available ? "opacity-60" : ""
+                  }`}
+                  style={{ animationDelay: `${index * 0.1}s` }}
+                  onClick={() => game.available && setCurrentGame(game.id)}
+                >
+                  <CardHeader className={`${game.color} text-white rounded-t-3xl relative overflow-hidden`}>
+                    <div className="absolute top-0 right-0 w-20 h-20 bg-white/10 rounded-full -translate-y-10 translate-x-10"></div>
+                    <div className="relative z-10">
+                      <div className="flex items-center justify-between mb-2">
+                        <IconComponent className="w-8 h-8" />
+                        {!game.available && (
+                          <Badge variant="secondary" className="bg-white/20 text-white border-white/30">
+                            Coming Soon
+                          </Badge>
+                        )}
+                      </div>
+                      <CardTitle className="text-xl font-bold">{game.name}</CardTitle>
+                    </div>
+                  </CardHeader>
+                  <CardContent className="p-6">
+                    <p className="text-muted-foreground mb-4 font-medium">{game.description}</p>
+                    <div className="flex justify-between items-center mb-4">
+                      <div className="flex items-center gap-2">
+                        <Timer className="w-4 h-4 text-muted-foreground" />
+                        <span className="text-sm text-muted-foreground">{game.difficulty}</span>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <Users className="w-4 h-4 text-muted-foreground" />
+                        <span className="text-sm text-muted-foreground">{game.players}</span>
+                      </div>
+                    </div>
+                    <Button
+                      className="w-full rounded-2xl font-semibold"
+                      disabled={!game.available}
+                      onClick={(e) => {
+                        e.stopPropagation()
+                        game.available && setCurrentGame(game.id)
+                      }}
+                    >
+                      {game.available ? "Play Now" : "Coming Soon"}
+                    </Button>
+                  </CardContent>
+                </Card>
+              )
+            })}
+          </div>
+        </div>
 
-  // Preview countdown effect
-  useEffect(() => {
-    let interval: NodeJS.Timeout
-    if (gamePhase === "preview" && previewCountdown > 0) {
-      interval = setInterval(() => {
-        setPreviewCountdown((prev) => prev - 1)
-      }, 1000)
-    }
-    return () => clearInterval(interval)
-  }, [gamePhase, previewCountdown])
-
-  // Initialize game
-  const startGame = () => {
-    const newTiles = generateTiles()
-    setTiles(newTiles)
-    setFlippedTiles([])
-    setMatchedPairs(0)
-    setMoves(0)
-    setTime(0)
-    setStreak(0)
-    setBestStreak(0)
-    setIsGameActive(true)
-    setGamePhase("preview")
-    setShowCompletionDialog(false)
-    setPreviewCountdown(3)
-
-    // Show tiles for 3 seconds, then flip them
-    setTimeout(() => {
-      setTiles((prev) => prev.map((tile) => ({ ...tile, isFlipped: false })))
-      setGamePhase("playing")
-    }, 3000)
-  }
-
-  // Handle tile click
-  const handleTileClick = (tileId: number) => {
-    if (gamePhase !== "playing" || flippedTiles.length >= 2) return
-
-    const tile = tiles.find((t) => t.id === tileId)
-    if (!tile || tile.isFlipped || tile.isMatched || tile.isFlipping) return
-
-    const newFlippedTiles = [...flippedTiles, tileId]
-    setFlippedTiles(newFlippedTiles)
-
-    // Add flip animation
-    setTiles((prev) => prev.map((t) => (t.id === tileId ? { ...t, isFlipped: true, isFlipping: true } : t)))
-
-    // Remove flip animation class after animation completes
-    setTimeout(() => {
-      setTiles((prev) => prev.map((t) => (t.id === tileId ? { ...t, isFlipping: false } : t)))
-    }, 300)
-
-    if (newFlippedTiles.length === 2) {
-      setMoves((prev) => prev + 1)
-
-      const [firstId, secondId] = newFlippedTiles
-      const firstTile = tiles.find((t) => t.id === firstId)
-      const secondTile = tiles.find((t) => t.id === secondId)
-
-      if (firstTile?.imageId === secondTile?.imageId) {
-        // Match found - increment streak
-        const newStreak = streak + 1
-        setStreak(newStreak)
-        if (newStreak > bestStreak) {
-          setBestStreak(newStreak)
-        }
-
-        // Show streak effect for streaks >= 3
-        if (newStreak >= 3) {
-          setShowStreakEffect(true)
-          setTimeout(() => setShowStreakEffect(false), 1000)
-        }
-
-        setTimeout(() => {
-          setTiles((prev) => prev.map((t) => (t.id === firstId || t.id === secondId ? { ...t, isMatched: true } : t)))
-          setFlippedTiles([])
-          setMatchedPairs((prev) => prev + 1)
-        }, 500)
-      } else {
-        // No match - reset streak
-        setStreak(0)
-
-        // No match - flip back after delay
-        setTimeout(() => {
-          setTiles((prev) => prev.map((t) => (t.id === firstId || t.id === secondId ? { ...t, isFlipped: false } : t)))
-          setFlippedTiles([])
-        }, 800)
-      }
-    }
-  }
-
-  // Check for game completion
-  useEffect(() => {
-    if (matchedPairs === 18 && gamePhase === "playing") {
-      setIsGameActive(false)
-      setGamePhase("finished")
-
-      // Start celebration animation
-      setShowCelebration(true)
-
-      // Show completion dialog after celebration starts
-      setTimeout(() => {
-        setShowCompletionDialog(true)
-      }, 1000)
-
-      // End celebration after 5 seconds
-      setTimeout(() => {
-        setShowCelebration(false)
-      }, 5000)
-    }
-  }, [matchedPairs, gamePhase])
-
-  // Save score to leaderboard
-  const saveScore = () => {
-    if (!playerName.trim()) return
-
-    const newEntry: LeaderboardEntry = {
-      name: playerName.trim(),
-      time,
-      moves,
-      streak: bestStreak,
-      date: new Date().toLocaleDateString(),
-    }
-
-    const updatedLeaderboard = [...leaderboard, newEntry].sort((a, b) => a.time - b.time).slice(0, 10)
-
-    setLeaderboard(updatedLeaderboard)
-    localStorage.setItem("adhd-memory-leaderboard", JSON.stringify(updatedLeaderboard))
-    setShowCompletionDialog(false)
-    setPlayerName("")
-  }
-
-  // Format time display
-  const formatTime = (seconds: number) => {
-    const mins = Math.floor(seconds / 60)
-    const secs = seconds % 60
-    return `${mins}:${secs.toString().padStart(2, "0")}`
-  }
-
-  // Generate tile image/pattern
-  const getTileImage = (imageId: number) => {
-    const tileDesigns = [
-      { bg: "bg-red-500", icon: "🌟", shadow: "shadow-red-200" },
-      { bg: "bg-blue-500", icon: "🎯", shadow: "shadow-blue-200" },
-      { bg: "bg-green-500", icon: "🎨", shadow: "shadow-green-200" },
-      { bg: "bg-yellow-500", icon: "🎪", shadow: "shadow-yellow-200" },
-      { bg: "bg-purple-500", icon: "🎭", shadow: "shadow-purple-200" },
-      { bg: "bg-pink-500", icon: "🎵", shadow: "shadow-pink-200" },
-      { bg: "bg-indigo-500", icon: "🎸", shadow: "shadow-indigo-200" },
-      { bg: "bg-orange-500", icon: "🎺", shadow: "shadow-orange-200" },
-      { bg: "bg-teal-500", icon: "🎻", shadow: "shadow-teal-200" },
-      { bg: "bg-cyan-500", icon: "🎹", shadow: "shadow-cyan-200" },
-      { bg: "bg-lime-500", icon: "⭐", shadow: "shadow-lime-200" },
-      { bg: "bg-amber-500", icon: "🔥", shadow: "shadow-amber-200" },
-      { bg: "bg-emerald-500", icon: "💎", shadow: "shadow-emerald-200" },
-      { bg: "bg-violet-500", icon: "🌈", shadow: "shadow-violet-200" },
-      { bg: "bg-rose-500", icon: "🚀", shadow: "shadow-rose-200" },
-      { bg: "bg-sky-500", icon: "⚡", shadow: "shadow-sky-200" },
-      { bg: "bg-slate-500", icon: "🎲", shadow: "shadow-slate-200" },
-      { bg: "bg-gray-500", icon: "🎊", shadow: "shadow-gray-200" },
-    ]
-
-    const design = tileDesigns[imageId - 1]
-
-    return (
-      <div
-        className={`w-full h-full ${design.bg} flex items-center justify-center text-2xl font-bold text-white rounded-2xl ${design.shadow} shadow-lg transition-all duration-300 hover:shadow-xl`}
-      >
-        <span className="drop-shadow-lg">{design.icon}</span>
+        {/* Features Section */}
+        <div className="mt-16 animate-fade-in-up" style={{ animationDelay: "0.5s" }}>
+          <h2 className="text-3xl font-bold text-center mb-8 text-foreground">Why ADHDapt Arcade?</h2>
+          <div className="grid md:grid-cols-2 gap-8">
+            <div className="text-center">
+              <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4">
+                <Brain className="w-8 h-8 text-primary" />
+              </div>
+              <h3 className="text-xl font-bold mb-2">Science-Based</h3>
+              <p className="text-muted-foreground">
+                Games designed with cognitive science principles to effectively train attention and memory skills.
+              </p>
+            </div>
+            <div className="text-center">
+              <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4">
+                <Gamepad2 className="w-8 h-8 text-primary" />
+              </div>
+              <h3 className="text-xl font-bold mb-2">Engaging & Fun</h3>
+              <p className="text-muted-foreground">
+                Colorful, interactive games that make brain training enjoyable and motivating for all ages.
+              </p>
+            </div>
+          </div>
+        </div>
       </div>
-    )
+    </div>
+  )
+
+  const ComingSoonPage = ({ gameName }: { gameName: string }) => (
+    <div className="min-h-screen bg-background flex items-center justify-center p-8">
+      <div className="text-center animate-fade-in-scale">
+        <div className="w-24 h-24 bg-primary/10 rounded-full flex items-center justify-center text-4xl mx-auto mb-6 animate-bounce">
+          🚀
+        </div>
+        <h2 className="text-3xl font-bold text-foreground mb-4">{gameName}</h2>
+        <p className="text-xl text-muted-foreground mb-8">This exciting game is coming soon!</p>
+        <Button onClick={() => setCurrentGame("welcome")} className="px-8 py-3 text-lg font-semibold rounded-2xl">
+          Back to Arcade
+        </Button>
+      </div>
+    </div>
+  )
+
+  const renderCurrentGame = () => {
+    switch (currentGame) {
+      case "welcome":
+        return <WelcomePage />
+      case "tile-memory":
+        return <TileMemoryGame onBack={() => setCurrentGame("welcome")} sidebarOpen={sidebarOpen} />
+      case "coming-soon-1":
+        return <ComingSoonPage gameName="Focus Flow" />
+      case "coming-soon-2":
+        return <ComingSoonPage gameName="Mind Maze" />
+      default:
+        return <WelcomePage />
+    }
   }
 
-  const getStreakBadgeVariant = (currentStreak: number) => {
-    if (currentStreak >= 10) return "default"
-    if (currentStreak >= 7) return "destructive"
-    if (currentStreak >= 5) return "default"
-    if (currentStreak >= 3) return "secondary"
-    return "outline"
-  }
-
-  const gameProgress = (matchedPairs / 18) * 100
-
+  // Loading screen - same as your original
   if (isLoading) {
     return (
       <div className="min-h-screen bg-background flex items-center justify-center">
@@ -292,411 +235,93 @@ export default function ADHDMemoryGame() {
   }
 
   return (
-    <div className="min-h-screen bg-background p-4 animate-fade-in">
-      {/* Streak Effect */}
-      {showStreakEffect && (
-        <div className="fixed inset-0 pointer-events-none z-40 flex items-center justify-center">
-          <div className="animate-ping text-6xl">🔥</div>
-          <div className="absolute animate-bounce text-4xl font-bold text-primary mt-16">STREAK {streak}!</div>
-        </div>
-      )}
-
-      {/* Celebration Animation */}
-      {showCelebration && (
-        <div className="fixed inset-0 pointer-events-none z-50 overflow-hidden">
-          {/* Confetti */}
-          {Array.from({ length: 50 }).map((_, i) => (
-            <div
-              key={`confetti-${i}`}
-              className="absolute w-3 h-3 animate-confetti-fall"
-              style={{
-                left: `${Math.random() * 100}%`,
-                animationDelay: `${Math.random() * 3}s`,
-                animationDuration: `${3 + Math.random() * 2}s`,
-              }}
-            >
-              <div
-                className={`w-full h-full ${
-                  ["bg-red-500", "bg-blue-500", "bg-green-500", "bg-yellow-500", "bg-purple-500", "bg-pink-500"][
-                    Math.floor(Math.random() * 6)
-                  ]
-                } rounded-full`}
-              />
-            </div>
-          ))}
-
-          {/* Sparkles */}
-          {Array.from({ length: 20 }).map((_, i) => (
-            <div
-              key={`sparkle-${i}`}
-              className="absolute text-2xl animate-sparkle"
-              style={{
-                left: `${Math.random() * 100}%`,
-                top: `${Math.random() * 100}%`,
-                animationDelay: `${Math.random() * 2}s`,
-              }}
-            >
-              ✨
-            </div>
-          ))}
-
-          {/* Fireworks */}
-          {Array.from({ length: 8 }).map((_, i) => (
-            <div
-              key={`firework-${i}`}
-              className="absolute text-4xl animate-firework"
-              style={{
-                left: `${20 + Math.random() * 60}%`,
-                top: `${20 + Math.random() * 60}%`,
-                animationDelay: `${i * 0.3}s`,
-              }}
-            >
-              🎆
-            </div>
-          ))}
-
-          {/* Central celebration text */}
-          <div className="absolute inset-0 flex items-center justify-center">
-            <div className="text-center animate-celebration-bounce">
-              <div className="text-8xl mb-4 animate-celebration-pulse">🎉</div>
-              <h2 className="text-4xl md:text-6xl font-bold text-primary mb-2 animate-celebration-pulse">AMAZING!</h2>
-              <p className="text-xl md:text-2xl text-muted-foreground font-semibold animate-fade-in">
-                You completed the challenge!
-              </p>
-            </div>
-          </div>
-
-          {/* Side celebration emojis */}
-          <div className="absolute left-10 top-1/2 transform -translate-y-1/2 text-6xl animate-celebration-bounce">
-            🏆
-          </div>
-          <div
-            className="absolute right-10 top-1/2 transform -translate-y-1/2 text-6xl animate-celebration-bounce"
-            style={{ animationDelay: "0.5s" }}
-          >
-            🎊
-          </div>
-
-          {/* Floating achievement badges */}
-          <div className="absolute top-20 left-1/4 animate-fade-in-up" style={{ animationDelay: "1s" }}>
-            <div className="bg-primary text-primary-foreground px-4 py-2 rounded-full font-bold shadow-lg">
-              🧠 Memory Master!
-            </div>
-          </div>
-          <div className="absolute top-32 right-1/4 animate-fade-in-up" style={{ animationDelay: "1.5s" }}>
-            <div className="bg-green-500 text-white px-4 py-2 rounded-full font-bold shadow-lg">⚡ Speed Demon!</div>
-          </div>
-        </div>
-      )}
-
-      <div className="max-w-7xl mx-auto">
-        {/* Header */}
-        <div className="flex items-center justify-between mb-8 animate-fade-in-up">
-          <div className="text-center flex-1">
-            <h1 className="text-4xl md:text-5xl font-bold text-foreground  flex items-center justify-center">
-              <TileIcon/>
-              TileTango
-            </h1>
-            <p className="text-muted-foreground text-lg font-medium">
-              The fun way to stay sharp — match, remember, repeat!
-            </p>
-          </div>
-          <Switch />
-        </div>
-
-        <div className="grid lg:grid-cols-4 gap-8">
-          {/* Game Board */}
-          <div className="lg:col-span-3 animate-slide-in">
-            <Card className="border shadow-[5px_5px_0px_0px_#d04f99] border-[#d04f99] rounded-3xl bg-[#fdedc9]">
-              <CardHeader className="bg-primary text-[#FFFFFF] rounded-t-3xl bg-[#d04f99]">
-                <div className="flex flex-wrap items-center justify-between gap-4   ">
-                  <CardTitle className="flex items-center gap-2 text-xl font-semibold">
-                    <Trophy className="w-6 h-6" />
-                    Memory Challenge
-                  </CardTitle>
-                  <div className="flex flex-wrap items-center gap-3 ">
-                    <Badge variant="secondary" className="flex items-center gap-1 px-3 py-1 font-medium rounded-full">
-                      <Timer className="w-4 h-4" />
-                      {formatTime(time)}
-                    </Badge>
-                    <Badge variant="secondary" className="px-3 py-1 font-medium rounded-full">
-                      <Target className="w-4 h-4 mr-1" />
-                      {moves} moves
-                    </Badge>
-                    <Badge variant="secondary" className="px-3 py-1 font-medium rounded-full">
-                      <Award className="w-4 h-4 mr-1" />
-                      {matchedPairs}/18
-                    </Badge>
-                    <Badge
-                      variant={getStreakBadgeVariant(streak)}
-                      className={`flex items-center stroke-black gap-1 px-3 py-1 font-medium rounded-full ${streak >= 3 ? "animate-pulse" : ""}`}
-                    >
-                      <Flame className="w-4 h-4" />
-                      {streak} streak
-                    </Badge>
-                  </div>
+    <div className="flex min-h-screen bg-background">
+      {/* Sidebar */}
+      <div
+        className={`${sidebarOpen ? "w-80" : "w-16"} transition-all duration-300 bg-card border-r border-border flex flex-col animate-slide-in`}
+      >
+        {/* Sidebar Header */}
+        <div className="p-4 border-b border-border">
+          <div className="flex items-center justify-between">
+            {sidebarOpen && (
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 bg-primary/10 rounded-full flex items-center justify-center">
+                  <Gamepad2 className="w-5 h-5 text-primary" />
                 </div>
-                {gamePhase === "playing" && (
-                  <div className="mt-4">
-                    <div className="flex items-center justify-between text-sm mb-2 ">
-                      <span>Progress</span>
-                      <span>{Math.round(gameProgress)}%</span>
-                    </div>
-                    <Progress value={gameProgress} className="h-2 rounded-full" />
-                  </div>
-                )}
-              </CardHeader>
-              <CardContent className="p-8">
-                {gamePhase === "preview" && (
-                  <div className="text-center mb-6 animate-fade-in">
-                    <Badge variant="default" className="text-lg px-6 py-3 animate-pulse font-medium rounded-full">
-                      <Star className="w-5 h-5 mr-2" />
-                      Memorize the patterns! Starting in {previewCountdown}...
-                      <Star className="w-5 h-5 ml-2" />
-                    </Badge>
-                  </div>
-                )}
+                <div>
+                  <h2 className="font-bold text-foreground">ADHDapt</h2>
+                  <p className="text-xs text-muted-foreground">Arcade</p>
+                </div>
+              </div>
+            )}
+            <Button variant="ghost" size="sm" onClick={() => setSidebarOpen(!sidebarOpen)} className="rounded-full">
+              <Menu className="w-4 h-4" />
+            </Button>
+          </div>
+        </div>
 
-                {tiles.length === 0 ? (
-                  <div className="text-center py-16 animate-fade-in-scale">
-                    <div className="mb-8">
-                      <div className="w-24 h-24 bg-primary/10 rounded-full flex items-center justify-center text-4xl mx-auto mb-6 animate-bounce">
-                        🧠
+        {/* Navigation */}
+        <div className="flex-1 p-4">
+          <nav className="space-y-2">
+            {/* Home */}
+            <Button
+              variant={currentGame === "welcome" ? "default" : "ghost"}
+              className={`w-full justify-start rounded-2xl ${!sidebarOpen ? "px-2" : ""}`}
+              onClick={() => setCurrentGame("welcome")}
+            >
+              <Home className="w-5 h-5" />
+              {sidebarOpen && <span className="ml-3">Home</span>}
+            </Button>
+
+            {/* Games */}
+            {sidebarOpen && (
+              <div className="pt-4">
+                <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-2 px-3">Games</p>
+              </div>
+            )}
+
+            {games.map((game) => {
+              const IconComponent = game.icon
+              return (
+                <Button
+                  key={game.id}
+                  variant={currentGame === game.id ? "default" : "ghost"}
+                  className={`w-full justify-start rounded-2xl ${!sidebarOpen ? "px-2" : ""} ${
+                    !game.available ? "opacity-50" : ""
+                  }`}
+                  onClick={() => game.available && setCurrentGame(game.id)}
+                  disabled={!game.available}
+                >
+                  <IconComponent className="w-5 h-5" />
+                  {sidebarOpen && (
+                    <div className="ml-3 flex-1 text-left">
+                      <div className="flex items-center justify-between">
+                        <span>{game.name}</span>
+                        {!game.available && (
+                          <Badge variant="secondary" className="text-xs">
+                            Soon
+                          </Badge>
+                        )}
                       </div>
-                      <h3 className="text-2xl font-bold text-foreground mb-3">Ready to Challenge Your Mind?</h3>
-                      <p className="text-muted-foreground font-medium">Test your memory and build amazing streaks!</p>
                     </div>
-                    <Button onClick={startGame} size="lg" className="px-8 py-4 text-lg font-semibold rounded-2xl">
-                      <Play className="w-6 h-6 mr-2" />
-                      Start New Game
-                    </Button>
-                  </div>
-                ) : (
-                  <>
-                    <div className="grid grid-cols-6 gap-3 mb-6">
-                      {tiles.map((tile, index) => (
-                        <div
-                          key={tile.id}
-                          className={`aspect-square cursor-pointer perspective-1000 ${
-                            gamePhase === "playing" ? "cursor-pointer" : "cursor-default"
-                          } animate-fade-in`}
-                          style={{ animationDelay: `${index * 0.05}s` }}
-                          onClick={() => handleTileClick(tile.id)}
-                        >
-                          <div
-                            className={`w-full h-full relative preserve-3d transition-transform duration-300 ${
-                              tile.isFlipped || tile.isMatched ? "rotate-y-180" : ""
-                            } ${tile.isFlipping ? "animate-fast-flip" : ""}`}
-                          >
-                            {/* Back of tile (hidden state) */}
-                            <div className="absolute inset-0 w-full h-full backface-hidden ">
-                              <div className="w-full h-full rounded-2xl border-2 border-border flex items-center justify-center shadow-lg transition-colors bg-[#8acfd1]">
-                                <div className="w-8 h-8 bg-muted-foreground/20 rounded-full "></div>
-                              </div>
-                            </div>
+                  )}
+                </Button>
+              )
+            })}
+          </nav>
+        </div>
 
-                            {/* Front of tile (revealed state) */}
-                            <div className="absolute inset-0 w-full h-full backface-hidden rotate-y-180">
-                              <div
-                                className={`w-full h-full rounded-2xl border-2 transition-all duration-300 ${
-                                  tile.isMatched
-                                    ? "border-green-500 opacity-90 shadow-lg shadow-green-500/20"
-                                    : "border-border shadow-lg"
-                                }`}
-                              >
-                                {getTileImage(tile.imageId)}
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-
-                    <div className="flex justify-center gap-4">
-                      <Button
-                        onClick={startGame}
-                        variant="outline"
-                        className="flex items-center gap-2 font-medium bg-transparent rounded-2xl"
-                      >
-                        <RotateCcw className="w-4 h-4" />
-                        New Game
-                      </Button>
-                    </div>
-                  </>
-                )}
-              </CardContent>
-            </Card>
-          </div>
-
-          {/* Sidebar */}
-          <div className="lg:col-span-1 space-y-6">
-            {/* Current Session Stats */}
-            <Card className="border animate-slide-in-right rounded-3xl shadow-[5px_5px_0px_0px_#d04f99] border-[#d04f99] bg-[#fdedc9]">
-              <CardHeader className="bg-primary text-[#ffffff] rounded-t-3xl bg-[#d04f99]">
-                <CardTitle className="text-sm flex items-center gap-2 font-semibold">
-                  <Star className="w-4 h-4" />
-                  Current Session
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="p-4 space-y-4">
-                <div className="flex justify-between items-center">
-                  <span className="text-sm text-muted-foreground font-medium">Best Streak</span>
-                  <Badge variant={getStreakBadgeVariant(bestStreak)} className="font-semibold rounded-full">
-                    {bestStreak}
-                  </Badge>
-                </div>
-                <div className="flex justify-between items-center">
-                  <span className="text-sm text-muted-foreground font-medium">Current Streak</span>
-                  <Badge variant={getStreakBadgeVariant(streak)} className="font-semibold rounded-full">
-                    {streak}
-                  </Badge>
-                </div>
-                <Separator />
-                <div className="flex justify-between items-center">
-                  <span className="text-sm text-muted-foreground font-medium">Time Elapsed</span>
-                  <Badge variant="outline" className="font-mono font-semibold rounded-full">
-                    <Clock className="w-3 h-3 mr-1" />
-                    {formatTime(time)}
-                  </Badge>
-                </div>
-              </CardContent>
-            </Card>
-
-            {/* Leaderboard */}
-            <Card className="border animate-slide-in-right rounded-3xl shadow-[5px_5px_0px_0px_#d04f99] border-[#d04f99] bg-[#fdedc9]" style={{ animationDelay: "0.1s" }}>
-              <CardHeader className="bg-primary text-[#ffffff] rounded-t-3xl bg-[#d04f99]">
-                <CardTitle className="flex items-center gap-2 font-semibold">
-                  <Trophy className="w-5 h-5" />
-                  Leaderboard
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="p-4">
-                {leaderboard.length === 0 ? (
-                  <div className="text-center py-8">
-                    <div className="text-4xl mb-3">🏆</div>
-                    <p className="text-muted-foreground font-medium">Be the first champion!</p>
-                  </div>
-                ) : (
-                  <div className="space-y-3">
-                    {leaderboard.map((entry, index) => (
-                      <div
-                        key={index}
-                        className={`p-4 rounded-2xl border transition-all duration-200 ${
-                          index === 0
-                            ? "bg-primary/5 border-primary/20"
-                            : index === 1
-                              ? "bg-secondary/50 border-secondary"
-                              : index === 2
-                                ? "bg-muted/50 border-muted"
-                                : "bg-background border-border"
-                        }`}
-                      >
-                        <div className="flex items-center justify-between">
-                          <div className="flex items-center gap-3">
-                            <Badge
-                              variant={index === 0 ? "default" : index <= 2 ? "secondary" : "outline"}
-                              className="w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold p-0"
-                            >
-                              {index + 1}
-                            </Badge>
-                            <div>
-                              <p className="font-semibold text-sm">{entry.name}</p>
-                              <p className="text-xs text-muted-foreground">{entry.date}</p>
-                            </div>
-                          </div>
-                          <div className="text-right">
-                            <p className="font-bold text-sm font-mono">{formatTime(entry.time)}</p>
-                            <div className="flex items-center gap-1 text-xs text-muted-foreground">
-                              <span>{entry.moves}m</span>
-                              <Zap className="w-3 h-3 text-primary" />
-                              <span>{entry.streak}</span>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                )}
-              </CardContent>
-            </Card>
-
-            {/* Instructions */}
-            <Card className="border animate-slide-in-right rounded-3xl shadow-[5px_5px_0px_0px_#d04f99] border-[#d04f99] bg-[#fdedc9]" style={{ animationDelay: "0.2s" }}>
-              <CardHeader className="bg-primary text-[#ffffff] rounded-t-3xl bg-[#d04f99]">
-                <CardTitle className="text-sm font-semibold">How to Play</CardTitle>
-              </CardHeader>
-              <CardContent className="text-xs space-y-2 p-4 font-medium">
-                <p>🧠 Memorize tile patterns during preview</p>
-                <p>🎯 Click tiles to find matching pairs</p>
-                <p>🔥 Build streaks for bonus points</p>
-                <p>⚡ Complete as fast as possible</p>
-                <p>🏆 Compete on the leaderboard!</p>
-              </CardContent>
-            </Card>
+        {/* Theme Toggle */}
+        <div className="p-4 border-t border-border">
+          <div className={`flex items-center ${sidebarOpen ? "justify-between" : "justify-center"}`}>
+            {sidebarOpen && <span className="text-sm text-muted-foreground">Theme</span>}
+            <ThemeToggle />
           </div>
         </div>
       </div>
 
-      {/* Game Completion Dialog */}
-      <Dialog open={showCompletionDialog} onOpenChange={setShowCompletionDialog}>
-        <DialogContent className="sm:max-w-md rounded-3xl bg-[#fdedc9]">
-          <DialogHeader>
-            <DialogTitle className="text-center text-2xl flex items-center justify-center gap-2 font-bold">
-              <Trophy className="w-8 h-8 text-primary" />
-              Congratulations!
-            </DialogTitle>
-            <DialogDescription className="text-center text-lg">
-              You've completed the memory challenge!
-            </DialogDescription>
-          </DialogHeader>
-          <div className="text-center space-y-4">
-            <div className="text-6xl animate-bounce">🎉</div>
-            <div className="grid grid-cols-3 gap-4 text-center">
-              <div className="space-y-1">
-                <p className="text-2xl font-bold text-primary font-mono">{formatTime(time)}</p>
-                <p className="text-xs text-muted-foreground font-medium">Time</p>
-              </div>
-              <div className="space-y-1">
-                <p className="text-2xl font-bold text-primary">{moves}</p>
-                <p className="text-xs text-muted-foreground font-medium">Moves</p>
-              </div>
-              <div className="space-y-1">
-                <p className="text-2xl font-bold text-primary">{bestStreak}</p>
-                <p className="text-xs text-muted-foreground font-medium">Best Streak</p>
-              </div>
-            </div>
-            <Separator />
-            <div className="space-y-3">
-              <div className="space-y-2">
-                <Label htmlFor="player-name" className="font-medium">
-                  Enter your name for the leaderboard
-                </Label>
-                <Input
-                  id="player-name"
-                  type="text"
-                  placeholder="Your name"
-                  value={playerName}
-                  onChange={(e) => setPlayerName(e.target.value)}
-                  onKeyPress={(e) => e.key === "Enter" && saveScore()}
-                  className="font-medium rounded-2xl"
-                />
-              </div>
-            </div>
-          </div>
-          <DialogFooter className="flex gap-3 sm:gap-3">
-            <Button
-              onClick={() => setShowCompletionDialog(false)}
-              variant="outline"
-              className="flex-1 font-medium rounded-2xl"
-            >
-              Skip
-            </Button>
-            <Button onClick={saveScore} className="flex-1 font-medium rounded-2xl" disabled={!playerName.trim()}>
-              Save Score
-            </Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
+      {/* Main Content */}
+      <div className="flex-1 overflow-auto transition-all duration-300">{renderCurrentGame()}</div>
     </div>
   )
 }
