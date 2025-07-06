@@ -161,3 +161,12 @@ body {
   font-family: var(--font-sans);
 }
 
+/* .container {
+  display: flex;
+  justify-content: center;
+}
+
+.container-left {
+  display:flex;
+  justify-content: left;
+} */

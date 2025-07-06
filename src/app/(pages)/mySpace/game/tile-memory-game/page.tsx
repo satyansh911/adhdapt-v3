@@ -39,6 +39,7 @@ import TrophyIcon from "@/components/ui/trophyIcon"
 import CurrentSessionIcon from "@/components/ui/currentSessionIcon"
 import LeaderboardIcon from "@/components/ui/leaderboardIcon"
 import Loader from "@/components/ui/Loader"
+import ArrowIcon from "@/components/ui/arrowIcon"
 
 interface Tile {
   id: number
@@ -411,9 +412,9 @@ export default function TileMemoryGame({ onBack, sidebarOpen = true }: TileMemor
       <div className="max-w-7xl mx-auto">
         {/* Header */}
         <div className="flex items-center justify-between mb-8 animate-fade-in-up">
-          <div className="flex items-center gap-4 bg-[#fdedc9]">
-            <Button variant="outline" size="sm" onClick={onBack} className="rounded-full bg-transparent shadow-[3px_3px_0px_0px_#d14e99]">
-              <ArrowLeft className="w-4 h-4 mr-2" />
+          <div className="flex items-center gap-4">
+            <Button variant="outline" size="sm" onClick={onBack} className="bg-[#fdedc9] rounded-full shadow-[3px_3px_0px_0px_#d14e99] hover:bg-[#fdedc9] hover:shadow-none hover:translate-x-1 hover:translate-y-1 transition-all duration-200 ease-in-out">
+              <ArrowIcon/>
               Back to Arcade
             </Button>
           </div>
@@ -458,7 +459,7 @@ export default function TileMemoryGame({ onBack, sidebarOpen = true }: TileMemor
                     </Badge>
                     <Badge
                       variant={getStreakBadgeVariant(streak)}
-                      className={`flex items-center gap-1 px-3 py-1 font-medium rounded-full ${streak >= 3 ? "animate-pulse" : ""}`}
+                      className={`flex bg-white text-black items-center gap-1 px-3 py-1 font-medium rounded-full ${streak >= 3 ? "animate-pulse" : ""}`}
                     >
                       <FireIcon/>
                       {streak} streak
@@ -495,8 +496,8 @@ export default function TileMemoryGame({ onBack, sidebarOpen = true }: TileMemor
                       <h3 className="text-2xl font-bold text-foreground mb-3">Ready to Challenge Your Mind?</h3>
                       <p className="text-muted-foreground font-medium">Test your memory and build amazing streaks!</p>
                     </div>
-                    <Button onClick={startGame} size="lg" className="px-8 py-4 text-lg font-semibold rounded-2xl bg-[#8acfd1] shadow-[3px_3px_0px_0px_#d14e99]">
-                      <Play className="w-6 h-6 mr-2" />
+                    <Button onClick={startGame} size="lg" className="px-8 py-4 text-lg text-black font-semibold rounded-2xl bg-[#8acfd1] shadow-[3px_3px_0px_0px_#d14e99] hover:bg-[#8acfd1] hover:shadow-none hover:translate-x-1 hover:translate-y-1 transition-all duration-200 ease-in-out">
+                      <img src="/play.png" className="w-6 h-6"/>
                       Start New Game
                     </Button>
                   </div>
@@ -545,7 +546,7 @@ export default function TileMemoryGame({ onBack, sidebarOpen = true }: TileMemor
                       <Button
                         onClick={startGame}
                         variant="outline"
-                        className="flex items-center gap-2 font-medium bg-transparent rounded-2xl"
+                        className="flex items-center gap-2 font-medium bg-transparent rounded-2xl bg-"
                       >
                         <RotateCcw className="w-4 h-4" />
                         New Game

@@ -19,6 +19,7 @@ import FocusFlowIcon from "@/components/ui/focusFlowIcon"
 import MindMazeIcon from "@/components/ui/mindMazeIcon"
 import HomeIcon from "@/components/ui/homeIcon"
 import SidebarIcon from "@/components/ui/sidebarLogo"
+import TimerIcon from "@/components/ui/timerIcon"
 
 type GameType = "welcome" | "tile-memory" | "coming-soon-1" | "coming-soon-2"
 
@@ -124,7 +125,7 @@ export default function GameHub() {
               return (
                 <Card
                   key={game.id}
-                  className={`border bg-[#fdedc9] shadow-[5px_5px_0px_0px_#d04f99] border-[#d04f99] rounded-3xl transition-all duration-300 hover:shadow-xl hover:scale-105 cursor-pointer animate-slide-in ${
+                  className={`border bg-[#fdedc9] shadow-[5px_5px_0px_0px_#d04f99] border-[#d04f99] rounded-3xl hover:shadow-none hover:translate-x-1 hover:translate-y-1 transition-all duration-200 ease-in-out cursor-pointer animate-slide-in ${
                     !game.available ? "opacity-60" : ""
                   }`}
                   style={{ animationDelay: `${index * 0.1}s` }}
@@ -148,7 +149,7 @@ export default function GameHub() {
                     <p className="text-muted-foreground mb-4 font-medium">{game.description}</p>
                     <div className="flex justify-between items-center mb-4">
                       <div className="flex items-center gap-2">
-                        <Timer className="w-4 h-4 text-muted-foreground" />
+                        <TimerIcon/>
                         <span className="text-sm text-muted-foreground">{game.difficulty}</span>
                       </div>
                       <div className="flex items-center gap-2">
@@ -200,7 +201,7 @@ export default function GameHub() {
               </div>
               <h3 className="text-xl font-bold mb-2">Engaging & Fun</h3>
               <p className="text-muted-foreground">
-                Colorful, interactive games that make brain training enjoyable and motivating for all ages.
+                Colorful, interactive games that make brain training <br/>enjoyable and motivating for all ages.
               </p>
             </div>
           </div>

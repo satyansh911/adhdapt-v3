@@ -5,11 +5,11 @@ import { NavigationMenuDemo } from '@/components/ui/Navbar'
 function page() {
   return (
     <div>
-      <div>
+      <div className='relative'>
         <NavigationMenuDemo/>
       </div>
       <div>
-        <Home/>
+        {/* <Home/> */}
       </div>
     </div>
   )
