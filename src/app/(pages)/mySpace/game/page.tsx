@@ -278,7 +278,7 @@ export default function GameHub() {
               </div>
             )}
             <Button variant="ghost" size="sm" onClick={() => setSidebarOpen(!sidebarOpen)} className="rounded-full">
-              <Menu className="w-4 h-4" />
+              <Menu className="relative left-1 w-4 h-4" />
             </Button>
           </div>
         </div>

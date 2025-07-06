@@ -28,10 +28,17 @@ import {
   Clock,
   Award,
   ArrowLeft,
-  Grid3X3,
   X,
 } from "lucide-react"
 import TileIcon from "@/components/ui/tileGame"
+import FireIcon from "@/components/ui/fireIcon"
+import BadgeIcon from "@/components/ui/badgeIcon"
+import TargetIcon from "@/components/ui/targetIcon"
+import TimerIcon from "@/components/ui/timerIcon"
+import TrophyIcon from "@/components/ui/trophyIcon"
+import CurrentSessionIcon from "@/components/ui/currentSessionIcon"
+import LeaderboardIcon from "@/components/ui/leaderboardIcon"
+import Loader from "@/components/ui/Loader"
 
 interface Tile {
   id: number
@@ -308,7 +315,7 @@ export default function TileMemoryGame({ onBack, sidebarOpen = true }: TileMemor
       {/* Streak Effect */}
       {showStreakEffect && (
         <div className="fixed inset-0 pointer-events-none z-40 flex items-center justify-center">
-          <div className="animate-ping text-6xl">🔥</div>
+          <div className="animate-ping text-6xl"><FireIcon/></div>
           <div className="absolute animate-bounce text-4xl font-bold text-primary mt-16">STREAK {streak}!</div>
         </div>
       )}
@@ -404,18 +411,18 @@ export default function TileMemoryGame({ onBack, sidebarOpen = true }: TileMemor
       <div className="max-w-7xl mx-auto">
         {/* Header */}
         <div className="flex items-center justify-between mb-8 animate-fade-in-up">
-          <div className="flex items-center gap-4">
-            <Button variant="outline" size="sm" onClick={onBack} className="rounded-full bg-transparent">
+          <div className="flex items-center gap-4 bg-[#fdedc9]">
+            <Button variant="outline" size="sm" onClick={onBack} className="rounded-full bg-transparent shadow-[3px_3px_0px_0px_#d14e99]">
               <ArrowLeft className="w-4 h-4 mr-2" />
               Back to Arcade
             </Button>
           </div>
           <div className="text-center flex-1">
-            <h1 className="text-4xl md:text-5xl font-bold text-foreground flex items-center justify-center">
+            <h1 className="text-4xl md:text-5xl font-bold text-foreground flex items-center justify-center relative -left-10  ">
               <TileIcon/>
               TileTango
             </h1>
-            <p className="text-muted-foreground text-lg font-medium">
+            <p className="text-muted-foreground text-lg font-medium relative -left-8 top-4">
               The fun way to stay sharp — match, remember, repeat!
             </p>
           </div>
@@ -431,27 +438,29 @@ export default function TileMemoryGame({ onBack, sidebarOpen = true }: TileMemor
               <CardHeader className="bg-primary text-[#FFFFFF] rounded-t-3xl bg-[#d04f99]">
                 <div className="flex flex-wrap items-center justify-between gap-1">
                   <CardTitle className="flex items-center gap-2 text-xl font-semibold">
-                    <Trophy className="w-6 h-6" />
+                    <div className="relative -top-5 -left-6 w-10 h-10">
+                      <TrophyIcon/>
+                    </div>
                     Memory Challenge
                   </CardTitle>
                   <div className="flex flex-wrap items-center gap-3">
                     <Badge variant="secondary" className="flex items-center gap-1 px-3 py-1 font-medium rounded-full">
-                      <Timer className="w-4 h-4" />
+                      <TimerIcon/>
                       {formatTime(time)}
                     </Badge>
                     <Badge variant="secondary" className="px-3 py-1 font-medium rounded-full">
-                      <Target className="w-4 h-4 mr-1" />
+                      <TargetIcon/>
                       {moves} moves
                     </Badge>
                     <Badge variant="secondary" className="px-3 py-1 font-medium rounded-full">
-                      <Award className="w-4 h-4 mr-1" />
+                      <BadgeIcon/>
                       {matchedPairs}/18
                     </Badge>
                     <Badge
                       variant={getStreakBadgeVariant(streak)}
                       className={`flex items-center gap-1 px-3 py-1 font-medium rounded-full ${streak >= 3 ? "animate-pulse" : ""}`}
                     >
-                      <Flame className="w-4 h-4" />
+                      <FireIcon/>
                       {streak} streak
                     </Badge>
                   </div>
@@ -480,13 +489,13 @@ export default function TileMemoryGame({ onBack, sidebarOpen = true }: TileMemor
                 {tiles.length === 0 ? (
                   <div className="text-center py-16 animate-fade-in-scale">
                     <div className="mb-8">
-                      <div className="w-24 h-24 bg-primary/10 rounded-full flex items-center justify-center text-4xl mx-auto mb-6 animate-bounce">
-                        🧠
+                      <div className="w-[220px] relative left-[38%]">
+                        <Loader/>
                       </div>
                       <h3 className="text-2xl font-bold text-foreground mb-3">Ready to Challenge Your Mind?</h3>
                       <p className="text-muted-foreground font-medium">Test your memory and build amazing streaks!</p>
                     </div>
-                    <Button onClick={startGame} size="lg" className="px-8 py-4 text-lg font-semibold rounded-2xl">
+                    <Button onClick={startGame} size="lg" className="px-8 py-4 text-lg font-semibold rounded-2xl bg-[#8acfd1] shadow-[3px_3px_0px_0px_#d14e99]">
                       <Play className="w-6 h-6 mr-2" />
                       Start New Game
                     </Button>
@@ -564,7 +573,7 @@ export default function TileMemoryGame({ onBack, sidebarOpen = true }: TileMemor
             <Card className="border animate-slide-in-right rounded-3xl shadow-[5px_5px_0px_0px_#d04f99] border-[#d04f99] bg-[#fdedc9]">
               <CardHeader className="bg-primary text-[#ffffff] rounded-t-3xl bg-[#d04f99]">
                 <CardTitle className="text-sm flex items-center gap-2 font-semibold">
-                  <Star className="w-4 h-4" />
+                  <CurrentSessionIcon/>
                   Current Session
                 </CardTitle>
               </CardHeader>
@@ -599,7 +608,7 @@ export default function TileMemoryGame({ onBack, sidebarOpen = true }: TileMemor
             >
               <CardHeader className="bg-primary text-[#ffffff] rounded-t-3xl bg-[#d04f99]">
                 <CardTitle className="flex items-center gap-2 font-semibold">
-                  <Trophy className="w-5 h-5" />
+                  <LeaderboardIcon/>
                   Leaderboard
                 </CardTitle>
               </CardHeader>
@@ -616,19 +625,19 @@ export default function TileMemoryGame({ onBack, sidebarOpen = true }: TileMemor
                         key={index}
                         className={`p-4 rounded-2xl border transition-all duration-200 ${
                           index === 0
-                            ? "bg-primary/5 border-primary/20"
+                            ? "border-primary/20 bg-[#f96f70] text-white"
                             : index === 1
-                              ? "bg-secondary/50 border-secondary"
+                              ? "bg-[#333333] text-white border-secondary"
                               : index === 2
-                                ? "bg-muted/50 border-muted"
-                                : "bg-background border-border"
+                                ? "bg-[#5b5b5b] text-white border-muted"
+                                : "bg-white text-black border-border"
                         }`}
                       >
                         <div className="flex items-center justify-between">
                           <div className="flex items-center gap-3">
                             <Badge
                               variant={index === 0 ? "default" : index <= 2 ? "secondary" : "outline"}
-                              className="w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold p-0"
+                              className="w-8 h-8 bg-[#fdedc9] rounded-full flex items-center justify-center text-sm text-black font-bold p-0"
                             >
                               {index + 1}
                             </Badge>
