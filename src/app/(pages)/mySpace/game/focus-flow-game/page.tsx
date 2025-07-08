@@ -17,6 +17,8 @@ import {
   DialogFooter,
 } from "@/components/ui/dialog"
 import { Timer, Trophy, RotateCcw, Play, Target, Award, ArrowLeft, Search, X, CheckCircle } from "lucide-react"
+import Loader1 from "@/components/ui/Loader1"
+import SearchIcon from "@/components/ui/SearchIcon"
 
 interface GridCell {
   letter: string
@@ -506,7 +508,7 @@ export default function FocusFlowGame({ onBack, sidebarOpen = true }: FocusFlowG
               <CardHeader className="bg-[#4f99d0] text-white rounded-t-3xl">
                 <div className="flex flex-wrap items-center justify-between gap-1">
                   <CardTitle className="flex items-center gap-2 text-xl font-semibold">
-                    <Search className="w-6 h-6" />
+                    <SearchIcon/>
                     Word Search
                   </CardTitle>
                   <div className="flex flex-wrap items-center gap-3">
@@ -534,8 +536,8 @@ export default function FocusFlowGame({ onBack, sidebarOpen = true }: FocusFlowG
                 {grid.length === 0 ? (
                   <div className="text-center py-16 animate-fade-in-scale">
                     <div className="mb-8">
-                      <div className="w-24 h-24 bg-primary/10 rounded-full flex items-center justify-center text-4xl mx-auto mb-6 animate-bounce">
-                        🔍
+                      <div className="w-24 h-24 bg-primary/10 rounded-full flex items-center justify-center text-4xl mx-auto mb-16">
+                        <Loader1/>
                       </div>
                       <h3 className="text-2xl font-bold text-foreground mb-3">Ready to Find Words?</h3>
                       <p className="text-muted-foreground font-medium">Search for hidden words in all directions!</p>
