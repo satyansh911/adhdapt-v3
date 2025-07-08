@@ -20,8 +20,9 @@ import MindMazeIcon from "@/components/ui/mindMazeIcon"
 import HomeIcon from "@/components/ui/homeIcon"
 import SidebarIcon from "@/components/ui/sidebarLogo"
 import TimerIcon from "@/components/ui/timerIcon"
+import FocusFlowGame from "./focus-flow-game/page"
 
-type GameType = "welcome" | "tile-memory" | "coming-soon-1" | "coming-soon-2"
+type GameType = "welcome" | "tile-memory" | "focus-flow" | "coming-soon-2"
 
 export default function GameHub() {
   const [currentGame, setCurrentGame] = useState<GameType>("welcome")
@@ -48,12 +49,12 @@ export default function GameHub() {
       players: "Single Player",
     },
     {
-      id: "coming-soon-1" as GameType,
+      id: "focus-flow" as GameType,
       name: "Focus Flow",
       description: "Attention training exercises",
       icon: FocusFlowIcon,
       color: "bg-blue-500",
-      available: false,
+      available: true,
       difficulty: "Easy",
       players: "Single Player",
     },
@@ -231,8 +232,8 @@ export default function GameHub() {
         return <WelcomePage />
       case "tile-memory":
         return <TileMemoryGame onBack={() => setCurrentGame("welcome")} sidebarOpen={sidebarOpen} />
-      case "coming-soon-1":
-        return <ComingSoonPage gameName="Focus Flow" />
+      case "focus-flow":
+        return <FocusFlowGame onBack={() => setCurrentGame("welcome")} sidebarOpen={sidebarOpen} />
       case "coming-soon-2":
         return <ComingSoonPage gameName="Mind Maze" />
       default:
@@ -254,10 +255,16 @@ export default function GameHub() {
   }
 
   return (
-    <div className="flex min-h-screen bg-background">
+    <div
+      className={`flex min-h-screen transition-colors duration-500 ${
+        currentGame === "focus-flow" ? "bg-[#d8eaf8]" : "bg-background"
+      }`}
+    >
       {/* Sidebar */}
       <div
-        className={`${sidebarOpen ? "w-80" : "w-16"} transition-all duration-300 border-r border-border flex flex-col animate-slide-in bg-[#f8d8ea]`}
+        className={`${sidebarOpen ? "w-80" : "w-16"} transition-all duration-300 border-r border-border flex flex-col animate-slide-in ${
+          currentGame === "focus-flow" ? "bg-[#a8d4f9]" : "bg-[#f8d8ea]"
+        }`}
       >
         {/* Sidebar Header */}
         <div className="p-2 border-b border-border">
