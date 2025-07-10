@@ -21,8 +21,9 @@ import HomeIcon from "@/components/ui/homeIcon"
 import SidebarIcon from "@/components/ui/sidebarLogo"
 import TimerIcon from "@/components/ui/timerIcon"
 import FocusFlowGame from "./focus-flow-game/page"
+import SoundMemoryGame from "./sound-memory-game/page"
 
-type GameType = "welcome" | "tile-memory" | "focus-flow" | "coming-soon-2"
+type GameType = "welcome" | "tile-memory" | "focus-flow" | "sound-memory"
 
 export default function GameHub() {
   const [currentGame, setCurrentGame] = useState<GameType>("welcome")
@@ -59,13 +60,13 @@ export default function GameHub() {
       players: "Single Player",
     },
     {
-      id: "coming-soon-2" as GameType,
-      name: "Mind Maze",
-      description: "Navigate complex puzzles",
+      id: "sound-memory" as GameType,
+      name: "EchoCritters",
+      description: "Sound memory game",
       icon: MindMazeIcon,
       color: "bg-green-500",
-      available: false,
-      difficulty: "Hard",
+      available: true,
+      difficulty: "Medium",
       players: "Single Player",
     },
   ]
@@ -234,8 +235,8 @@ export default function GameHub() {
         return <TileMemoryGame onBack={() => setCurrentGame("welcome")} sidebarOpen={sidebarOpen} />
       case "focus-flow":
         return <FocusFlowGame onBack={() => setCurrentGame("welcome")} sidebarOpen={sidebarOpen} />
-      case "coming-soon-2":
-        return <ComingSoonPage gameName="Mind Maze" />
+      case "sound-memory":
+        return <SoundMemoryGame onBack={() => setCurrentGame("welcome")} sidebarOpen={sidebarOpen} />
       default:
         return <WelcomePage />
     }
