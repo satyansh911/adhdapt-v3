@@ -19,6 +19,14 @@ import {
 import { Timer, Trophy, RotateCcw, Play, Target, Award, ArrowLeft, Search, X, CheckCircle } from "lucide-react"
 import Loader1 from "@/components/ui/Loader1"
 import SearchIcon from "@/components/ui/SearchIcon"
+import FocusFlowIcon from "@/components/ui/focusFlowIcon"
+import TimerIcon from "@/components/ui/timerIcon"
+import BadgeIcon from "@/components/ui/badgeIcon"
+import TargetIcon from "@/components/ui/targetIcon"
+import TrophyIcon from "@/components/ui/trophyIcon"
+import LeaderboardIcon from "@/components/ui/leaderboardIcon"
+import ArrowIcon from "@/components/ui/arrowIcon"
+import PencilIcon from "@/components/ui/PencilIcon"
 
 interface GridCell {
   letter: string
@@ -485,16 +493,16 @@ export default function FocusFlowGame({ onBack, sidebarOpen = true }: FocusFlowG
         <div className="flex items-center justify-between mb-8 animate-fade-in-up">
           <div className="flex items-center gap-4">
             <Button variant="outline" size="sm" onClick={onBack} className="rounded-full bg-transparent bg-[#edc9fd] shadow-[3px_3px_0px_0px_#4f99d0] hover:bg-[#edc9fd] hover:shadow-none hover:translate-x-1 hover:translate-y-1 transition-all duration-200 ease-in-out">
-              <ArrowLeft className="w-4 h-4 mr-2" />
+              <ArrowIcon/>
               Back to Arcade
             </Button>
           </div>
           <div className="text-center flex-1">
-            <h1 className="text-4xl md:text-5xl font-bold text-foreground flex items-center justify-center">
-              <Target className="w-10 h-10 md:w-12 md:h-12 text-primary mr-3" />
-              Focus Flow
+            <h1 className="text-4xl md:text-5xl font-bold text-foreground flex items-center justify-center relative -left-10">
+              <FocusFlowIcon/>
+              SpellBound
             </h1>
-            <p className="text-muted-foreground text-lg font-medium">Find hidden words in the letter matrix</p>
+            <p className="text-muted-foreground text-lg font-medium relative -left-10 top-4">Find hidden words in the letter matrix</p>
           </div>
           <div className="w-24"></div>
         </div>
@@ -513,11 +521,11 @@ export default function FocusFlowGame({ onBack, sidebarOpen = true }: FocusFlowG
                   </CardTitle>
                   <div className="flex flex-wrap items-center gap-3">
                     <Badge variant="secondary" className="flex items-center gap-1 px-3 py-1 font-medium rounded-full">
-                      <Timer className="w-4 h-4" />
+                      <TimerIcon/>
                       {formatTime(time)}
                     </Badge>
                     <Badge variant="secondary" className="px-3 py-1 font-medium rounded-full">
-                      <Award className="w-4 h-4 mr-1" />
+                      <BadgeIcon/>
                       {foundWords.size}/{words.length}
                     </Badge>
                   </div>
@@ -608,14 +616,14 @@ export default function FocusFlowGame({ onBack, sidebarOpen = true }: FocusFlowG
             <Card className="border animate-slide-in-right rounded-3xl shadow-[5px_5px_0px_0px_#4f99d0] border-[#4f99d0] bg-[#edc9fd]">
               <CardHeader className="bg-[#4f99d0] text-white rounded-t-3xl">
                 <CardTitle className="text-sm flex items-center gap-2 font-semibold">
-                  <Target className="w-4 h-4" />
+                  <TargetIcon/>
                   Words to Find
                 </CardTitle>
               </CardHeader>
               <CardContent className="p-4">
                 {words.length === 0 ? (
-                  <div className="text-center py-8">
-                    <div className="text-4xl mb-3">📝</div>
+                  <div className="text-center py-4">
+                    <div className="text-4xl"><PencilIcon/></div>
                     <p className="text-muted-foreground font-medium">Start a game to see words!</p>
                   </div>
                 ) : (
@@ -645,14 +653,14 @@ export default function FocusFlowGame({ onBack, sidebarOpen = true }: FocusFlowG
             >
               <CardHeader className="bg-[#4f99d0] text-white rounded-t-3xl">
                 <CardTitle className="flex items-center gap-2 font-semibold">
-                  <Trophy className="w-5 h-5" />
+                  <LeaderboardIcon/>
                   Leaderboard
                 </CardTitle>
               </CardHeader>
               <CardContent className="p-4">
                 {leaderboard.length === 0 ? (
                   <div className="text-center py-8">
-                    <div className="text-4xl mb-3">🏆</div>
+                    <div className="text-4xl mb-3"><LeaderboardIcon/></div>
                     <p className="text-muted-foreground font-medium">Be the first champion!</p>
                   </div>
                 ) : (
@@ -660,21 +668,21 @@ export default function FocusFlowGame({ onBack, sidebarOpen = true }: FocusFlowG
                     {leaderboard.map((entry, index) => (
                       <div
                         key={index}
-                        className={`p-4 rounded-2xl border transition-all duration-200 ${
+                        className={`p-4 rounded-2xl border transition-all duration-200 text-white ${
                           index === 0
-                            ? "bg-primary/5 border-primary/20"
+                            ? "bg-[#333333]"
                             : index === 1
-                              ? "bg-secondary/50 border-secondary"
+                              ? "bg-[#d2e284]"
                               : index === 2
-                                ? "bg-muted/50 border-muted"
-                                : "bg-background border-border"
+                                ? "bg-[#5b5b5b]"
+                                : "bg-[#4f99d0]"
                         }`}
                       >
                         <div className="flex items-center justify-between">
                           <div className="flex items-center gap-3">
                             <Badge
                               variant={index === 0 ? "default" : index <= 2 ? "secondary" : "outline"}
-                              className="w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold p-0"
+                              className="w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold p-0 bg-[#edc9fd] text-black"
                             >
                               {index + 1}
                             </Badge>

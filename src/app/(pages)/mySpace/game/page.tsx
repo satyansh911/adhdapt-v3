@@ -50,7 +50,7 @@ export default function GameHub() {
     },
     {
       id: "focus-flow" as GameType,
-      name: "Focus Flow",
+      name: "SpellBound",
       description: "Attention training exercises",
       icon: FocusFlowIcon,
       color: "bg-blue-500",
