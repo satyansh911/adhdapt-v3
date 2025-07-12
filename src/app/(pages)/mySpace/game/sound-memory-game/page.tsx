@@ -8,15 +8,18 @@ import { ArrowLeft, Volume2, VolumeX, Play, RotateCcw, Trophy, Medal, Award } fr
 import ArrowIcon from "@/components/ui/arrowIcon"
 import MindMazeIcon from "@/components/ui/mindMazeIcon"
 import MusicIcon from "@/components/ui/MusicIcon"
-import StarIcon from "@/components/ui/starIcon"
 import Star1Icon from "@/components/ui/Star1Icon"
-import TrophyIcon from "@/components/ui/trophyIcon"
 import MedalIcon from "@/components/ui/MedalIcon"
 import SquirrelIcon from "@/components/ui/SquirrelIcon"
 import CatIcon from "@/components/ui/CatIcon"
 import BeeIcon from "@/components/ui/BeeIcon"
 import DuckIcon from "@/components/ui/DuckIcon"
 import LeaderboardIcon from "@/components/ui/leaderboardIcon"
+import VolumeOnIcon from "@/components/ui/VolumeOn"
+import VolumeOffIcon from "@/components/ui/VolumeOff"
+import TargetIcon from "@/components/ui/targetIcon"
+import ProgressIcon from "@/components/ui/ProgressIcon"
+import styles from "./sound_game.module.css";
 
 interface SoundMemoryGameProps {
   onBack: () => void
@@ -504,7 +507,7 @@ export default function SoundMemoryGame({ onBack, sidebarOpen }: SoundMemoryGame
                 size="sm"
                 className="rounded-full w-12 h-12 bg-background/20 hover:bg-background/30 backdrop-blur-sm"
               >
-                {soundEnabled ? <Volume2 className="w-5 h-5" /> : <VolumeX className="w-5 h-5" />}
+                {soundEnabled ? <VolumeOnIcon/> : <VolumeOffIcon/>}
               </Button>
             </div>
           </div>
@@ -614,7 +617,10 @@ export default function SoundMemoryGame({ onBack, sidebarOpen }: SoundMemoryGame
               })}
 
               {/* Center decoration */}
-              <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-16 h-16 bg-gradient-to-br from-white/20 to-white/5 rounded-full backdrop-blur-sm border border-white/30 flex items-center justify-center">
+              <div
+                className={`absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 rounded-full backdrop-blur-sm border border-white/30 flex items-center justify-center ${styles.container}`}
+                style={{ width: "4rem", height: "4rem" }} // w-16 h-16
+              >
                 <div className="w-8 h-8 bg-gradient-to-br from-primary/50 to-primary/30 rounded-full animate-pulse"></div>
               </div>
             </div>
@@ -669,7 +675,7 @@ export default function SoundMemoryGame({ onBack, sidebarOpen }: SoundMemoryGame
           {/* Enhanced Instructions */}
           <div className="mt-16 max-w-4xl mx-auto">
             <Card
-              className="bg-background/80 backdrop-blur-sm rounded-3xl shadow-2xl animate-fade-in-up"
+              className="bg-[#c9fded] shadow-[5px_5px_0px_0px_#99d04f] hover:bg-[#c9fded] hover:shadow-none hover:translate-x-1 hover:translate-y-1 transition-all duration-200 ease-in-out backdrop-blur-sm rounded-3xl animate-fade-in-up"
               style={{ animationDelay: "0.3s" }}
             >
               <CardContent className="p-8">
@@ -679,13 +685,13 @@ export default function SoundMemoryGame({ onBack, sidebarOpen }: SoundMemoryGame
                 <div className="grid md:grid-cols-2 gap-6 text-base text-muted-foreground">
                   <div className="space-y-3">
                     <p className="flex items-center gap-3">
-                      <span className="text-2xl">🎵</span>
+                      <span className="text-2xl"><MusicIcon size={30}/></span>
                       <span>
                         <strong className="text-foreground">Listen:</strong> Watch and listen to the sequence of sounds
                       </span>
                     </p>
                     <p className="flex items-center gap-3">
-                      <span className="text-2xl">🎯</span>
+                      <span className="text-2xl"><TargetIcon/></span>
                       <span>
                         <strong className="text-foreground">Repeat:</strong> Click the buttons in the same order
                       </span>
@@ -693,14 +699,14 @@ export default function SoundMemoryGame({ onBack, sidebarOpen }: SoundMemoryGame
                   </div>
                   <div className="space-y-3">
                     <p className="flex items-center gap-3">
-                      <span className="text-2xl">📈</span>
+                      <span className="text-2xl"><ProgressIcon size={35}/></span>
                       <span>
                         <strong className="text-foreground">Progress:</strong> Each level adds one more sound to
                         remember
                       </span>
                     </p>
                     <p className="flex items-center gap-3">
-                      <span className="text-2xl">🏆</span>
+                      <span className="text-2xl"><LeaderboardIcon size={35}/></span>
                       <span>
                         <strong className="text-foreground">Compete:</strong> Beat high scores and climb the leaderboard
                       </span>
