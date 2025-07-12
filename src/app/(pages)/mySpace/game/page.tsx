@@ -264,7 +264,7 @@ export default function GameHub() {
       {/* Sidebar */}
       <div
         className={`${sidebarOpen ? "w-80" : "w-16"} transition-all duration-300 border-r border-border flex flex-col animate-slide-in ${
-          currentGame === "focus-flow" ? "bg-[#a8d4f9]" : "bg-[#f8d8ea]"
+          currentGame === "focus-flow" ? "bg-[#a8d4f9]" : currentGame === "sound-memory" ? "bg-[#d4f9a8]" : "bg-[#f8d8ea]"
         }`}
       >
         {/* Sidebar Header */}

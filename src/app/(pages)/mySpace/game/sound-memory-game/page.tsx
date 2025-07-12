@@ -1,10 +1,22 @@
 "use client"
 
-import { useState, useCallback, useEffect } from "react"
+import { useState, useCallback, useEffect, useRef } from "react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog"
 import { ArrowLeft, Volume2, VolumeX, Play, RotateCcw, Trophy, Medal, Award } from "lucide-react"
+import ArrowIcon from "@/components/ui/arrowIcon"
+import MindMazeIcon from "@/components/ui/mindMazeIcon"
+import MusicIcon from "@/components/ui/MusicIcon"
+import StarIcon from "@/components/ui/starIcon"
+import Star1Icon from "@/components/ui/Star1Icon"
+import TrophyIcon from "@/components/ui/trophyIcon"
+import MedalIcon from "@/components/ui/MedalIcon"
+import SquirrelIcon from "@/components/ui/SquirrelIcon"
+import CatIcon from "@/components/ui/CatIcon"
+import BeeIcon from "@/components/ui/BeeIcon"
+import DuckIcon from "@/components/ui/DuckIcon"
+import LeaderboardIcon from "@/components/ui/leaderboardIcon"
 
 interface SoundMemoryGameProps {
   onBack: () => void
@@ -20,7 +32,7 @@ interface SoundButton {
   activeColor: string
   glowColor: string
   sound: number
-  emoji: string
+  emoji: React.ReactNode
   name: string
   shape: string
 }
@@ -50,6 +62,14 @@ export default function SoundMemoryGame({ onBack, sidebarOpen }: SoundMemoryGame
   const [showNameInput, setShowNameInput] = useState(false)
   const [isNewHighScore, setIsNewHighScore] = useState(false)
 
+  // refs for icons
+  const squirrelRef = useRef<any>(null)
+  const catRef = useRef<any>(null)
+  const beeRef = useRef<any>(null)
+  const duckRef = useRef<any>(null)
+
+  const iconRefs = [squirrelRef, catRef, beeRef, duckRef]
+
   const soundButtons: SoundButton[] = [
     {
       id: 0,
@@ -58,8 +78,8 @@ export default function SoundMemoryGame({ onBack, sidebarOpen }: SoundMemoryGame
       activeColor: "from-green-300 to-green-500",
       glowColor: "shadow-green-400/50",
       sound: 261.63,
-      emoji: "🐸",
-      name: "Frog",
+      emoji: <SquirrelIcon ref={squirrelRef} />,
+      name: "Squirrel",
       shape: "rounded-full",
     },
     {
@@ -69,8 +89,8 @@ export default function SoundMemoryGame({ onBack, sidebarOpen }: SoundMemoryGame
       activeColor: "from-yellow-300 to-yellow-500",
       glowColor: "shadow-yellow-400/50",
       sound: 329.63,
-      emoji: "🐝",
-      name: "Bee",
+      emoji: <CatIcon ref={catRef} />,
+      name: "Cat",
       shape: "rounded-2xl rotate-45",
     },
     {
@@ -80,8 +100,8 @@ export default function SoundMemoryGame({ onBack, sidebarOpen }: SoundMemoryGame
       activeColor: "from-red-300 to-red-500",
       glowColor: "shadow-red-400/50",
       sound: 392.0,
-      emoji: "🐙",
-      name: "Octopus",
+      emoji: <BeeIcon ref={beeRef} />,
+      name: "Bee",
       shape: "rounded-3xl",
     },
     {
@@ -91,8 +111,8 @@ export default function SoundMemoryGame({ onBack, sidebarOpen }: SoundMemoryGame
       activeColor: "from-blue-300 to-blue-500",
       glowColor: "shadow-blue-400/50",
       sound: 523.25,
-      emoji: "🪼",
-      name: "Jellyfish",
+      emoji: <DuckIcon ref={duckRef} />,
+      name: "Duck",
       shape: "rounded-full",
     },
   ]
@@ -201,7 +221,7 @@ export default function SoundMemoryGame({ onBack, sidebarOpen }: SoundMemoryGame
     return newSequence
   }, [currentLevel])
 
-  // Show sequence to player
+  // Show sequence to player, now triggers icon animation
   const showSequence = useCallback(
     async (seq: number[]) => {
       setGamePhase("showing")
@@ -213,6 +233,9 @@ export default function SoundMemoryGame({ onBack, sidebarOpen }: SoundMemoryGame
 
         setActiveButton(seq[i])
         setShowingIndex(i + 1)
+
+        // Play icon animation
+        iconRefs[seq[i]].current?.playAnimation?.()
         playSound(soundButtons[seq[i]].sound, 0.6)
 
         await new Promise((resolve) => setTimeout(resolve, 600))
@@ -223,7 +246,7 @@ export default function SoundMemoryGame({ onBack, sidebarOpen }: SoundMemoryGame
       setMessage("Now repeat the sequence!")
       setPlayerSequence([])
     },
-    [playSound, soundButtons],
+    [playSound, soundButtons, iconRefs],
   )
 
   // Start new game
@@ -236,16 +259,17 @@ export default function SoundMemoryGame({ onBack, sidebarOpen }: SoundMemoryGame
     showSequence(newSeq)
   }, [generateSequence, showSequence])
 
-  // Handle button click
+  // Handle button click, now triggers icon animation
   const handleButtonClick = useCallback(
     (buttonId: number) => {
       if (gamePhase !== "waiting") return
 
       const newPlayerSequence = [...playerSequence, buttonId]
       setPlayerSequence(newPlayerSequence)
-
-      // Play sound and show visual feedback
       setActiveButton(buttonId)
+
+      // Play icon animation
+      iconRefs[buttonId].current?.playAnimation?.()
       playSound(soundButtons[buttonId].sound, 0.3)
       setTimeout(() => setActiveButton(null), 200)
 
@@ -283,6 +307,7 @@ export default function SoundMemoryGame({ onBack, sidebarOpen }: SoundMemoryGame
       generateSequence,
       showSequence,
       checkHighScore,
+      iconRefs,
     ],
   )
 
@@ -410,9 +435,9 @@ export default function SoundMemoryGame({ onBack, sidebarOpen }: SoundMemoryGame
   )
 
   return (
-    <div className={`min-h-screen transition-all duration-300 ${sidebarOpen ? "ml-0" : "ml-0"}`}>
+    <div className={`min-h-screen bg-[#eaf8d8] transition-all duration-300 ${sidebarOpen ? "ml-0" : "ml-0"}`}>
       {/* Dynamic animated background */}
-      <div className="min-h-screen bg-gradient-to-br from-emerald-100 via-teal-50 to-cyan-100 dark:from-emerald-900 dark:via-teal-900 dark:to-cyan-900 relative overflow-hidden">
+      <div className="min-h-screen relative overflow-hidden">
         {/* Enhanced background elements with animations */}
         <div className="absolute inset-0 overflow-hidden">
           <div className="absolute -top-40 -right-40 w-96 h-96 bg-gradient-to-br from-green-300 to-emerald-400 rounded-full mix-blend-multiply filter blur-xl opacity-60 animate-float"></div>
@@ -446,16 +471,23 @@ export default function SoundMemoryGame({ onBack, sidebarOpen }: SoundMemoryGame
 
         {/* Header */}
         <div className="relative z-10 p-6">
-          <div className="flex items-center justify-between mb-8">
+          <div className="flex items-center justify-between mb-8 animate-fade-in-up">
             <Button
               onClick={onBack}
-              variant="ghost"
+              variant="outline"
               size="sm"
-              className="flex items-center gap-2 text-foreground hover:bg-background/20 rounded-2xl backdrop-blur-sm"
+              className={`flex relative ${sidebarOpen ? "-left-[8px]": "left-[65px]"} -top-[6px] border-black items-center gap-2 text-foreground bg-[#c9fded] rounded-2xl shadow-[3px_3px_0px_0px_#99d04f] hover:bg-[#c9fded] hover:shadow-none hover:translate-x-1 hover:translate-y-1 transition-all duration-200 ease-in-out`}
             >
-              <ArrowLeft className="w-4 h-4" />
+              <ArrowIcon/>
               Back to Arcade
             </Button>
+            <div className="text-center flex-1">
+              <h1 className="text-4xl md:text-5xl font-bold text-foreground flex items-center justify-center relative -left-10">
+                <MindMazeIcon/>
+                EchoCritters
+              </h1>
+              <p className="text-muted-foreground text-lg font-medium relative -left-10 top-4">Critters call — will you answer right?</p>
+            </div>
 
             <div className="flex items-center gap-4">
               <Button
@@ -464,7 +496,7 @@ export default function SoundMemoryGame({ onBack, sidebarOpen }: SoundMemoryGame
                 size="sm"
                 className="rounded-full w-12 h-12 bg-background/20 hover:bg-background/30 backdrop-blur-sm"
               >
-                <Trophy className="w-5 h-5" />
+                <LeaderboardIcon/>
               </Button>
               <Button
                 onClick={() => setSoundEnabled(!soundEnabled)}
@@ -479,14 +511,11 @@ export default function SoundMemoryGame({ onBack, sidebarOpen }: SoundMemoryGame
 
           {/* Game Title and Stats */}
           <div className="text-center mb-8">
-            <h1 className="text-5xl md:text-6xl font-bold mb-4 animate-fade-in-up bg-gradient-to-r from-green-600 to-blue-600 bg-clip-text text-transparent">
-              Sound Memory
-            </h1>
             <div className="flex items-center justify-center gap-6 mb-6">
-              <Card className="bg-background/80 backdrop-blur-sm rounded-3xl shadow-2xl animate-fade-in-scale">
+              <Card className="bg-background/80 backdrop-blur-sm rounded-3xl animate-fade-in-scale bg-[#c9fded] shadow-[3px_3px_0px_0px_#99d04f] hover:bg-[#c9fded] hover:shadow-none hover:translate-x-1 hover:translate-y-1 transition-all duration-200 ease-in-out">
                 <CardContent className="p-6 text-center">
                   <div className="flex items-center gap-2 mb-2">
-                    <span className="text-3xl">🎵</span>
+                    <span className="text-3xl"><MusicIcon/></span>
                     <span className="text-3xl font-bold text-foreground">{currentLevel}</span>
                   </div>
                   <p className="text-sm text-muted-foreground font-medium">Level</p>
@@ -494,12 +523,12 @@ export default function SoundMemoryGame({ onBack, sidebarOpen }: SoundMemoryGame
               </Card>
 
               <Card
-                className="bg-background/80 backdrop-blur-sm rounded-3xl shadow-2xl animate-fade-in-scale"
+                className="bg-[#c9fded] backdrop-blur-sm rounded-3xl animate-fade-in-scale shadow-[3px_3px_0px_0px_#99d04f] hover:bg-[#c9fded] hover:shadow-none hover:translate-x-1 hover:translate-y-1 transition-all duration-200 ease-in-out"
                 style={{ animationDelay: "0.1s" }}
               >
                 <CardContent className="p-6 text-center">
                   <div className="flex items-center gap-2 mb-2">
-                    <span className="text-3xl">⭐</span>
+                    <span className="text-3xl"><Star1Icon/></span>
                     <span className="text-3xl font-bold text-foreground">{score}</span>
                   </div>
                   <p className="text-sm text-muted-foreground font-medium">Score</p>
@@ -508,12 +537,12 @@ export default function SoundMemoryGame({ onBack, sidebarOpen }: SoundMemoryGame
 
               {leaderboard.length > 0 && (
                 <Card
-                  className="bg-background/80 backdrop-blur-sm rounded-3xl shadow-2xl animate-fade-in-scale"
+                  className="bg-[#c9fded] backdrop-blur-sm rounded-3xl animate-fade-in-scale shadow-[3px_3px_0px_0px_#99d04f] hover:bg-[#c9fded] hover:shadow-none hover:translate-x-1 hover:translate-y-1 transition-all duration-200 ease-in-out"
                   style={{ animationDelay: "0.2s" }}
                 >
                   <CardContent className="p-6 text-center">
                     <div className="flex items-center gap-2 mb-2">
-                      <Trophy className="w-6 h-6 text-yellow-500" />
+                      <MedalIcon/>
                       <span className="text-3xl font-bold text-foreground">{leaderboard[0]?.score || 0}</span>
                     </div>
                     <p className="text-sm text-muted-foreground font-medium">Best</p>
@@ -592,14 +621,15 @@ export default function SoundMemoryGame({ onBack, sidebarOpen }: SoundMemoryGame
           </div>
 
           {/* Control Buttons */}
-          <div className="flex justify-center gap-6">
+          <div className="flex justify-center gap-6 mt-5">
             {gamePhase === "idle" && (
               <Button
                 onClick={startGame}
-                className="px-10 py-4 text-xl font-bold rounded-3xl bg-gradient-to-r from-primary to-primary/80 hover:from-primary/90 hover:to-primary/70 shadow-2xl hover:shadow-3xl transform hover:scale-105 transition-all duration-300 animate-bounce-in"
+                variant={"outline"}
+                className="px-10 py-4 text-xl font-bold rounded-3xl bg-[#c9fded] border-black shadow-[3px_3px_0px_0px_#99d04f] hover:bg-[#c9fded] hover:shadow-none hover:translate-x-1 hover:translate-y-1 transition-all duration-200 ease-in-out"
               >
-                <Play className="w-6 h-6 mr-3" />
-                Start Game
+                <img src="/play.png" className="w-5 h-5"/>
+                Start Listening
               </Button>
             )}
 
