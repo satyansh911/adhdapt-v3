@@ -8,15 +8,15 @@ interface Props extends LucideProps {
   isActive?: boolean;  // Optional active state
 }
 
-const BadgeIcon: React.FC<Props> = ({ size = 40}) => {
+const Badge1Icon: React.FC<Props> = ({ size = 40}) => {
   return (
     <Player
       autoplay
       loop
-      src="/badge.json"
+      src="/badge1.json"
       style={{ height: `${size}px`, width: `${size}px` }}
     />
   );
 };
 
-export default BadgeIcon;
+export default Badge1Icon;

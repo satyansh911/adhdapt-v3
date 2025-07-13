@@ -20,6 +20,8 @@ import VolumeOffIcon from "@/components/ui/VolumeOff"
 import TargetIcon from "@/components/ui/targetIcon"
 import ProgressIcon from "@/components/ui/ProgressIcon"
 import styles from "./sound_game.module.css";
+import BadgeIcon from "@/components/ui/badgeIcon"
+import Badge1Icon from "@/components/ui/Badge1Icon"
 
 interface SoundMemoryGameProps {
   onBack: () => void
@@ -332,11 +334,11 @@ export default function SoundMemoryGame({ onBack, sidebarOpen }: SoundMemoryGame
   const getRankIcon = (position: number) => {
     switch (position) {
       case 1:
-        return <Trophy className="w-6 h-6 text-yellow-500" />
+        return <LeaderboardIcon size={50}/>
       case 2:
-        return <Medal className="w-6 h-6 text-gray-400" />
+        return <MedalIcon size={50}/>
       case 3:
-        return <Award className="w-6 h-6 text-amber-600" />
+        return <Badge1Icon size={50}/>
       default:
         return (
           <span className="w-6 h-6 flex items-center justify-center text-sm font-bold text-muted-foreground">
@@ -393,28 +395,32 @@ export default function SoundMemoryGame({ onBack, sidebarOpen }: SoundMemoryGame
   // Leaderboard dialog
   const LeaderboardDialog = () => (
     <Dialog open={showLeaderboard} onOpenChange={setShowLeaderboard}>
-      <DialogContent className="sm:max-w-2xl max-h-[80vh] overflow-y-auto">
+      <DialogContent className="sm:max-w-2xl max-h-[80vh] overflow-y-auto bg-[#eef6e6]">
         <DialogHeader>
-          <DialogTitle className="text-center flex items-center justify-center gap-2">
-            <Trophy className="w-6 h-6 text-yellow-500" />
+          <DialogTitle className="text-center flex items-center justify-center gap-2 text-black">
+            <MedalIcon/>
             Leaderboard
-            <Trophy className="w-6 h-6 text-yellow-500" />
+            <MedalIcon/>
           </DialogTitle>
         </DialogHeader>
         <div className="space-y-2">
           {leaderboard.length === 0 ? (
             <div className="text-center py-8 text-muted-foreground">
-              <Trophy className="w-12 h-12 mx-auto mb-4 opacity-50" />
+              <LeaderboardIcon size={30}/>
               <p>No scores yet. Be the first to play!</p>
             </div>
           ) : (
             leaderboard.map((entry, index) => (
               <div
                 key={entry.id}
-                className={`flex items-center gap-4 p-4 rounded-lg transition-colors ${
-                  index < 3
-                    ? "bg-gradient-to-r from-yellow-50 to-orange-50 dark:from-yellow-950 dark:to-orange-950"
-                    : "bg-muted/50"
+                className={`flex items-center gap-4 p-4 rounded-2xl border-black transition-colors ${
+                  index === 0
+                    ? "bg-yellow-300"
+                    : index === 1
+                    ? "bg-gray-300"
+                    : index === 2
+                    ? "bg-blue-300"
+                    : "bg-white"
                 }`}
               >
                 <div className="flex-shrink-0">{getRankIcon(index + 1)}</div>
@@ -431,7 +437,7 @@ export default function SoundMemoryGame({ onBack, sidebarOpen }: SoundMemoryGame
           )}
         </div>
         <div className="flex justify-center pt-4">
-          <Button onClick={() => setShowLeaderboard(false)}>Close</Button>
+          <Button variant={"outline"} className="rounded-2xl bg-[#c9fded] shadow-[3px_3px_0px_0px_#99d04f] hover:bg-[#c9fded] hover:shadow-none hover:translate-x-1 hover:translate-y-1 transition-all duration-200 ease-in-out" onClick={() => setShowLeaderboard(false)}>Close</Button>
         </div>
       </DialogContent>
     </Dialog>
@@ -479,7 +485,7 @@ export default function SoundMemoryGame({ onBack, sidebarOpen }: SoundMemoryGame
               onClick={onBack}
               variant="outline"
               size="sm"
-              className={`flex relative ${sidebarOpen ? "-left-[8px]": "left-[65px]"} -top-[6px] border-black items-center gap-2 text-foreground bg-[#c9fded] rounded-2xl shadow-[3px_3px_0px_0px_#99d04f] hover:bg-[#c9fded] hover:shadow-none hover:translate-x-1 hover:translate-y-1 transition-all duration-200 ease-in-out`}
+              className={`flex relative ${sidebarOpen ? "-left-[8px]": "left-[65px]"} -top-[6px] border-black items-center gap-2 text-foreground rounded-2xl bg-[#c9fded] shadow-[3px_3px_0px_0px_#99d04f] hover:bg-[#c9fded] hover:shadow-none hover:translate-x-1 hover:translate-y-1 transition-all duration-200 ease-in-out`}
             >
               <ArrowIcon/>
               Back to Arcade
