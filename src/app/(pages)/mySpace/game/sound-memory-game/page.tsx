@@ -22,6 +22,7 @@ import ProgressIcon from "@/components/ui/ProgressIcon"
 import styles from "./sound_game.module.css";
 import BadgeIcon from "@/components/ui/badgeIcon"
 import Badge1Icon from "@/components/ui/Badge1Icon"
+import ResetIcon from "@/components/ui/resetIcon"
 
 interface SoundMemoryGameProps {
   onBack: () => void
@@ -649,18 +650,17 @@ export default function SoundMemoryGame({ onBack, sidebarOpen }: SoundMemoryGame
               <div className="flex gap-6">
                 <Button
                   onClick={startGame}
-                  className="px-10 py-4 text-xl font-bold rounded-3xl bg-gradient-to-r from-primary to-primary/80 hover:from-primary/90 hover:to-primary/70 shadow-2xl hover:shadow-3xl transform hover:scale-105 transition-all duration-300 animate-bounce-in"
+                  className="px-10 py-4 text-xl font-bold rounded-3xl bg-[#c9fded] shadow-[3px_3px_0px_0px_#99d04f] hover:bg-[#c9fded] hover:shadow-none hover:translate-x-1 hover:translate-y-1 transition-all duration-200"
                 >
-                  <Play className="w-6 h-6 mr-3" />
+                  <img src="/play.png" className="w-5 h-5"/>
                   Play Again
                 </Button>
                 <Button
                   onClick={resetGame}
-                  variant="outline"
-                  className="px-8 py-4 text-lg font-semibold rounded-3xl bg-background/80 backdrop-blur-sm border-2 hover:bg-background/90 shadow-xl hover:shadow-2xl transform hover:scale-105 transition-all duration-300 animate-fade-in"
+                  className="px-8 py-4 text-lg font-semibold rounded-3xl bg-[#ffffff] shadow-[3px_3px_0px_0px_#333333] hover:bg-[#ffffff] hover:shadow-none hover:translate-x-1 hover:translate-y-1 transition-all duration-200"
                   style={{ animationDelay: "0.1s" }}
                 >
-                  <RotateCcw className="w-5 h-5 mr-2" />
+                  <ResetIcon size={20}/>
                   Reset
                 </Button>
               </div>
@@ -669,10 +669,9 @@ export default function SoundMemoryGame({ onBack, sidebarOpen }: SoundMemoryGame
             {(gamePhase === "waiting" || gamePhase === "showing") && (
               <Button
                 onClick={resetGame}
-                variant="outline"
-                className="px-8 py-3 text-lg font-semibold rounded-3xl bg-background/80 backdrop-blur-sm border-2 hover:bg-background/90 shadow-xl hover:shadow-2xl transform hover:scale-105 transition-all duration-300 animate-fade-in"
+                className="px-8 py-3 text-lg font-semibold rounded-3xl bg-[#ffffff] shadow-[3px_3px_0px_0px_#333333] hover:bg-[#ffffff] hover:shadow-none hover:translate-x-1 hover:translate-y-1 transition-all duration-200"
               >
-                <RotateCcw className="w-5 h-5 mr-2" />
+                <ResetIcon size={20}/>
                 Reset Game
               </Button>
             )}
