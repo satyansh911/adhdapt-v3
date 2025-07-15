@@ -23,6 +23,7 @@ import styles from "./sound_game.module.css";
 import BadgeIcon from "@/components/ui/badgeIcon"
 import Badge1Icon from "@/components/ui/Badge1Icon"
 import ResetIcon from "@/components/ui/resetIcon"
+import ConfettiIcon from "@/components/ui/ConfettiIcon"
 
 interface SoundMemoryGameProps {
   onBack: () => void
@@ -51,6 +52,66 @@ interface LeaderboardEntry {
   date: string
   timestamp: number
 }
+
+const NameInputDialog = ({
+    showNameInput,
+    setShowNameInput,
+    score,
+    currentLevel,
+    playerName,
+    setPlayerName,
+    addToLeaderboard,
+  }: {
+    showNameInput: boolean
+    setShowNameInput: (value: boolean) => void
+    score: number
+    currentLevel: number
+    playerName: string
+    setPlayerName: (value: string) => void
+    addToLeaderboard: (name: string, score: number, level: number) => void
+  }) => (
+    <Dialog open={showNameInput} onOpenChange={setShowNameInput}>
+      <DialogContent className="sm:max-w-md bg-[#eef6e6] text-black">
+        <DialogHeader>
+          <ConfettiIcon size={80} />
+          <DialogTitle className="text-center"> New High Score!</DialogTitle>
+        </DialogHeader>
+        <div className="space-y-4">
+          <div className="text-center">
+            <p className="text-lg font-semibold">Score: {score}</p>
+            <p className="text-sm text-muted-foreground">Level: {currentLevel - 1}</p>
+          </div>
+          <div>
+            <label htmlFor="playerName" className="block text-sm font-medium mb-2">
+              Enter your name:
+            </label>
+            <input
+              id="playerName"
+              type="text"
+              value={playerName}
+              onChange={(e) => setPlayerName(e.target.value)}
+              placeholder="Your name"
+              className="w-full px-3 py-2 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
+              maxLength={20}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") {
+                  addToLeaderboard(playerName, score, currentLevel - 1)
+                }
+              }}
+            />
+          </div>
+          <div className="flex gap-2">
+            <Button onClick={() => addToLeaderboard(playerName, score, currentLevel - 1)} className="flex-1 rounded-2xl bg-[#c9fded] shadow-[3px_3px_0px_0px_#99d04f] hover:bg-[#c9fded] hover:shadow-none hover:translate-x-1 hover:translate-y-1 transition-all duration-200 ease-in-out">
+              Save Score
+            </Button>
+            <Button onClick={() => setShowNameInput(false)} className="flex-1 rounded-2xl bg-[#ffffff] shadow-[3px_3px_0px_0px_#333333] hover:bg-[#ffffff] hover:shadow-none hover:translate-x-1 hover:translate-y-1 transition-all duration-200 ease-in-out">
+              Skip
+            </Button>
+          </div>
+        </div>
+      </DialogContent>
+    </Dialog>
+  )
 
 export default function SoundMemoryGame({ onBack, sidebarOpen }: SoundMemoryGameProps) {
   const [gamePhase, setGamePhase] = useState<GamePhase>("idle")
@@ -348,50 +409,6 @@ export default function SoundMemoryGame({ onBack, sidebarOpen }: SoundMemoryGame
         )
     }
   }
-
-  // Name input dialog
-  const NameInputDialog = () => (
-    <Dialog open={showNameInput} onOpenChange={setShowNameInput}>
-      <DialogContent className="sm:max-w-md">
-        <DialogHeader>
-          <DialogTitle className="text-center">🎉 New High Score! 🎉</DialogTitle>
-        </DialogHeader>
-        <div className="space-y-4">
-          <div className="text-center">
-            <p className="text-lg font-semibold">Score: {score}</p>
-            <p className="text-sm text-muted-foreground">Level: {currentLevel - 1}</p>
-          </div>
-          <div>
-            <label htmlFor="playerName" className="block text-sm font-medium mb-2">
-              Enter your name:
-            </label>
-            <input
-              id="playerName"
-              type="text"
-              value={playerName}
-              onChange={(e) => setPlayerName(e.target.value)}
-              placeholder="Your name"
-              className="w-full px-3 py-2 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
-              maxLength={20}
-              onKeyPress={(e) => {
-                if (e.key === "Enter") {
-                  addToLeaderboard(playerName, score, currentLevel - 1)
-                }
-              }}
-            />
-          </div>
-          <div className="flex gap-2">
-            <Button onClick={() => addToLeaderboard(playerName, score, currentLevel - 1)} className="flex-1">
-              Save Score
-            </Button>
-            <Button onClick={() => setShowNameInput(false)} variant="outline" className="flex-1">
-              Skip
-            </Button>
-          </div>
-        </div>
-      </DialogContent>
-    </Dialog>
-  )
 
   // Leaderboard dialog
   const LeaderboardDialog = () => (
@@ -725,7 +742,15 @@ export default function SoundMemoryGame({ onBack, sidebarOpen }: SoundMemoryGame
       </div>
 
       {/* Dialogs */}
-      <NameInputDialog />
+      <NameInputDialog
+        showNameInput={showNameInput}
+        setShowNameInput={setShowNameInput}
+        score={score}
+        currentLevel={currentLevel}
+        playerName={playerName}
+        setPlayerName={setPlayerName}
+        addToLeaderboard={addToLeaderboard}
+      />
       <LeaderboardDialog />
     </div>
   )
