@@ -24,6 +24,7 @@ import BadgeIcon from "@/components/ui/badgeIcon"
 import Badge1Icon from "@/components/ui/Badge1Icon"
 import ResetIcon from "@/components/ui/resetIcon"
 import ConfettiIcon from "@/components/ui/ConfettiIcon"
+import NormalPrizeIcon from "@/components/ui/NormalPrizeIcon"
 
 interface SoundMemoryGameProps {
   onBack: () => void
@@ -403,8 +404,8 @@ export default function SoundMemoryGame({ onBack, sidebarOpen }: SoundMemoryGame
         return <Badge1Icon size={50}/>
       default:
         return (
-          <span className="w-6 h-6 flex items-center justify-center text-sm font-bold text-muted-foreground">
-            #{position}
+          <span className="w-6 h-6 flex items-center justify-center text-sm font-bold text-muted-foreground mr-4 ml-3">
+            <NormalPrizeIcon size={50}/>
           </span>
         )
     }
