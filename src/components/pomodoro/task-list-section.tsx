@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, type KeyboardEvent } from "react";
+import { useState, type KeyboardEvent, useEffect, useRef } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -26,6 +26,20 @@ export default function TaskListSection({
   onDeleteTask,
 }: TaskListSectionProps) {
   const [newTaskName, setNewTaskName] = useState("");
+  const TASK_CELEBRATION_SOUND_URL =
+    "https://www.soundjay.com/human/cheering-8.mp3"; // Task celebration sound
+  const taskCelebrationAudioRef = useRef<HTMLAudioElement | null>(null);
+
+  useEffect(() => {
+    taskCelebrationAudioRef.current = new Audio(TASK_CELEBRATION_SOUND_URL);
+    taskCelebrationAudioRef.current.load();
+    return () => {
+      if (taskCelebrationAudioRef.current) {
+        taskCelebrationAudioRef.current.pause();
+        taskCelebrationAudioRef.current = null;
+      }
+    };
+  }, []);
 
   const handleAddNewTask = () => {
     if (newTaskName.trim()) {
@@ -40,9 +54,17 @@ export default function TaskListSection({
     }
   };
 
+  const handleTaskComplete = (id: string) => {
+    onToggleTaskComplete(id);
+    if (taskCelebrationAudioRef.current) {
+      taskCelebrationAudioRef.current.currentTime = 0;
+      taskCelebrationAudioRef.current.play().catch(() => {});
+    }
+  };
+
   return (
-    <div className="flex flex-col gap-4">
-      <div className="flex gap-2">
+    <div className="flex flex-col gap-6">
+      <div className="flex gap-4 mb-2 mt-6">
         <Input
           placeholder="Add a new task..."
           value={newTaskName}
@@ -65,14 +87,14 @@ export default function TaskListSection({
         </p>
       ) : (
         <ScrollArea className="h-[300px] pr-4">
-          <ul className="space-y-3">
+          <ul className="space-y-5">
             {tasks.map((task) => (
               <li
                 key={task.id}
                 className={`flex items-center gap-3 p-3 rounded-2xl transition-colors duration-200 ${
                   task.completed
                     ? "bg-[#fdedc9]/60 text-muted-foreground line-through"
-                    : "bg-[#fdedc9] hover:bg-[#d04f99]/10"
+                    : "bg-[#fdedc9]"
                 } ${
                   activeTaskId === task.id
                     ? "border-2 border-[#d04f99] shadow-[2px_2px_0px_0px_#d04f99]"
@@ -82,13 +104,13 @@ export default function TaskListSection({
                 <Checkbox
                   id={`task-${task.id}`}
                   checked={task.completed}
-                  onCheckedChange={() => onToggleTaskComplete(task.id)}
+                  onCheckedChange={() => handleTaskComplete(task.id)}
                   className="h-5 w-5 border-[#d04f99]"
                 />
                 <label
                   htmlFor={`task-${task.id}`}
                   className="flex-1 text-base cursor-pointer"
-                  onClick={() => onToggleTaskComplete(task.id)}
+                  onClick={() => handleTaskComplete(task.id)}
                 >
                   {task.name}
                 </label>

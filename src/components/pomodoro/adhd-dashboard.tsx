@@ -26,7 +26,7 @@ export default function ADHDDashboard() {
   const [completedTasksCount, setCompletedTasksCount] = useState(0);
 
   const activeTaskName = activeTaskId
-    ? tasks.find((t) => t.id === activeTaskId)?.name
+    ? tasks.find((t) => t.id === activeTaskId)?.name || "No task selected"
     : "No task selected";
 
   const handleAddTask = useCallback((name: string) => {
@@ -80,9 +80,15 @@ export default function ADHDDashboard() {
   );
 
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 w-full max-w-6xl mx-auto p-4">
+    <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 w-full max-w-6xl mx-auto p-6 transition-all duration-300">
+      {/* Motivational Message */}
+      <div className="lg:col-span-3 mb-4 text-center">
+        <span className="inline-block px-4 py-2 rounded-full bg-[#d04f99]/10 text-[#d04f99] font-semibold text-lg animate-fade-in">
+          {`You’re doing great! Every small step counts 🚀`}
+        </span>
+      </div>
       {/* Main Pomodoro Timer Section */}
-      <Card className="lg:col-span-2 shadow-[5px_5px_0px_0px_#d04f99] border-[#d04f99] border rounded-3xl bg-[#fdedc9]">
+      <Card className="lg:col-span-2 shadow-[5px_5px_0px_0px_#d04f99] border-[#d04f99] border rounded-3xl bg-[#fdedc9] transition-shadow duration-300 hover:shadow-[8px_8px_0px_0px_#d04f99]">
         <CardHeader className="text-center pb-4 bg-[#d04f99] text-[#fff] rounded-t-3xl">
           <CardTitle className="text-4xl font-extrabold text-[#fff] tracking-tight">
             Focus Hub
@@ -91,16 +97,15 @@ export default function ADHDDashboard() {
             Your personalized space for deep work and mindful breaks.
           </CardDescription>
         </CardHeader>
-        <CardContent className="p-6">
+        <CardContent className="p-8">
           <PomodoroSection
             activeTaskName={activeTaskName}
             onTimeUpdate={handleTimeUpdate}
           />
         </CardContent>
       </Card>
-
       {/* Task List Section */}
-      <Card className="shadow-[5px_5px_0px_0px_#d04f99] border-[#d04f99] border rounded-3xl bg-[#fdedc9]">
+      <Card className="shadow-[5px_5px_0px_0px_#d04f99] border-[#d04f99] border rounded-3xl bg-[#fdedc9] transition-shadow duration-300 hover:shadow-[8px_8px_0px_0px_#d04f99]">
         <CardHeader className="pb-4 bg-[#d04f99] text-[#fff] rounded-t-3xl">
           <CardTitle className="text-2xl font-bold text-[#fff]">
             Your Tasks
@@ -109,7 +114,7 @@ export default function ADHDDashboard() {
             Organize your focus.
           </CardDescription>
         </CardHeader>
-        <CardContent className="p-6 pt-0">
+        <CardContent className="p-8 pt-0">
           <TaskListSection
             tasks={tasks}
             activeTaskId={activeTaskId}
@@ -120,9 +125,8 @@ export default function ADHDDashboard() {
           />
         </CardContent>
       </Card>
-
       {/* Activity Summary Section */}
-      <Card className="lg:col-span-3 shadow-[5px_5px_0px_0px_#d04f99] border-[#d04f99] border rounded-3xl bg-[#fdedc9]">
+      <Card className="lg:col-span-3 shadow-[5px_5px_0px_0px_#d04f99] border-[#d04f99] border rounded-3xl bg-[#fdedc9] transition-shadow duration-300 hover:shadow-[8px_8px_0px_0px_#d04f99]">
         <CardHeader className="pb-4 bg-[#d04f99] text-[#fff] rounded-t-3xl">
           <CardTitle className="text-2xl font-bold text-[#fff]">
             Activity Summary
@@ -131,7 +135,7 @@ export default function ADHDDashboard() {
             Your progress at a glance.
           </CardDescription>
         </CardHeader>
-        <CardContent className="p-6 pt-0">
+        <CardContent className="p-8 pt-0">
           <SummarySection
             totalProductiveTime={totalProductiveTime}
             totalBreakTime={totalBreakTime}

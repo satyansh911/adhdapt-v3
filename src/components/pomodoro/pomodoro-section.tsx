@@ -7,6 +7,7 @@ import { Progress } from "@/components/ui/progress";
 import { Play, Pause, RotateCcw, Hourglass, CheckCircle } from "lucide-react";
 
 const NOTIFICATION_SOUND_URL = "https://www.soundjay.com/buttons/beep-07.mp3"; // Public domain sound for demo
+const CELEBRATION_SOUND_URL = "https://www.soundjay.com/human/applause-8.mp3"; // Celebration sound
 
 interface PomodoroSectionProps {
   activeTaskName: string;
@@ -19,13 +20,15 @@ export default function PomodoroSection({
 }: PomodoroSectionProps) {
   const [timeRemaining, setTimeRemaining] = useState(0); // seconds
   const [isRunning, setIsRunning] = useState(false);
-  const [mode, setMode] = useState<"productive" | "break">("productive");
+  const [mode] = useState<"productive" | "break">("productive");
   const [productiveDuration, setProductiveDuration] = useState(25 * 60); // Default 25 min
   const [breakDuration, setBreakDuration] = useState(5 * 60); // Default 5 min
+  const [showCelebration, setShowCelebration] = useState(false);
 
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
   const lastTickRef = useRef<number>(Date.now());
   const audioRef = useRef<HTMLAudioElement | null>(null);
+  const celebrationAudioRef = useRef<HTMLAudioElement | null>(null);
 
   /* ───────────────────────── helpers ───────────────────────── */
 
@@ -51,6 +54,15 @@ export default function PomodoroSection({
       intervalRef.current = null;
     }
   };
+
+  const handleSessionComplete = useCallback(() => {
+    setShowCelebration(true);
+    if (celebrationAudioRef.current) {
+      celebrationAudioRef.current.currentTime = 0;
+      celebrationAudioRef.current.play().catch(() => {});
+    }
+    setTimeout(() => setShowCelebration(false), 2000);
+  }, []);
 
   /* ─────────────────────── controls ───────────────────────── */
 
@@ -80,6 +92,7 @@ export default function PomodoroSection({
           clearTimerInterval();
           setIsRunning(false);
           playNotificationSound();
+          handleSessionComplete();
           // Optionally, auto-switch mode or prompt for next action
         }
         return newTime;
@@ -93,6 +106,7 @@ export default function PomodoroSection({
     breakDuration,
     onTimeUpdate,
     playNotificationSound,
+    handleSessionComplete,
   ]);
 
   const handlePause = useCallback(() => {
@@ -108,22 +122,6 @@ export default function PomodoroSection({
       mode === "productive" ? productiveDuration : breakDuration
     );
   }, [mode, productiveDuration, breakDuration]);
-
-  const handleToggleMode = useCallback(() => {
-    handlePause(); // Pause current timer before switching
-    const newMode = mode === "productive" ? "break" : "productive";
-    setMode(newMode);
-    setTimeRemaining(
-      newMode === "productive" ? productiveDuration : breakDuration
-    ); // Reset time for new mode
-    playNotificationSound();
-  }, [
-    mode,
-    productiveDuration,
-    breakDuration,
-    handlePause,
-    playNotificationSound,
-  ]);
 
   const handleDurationChange = useCallback(
     (value: number[], type: "productive" | "break") => {
@@ -149,7 +147,8 @@ export default function PomodoroSection({
     // Initialize audio element
     audioRef.current = new Audio(NOTIFICATION_SOUND_URL);
     audioRef.current.load(); // Preload the sound
-
+    celebrationAudioRef.current = new Audio(CELEBRATION_SOUND_URL);
+    celebrationAudioRef.current.load();
     // Set initial time remaining based on current mode
     setTimeRemaining(
       mode === "productive" ? productiveDuration : breakDuration
@@ -160,6 +159,10 @@ export default function PomodoroSection({
       if (audioRef.current) {
         audioRef.current.pause();
         audioRef.current = null;
+      }
+      if (celebrationAudioRef.current) {
+        celebrationAudioRef.current.pause();
+        celebrationAudioRef.current = null;
       }
     };
   }, [mode, productiveDuration, breakDuration]); // Re-run if mode or durations change
@@ -177,7 +180,11 @@ export default function PomodoroSection({
   /* ───────────────────────── render ───────────────────────── */
 
   return (
-    <div className="flex flex-col items-center gap-8 p-4 bg-[#fdedc9] border-[#d04f99] border shadow-[5px_5px_0px_0px_#d04f99] rounded-3xl">
+    <div
+      className={`flex flex-col items-center gap-8 p-4 bg-[#fdedc9] border-[#d04f99] border shadow-[5px_5px_0px_0px_#d04f99] rounded-3xl ${
+        showCelebration ? "animate-pulse" : ""
+      }`}
+    >
       {/* Current Task Display */}
       <div className="w-full text-center">
         <p className="text-lg text-[#d04f99] font-medium">Current Task:</p>
@@ -208,9 +215,6 @@ export default function PomodoroSection({
           <Progress
             value={progressPercentage}
             className="h-3 bg-[#d04f99]/20 rounded-full"
-            indicatorClassName={
-              mode === "productive" ? "bg-[#d04f99]" : "bg-blue-500"
-            }
           />
           <p className="text-sm text-[#d04f99] text-center mt-2">
             {formatTime(timeRemaining)} of{" "}
@@ -233,7 +237,6 @@ export default function PomodoroSection({
             value={[productiveDuration / 60]}
             onValueChange={(val) => handleDurationChange(val, "productive")}
             className="[&>span:first-child]:h-2 [&>span:first-child]:bg-[#d04f99]/20 [&>span:first-child]:rounded-full [&>span:first-child>span]:bg-[#d04f99] [&>span:first-child>span]:rounded-full"
-            thumbClassName="[&>span]:w-5 [&>span]:h-5 [&>span]:bg-[#d04f99] [&>span]:border-2 [&>span]:border-white [&>span]:shadow-md"
             disabled={isRunning}
             aria-label="Productive duration slider"
           />
@@ -250,7 +253,6 @@ export default function PomodoroSection({
             value={[breakDuration / 60]}
             onValueChange={(val) => handleDurationChange(val, "break")}
             className="[&>span:first-child]:h-2 [&>span:first-child]:bg-[#d04f99]/20 [&>span:first-child]:rounded-full [&>span:first-child>span]:bg-blue-500 [&>span:first-child>span]:rounded-full"
-            thumbClassName="[&>span]:w-5 [&>span]:h-5 [&>span]:bg-blue-500 [&>span]:border-2 [&>span]:border-white [&>span]:shadow-md"
             disabled={isRunning}
             aria-label="Break duration slider"
           />

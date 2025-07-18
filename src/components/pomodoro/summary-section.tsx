@@ -35,7 +35,7 @@ export default function SummarySection({
 
   return (
     <div className="flex flex-col gap-6">
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-center">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-6 text-center">
         <Card className="p-4 bg-[#fdedc9] border-[#d04f99] shadow-[2px_2px_0px_0px_#d04f99] rounded-2xl">
           <p className="text-sm text-[#d04f99] font-medium">Total Productive</p>
           <p className="text-3xl font-bold text-[#d04f99] mt-1">
