@@ -244,40 +244,26 @@ export default function SoundMemoryGame({ onBack, sidebarOpen }: SoundMemoryGame
   )
 
   // Sound generation with enhanced audio
+  const preloadedAudio = useRef<Record<number, HTMLAudioElement>>({
+    0: new Audio("/squirrel_sound.mp3"),
+    1: new Audio("/cat_sound.mp3"),
+    2: new Audio("/bee_sound.mp3"),
+    3: new Audio("/duck_sound.mp3"),
+  })
+
   const playSound = useCallback(
-    (frequency: number, duration = 0.5) => {
+    (id: number) => {
       if (!soundEnabled) return
 
-      try {
-        const audioContext = new (window.AudioContext || (window as any).webkitAudioContext)()
-        const oscillator = audioContext.createOscillator()
-        const gainNode = audioContext.createGain()
-        const filterNode = audioContext.createBiquadFilter()
-
-        oscillator.connect(filterNode)
-        filterNode.connect(gainNode)
-        gainNode.connect(audioContext.destination)
-
-        oscillator.frequency.setValueAtTime(frequency, audioContext.currentTime)
-        oscillator.type = "sine"
-
-        // Add some filtering for a warmer sound
-        filterNode.type = "lowpass"
-        filterNode.frequency.setValueAtTime(frequency * 2, audioContext.currentTime)
-
-        // Smooth attack and decay envelope
-        gainNode.gain.setValueAtTime(0, audioContext.currentTime)
-        gainNode.gain.linearRampToValueAtTime(0.3, audioContext.currentTime + 0.1)
-        gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + duration)
-
-        oscillator.start()
-        oscillator.stop(audioContext.currentTime + duration)
-      } catch (error) {
-        console.log("Audio not supported")
+      const audio = preloadedAudio.current[id]
+      if (audio) {
+        audio.currentTime = 0
+        audio.play()
       }
     },
-    [soundEnabled],
+    [soundEnabled]
   )
+
 
   // Generate new sequence
   const generateSequence = useCallback(() => {
@@ -304,7 +290,8 @@ export default function SoundMemoryGame({ onBack, sidebarOpen }: SoundMemoryGame
 
         // Play icon animation
         iconRefs[seq[i]].current?.playAnimation?.()
-        playSound(soundButtons[seq[i]].sound, 0.6)
+        playSound(seq[i])
+
 
         await new Promise((resolve) => setTimeout(resolve, 600))
         setActiveButton(null)
@@ -338,7 +325,7 @@ export default function SoundMemoryGame({ onBack, sidebarOpen }: SoundMemoryGame
 
       // Play icon animation
       iconRefs[buttonId].current?.playAnimation?.()
-      playSound(soundButtons[buttonId].sound, 0.3)
+      playSound(buttonId)
       setTimeout(() => setActiveButton(null), 200)
 
       // Check if sequence is correct so far
