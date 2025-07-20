@@ -27,6 +27,7 @@ import TrophyIcon from "@/components/ui/trophyIcon"
 import LeaderboardIcon from "@/components/ui/leaderboardIcon"
 import ArrowIcon from "@/components/ui/arrowIcon"
 import PencilIcon from "@/components/ui/PencilIcon"
+import ConfettiIcon from "@/components/ui/ConfettiIcon"
 
 interface GridCell {
   letter: string
@@ -725,16 +726,16 @@ export default function FocusFlowGame({ onBack, sidebarOpen = true }: FocusFlowG
 
       {/* Game Completion Dialog */}
       <Dialog open={showCompletionDialog} onOpenChange={setShowCompletionDialog}>
-        <DialogContent className="sm:max-w-md rounded-3xl bg-[#dbeafe]">
+        <DialogContent className="sm:max-w-md rounded-3xl bg-[#4f99d0] text-black">
           <DialogHeader>
             <DialogTitle className="text-center text-2xl flex items-center justify-center gap-2 font-bold">
-              <Trophy className="w-8 h-8 text-primary" />
+              <LeaderboardIcon size={40} />
               Congratulations!
             </DialogTitle>
             <DialogDescription className="text-center text-lg">You found all the words!</DialogDescription>
           </DialogHeader>
           <div className="text-center space-y-4">
-            <div className="text-6xl animate-bounce">🎉</div>
+            <div className="text-6xl animate-bounce"><ConfettiIcon size={80}/></div>
             <div className="grid grid-cols-2 gap-4 text-center">
               <div className="space-y-1">
                 <p className="text-2xl font-bold text-primary font-mono">{formatTime(time)}</p>
@@ -758,7 +759,7 @@ export default function FocusFlowGame({ onBack, sidebarOpen = true }: FocusFlowG
                   value={playerName}
                   onChange={(e) => setPlayerName(e.target.value)}
                   onKeyPress={(e) => e.key === "Enter" && saveScore()}
-                  className="font-medium rounded-2xl"
+                  className="font-medium rounded-2xl bg-white"
                 />
               </div>
             </div>
@@ -767,11 +768,11 @@ export default function FocusFlowGame({ onBack, sidebarOpen = true }: FocusFlowG
             <Button
               onClick={() => setShowCompletionDialog(false)}
               variant="outline"
-              className="flex-1 font-medium rounded-2xl"
+              className="flex-1 font-medium rounded-2xl bg-[#ffffff] shadow-[4px_4px_0px_0px_#333333] hover:bg-[#ffffff] hover:shadow-none hover:translate-y-1 hover:translate-x-1 transition-all duration-200 ease-in-out"
             >
               Skip
             </Button>
-            <Button onClick={saveScore} className="flex-1 font-medium rounded-2xl" disabled={!playerName.trim()}>
+            <Button onClick={saveScore} variant={"outline"} className="flex-1 font-medium rounded-2xl bg-[#e2a7fb] shadow-[4px_4px_0px_0px_#d2e284] hover:bg-[#e2a7fb] hover:shadow-none hover:translate-y-1 hover:translate-x-1 transition-all duration-200 ease-in-out" disabled={!playerName.trim()}>
               Save Score
             </Button>
           </DialogFooter>
