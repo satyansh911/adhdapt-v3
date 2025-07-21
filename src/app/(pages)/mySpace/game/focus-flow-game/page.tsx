@@ -28,6 +28,7 @@ import LeaderboardIcon from "@/components/ui/leaderboardIcon"
 import ArrowIcon from "@/components/ui/arrowIcon"
 import PencilIcon from "@/components/ui/PencilIcon"
 import ConfettiIcon from "@/components/ui/ConfettiIcon"
+import { LottieSafeWrapper } from "@/components/LottieWrapper"
 
 interface GridCell {
   letter: string
@@ -589,16 +590,16 @@ export default function FocusFlowGame({ onBack, sidebarOpen = true }: FocusFlowG
                       <Button
                         onClick={startGame}
                         variant="outline"
-                        className="flex items-center gap-2 font-medium bg-transparent rounded-2xl"
+                        className="flex items-center gap-2 font-medium bg-transparent rounded-2xl bg-[#ffffff] shadow-[4px_4px_0px_0px_#333333] hover:bg-[#ffffff] hover:shadow-none hover:translate-y-1 hover:translate-x-1 transition-all duration-200 ease-in-out"
                       >
-                        <RotateCcw className="w-4 h-4" />
+                        <LottieSafeWrapper src="/reset.json" size={20} autoplay={true} loop={true} fallbackIcon="🔍"/>
                         New Game
                       </Button>
                       {isGameActive && (
                         <Button
                           onClick={endGame}
                           variant="destructive"
-                          className="flex items-center gap-2 font-medium rounded-2xl"
+                          className="flex items-center gap-2 font-medium text-white rounded-2xl bg-[#4f99d0] shadow-[4px_4px_0px_0px_#333333] hover:bg-[#4f99d0] hover:shadow-none hover:translate-y-1 hover:translate-x-1 transition-all duration-200 ease-in-out"
                         >
                           <X className="w-4 h-4" />
                           End Game

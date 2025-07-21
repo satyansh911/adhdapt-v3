@@ -40,6 +40,7 @@ import CurrentSessionIcon from "@/components/ui/currentSessionIcon"
 import LeaderboardIcon from "@/components/ui/leaderboardIcon"
 import Loader from "@/components/ui/Loader"
 import ArrowIcon from "@/components/ui/arrowIcon"
+import { LottieSafeWrapper } from "@/components/LottieWrapper"
 
 interface Tile {
   id: number
@@ -270,24 +271,24 @@ export default function TileMemoryGame({ onBack, sidebarOpen = true }: TileMemor
   // Generate tile image/pattern
   const getTileImage = (imageId: number) => {
     const tileDesigns = [
-      { bg: "bg-red-500", icon: "🌟", shadow: "shadow-red-200" },
-      { bg: "bg-blue-500", icon: "🎯", shadow: "shadow-blue-200" },
-      { bg: "bg-green-500", icon: "🎨", shadow: "shadow-green-200" },
-      { bg: "bg-yellow-500", icon: "🎪", shadow: "shadow-yellow-200" },
-      { bg: "bg-purple-500", icon: "🎭", shadow: "shadow-purple-200" },
-      { bg: "bg-pink-500", icon: "🎵", shadow: "shadow-pink-200" },
-      { bg: "bg-indigo-500", icon: "🎸", shadow: "shadow-indigo-200" },
-      { bg: "bg-orange-500", icon: "🎺", shadow: "shadow-orange-200" },
-      { bg: "bg-teal-500", icon: "🎻", shadow: "shadow-teal-200" },
-      { bg: "bg-cyan-500", icon: "🎹", shadow: "shadow-cyan-200" },
-      { bg: "bg-lime-500", icon: "⭐", shadow: "shadow-lime-200" },
-      { bg: "bg-amber-500", icon: "🔥", shadow: "shadow-amber-200" },
-      { bg: "bg-emerald-500", icon: "💎", shadow: "shadow-emerald-200" },
-      { bg: "bg-violet-500", icon: "🌈", shadow: "shadow-violet-200" },
-      { bg: "bg-rose-500", icon: "🚀", shadow: "shadow-rose-200" },
-      { bg: "bg-sky-500", icon: "⚡", shadow: "shadow-sky-200" },
-      { bg: "bg-slate-500", icon: "🎲", shadow: "shadow-slate-200" },
-      { bg: "bg-gray-500", icon: "🎊", shadow: "shadow-gray-200" },
+      { bg: "bg-red-500", icon: <LottieSafeWrapper src="/tile-photos/honeycomb.json" size={50} autoplay={true} loop={true} fallbackIcon="🔍"/>, shadow: "shadow-red-200" },
+      { bg: "bg-blue-500", icon: <LottieSafeWrapper src="/tile-photos/clock.json" size={50} autoplay={true} loop={true} fallbackIcon="🔍"/>, shadow: "shadow-blue-200" },
+      { bg: "bg-green-500", icon: <LottieSafeWrapper src="/tile-photos/home.json" size={50} autoplay={true} loop={true} fallbackIcon="🔍"/>, shadow: "shadow-green-200" },
+      { bg: "bg-yellow-500", icon: <LottieSafeWrapper src="/tile-photos/gift.json" size={50} autoplay={true} loop={true} fallbackIcon="🔍"/>, shadow: "shadow-yellow-200" },
+      { bg: "bg-purple-500", icon: <LottieSafeWrapper src="/tile-photos/camera.json" size={50} autoplay={true} loop={true} fallbackIcon="🔍"/>, shadow: "shadow-purple-200" },
+      { bg: "bg-pink-500", icon: <LottieSafeWrapper src="/tile-photos/globe.json" size={50} autoplay={true} loop={true} fallbackIcon="🔍"/>, shadow: "shadow-pink-200" },
+      { bg: "bg-indigo-500", icon: <LottieSafeWrapper src="/tile-photos/edit.json" size={50} autoplay={true} loop={true} fallbackIcon="🔍"/>, shadow: "shadow-indigo-200" },
+      { bg: "bg-orange-500", icon: <LottieSafeWrapper src="/tile-photos/computer.json" size={50} autoplay={true} loop={true} fallbackIcon="🔍"/>, shadow: "shadow-orange-200" },
+      { bg: "bg-teal-500", icon: <LottieSafeWrapper src="/tile-photos/heart.json" size={50} autoplay={true} loop={true} fallbackIcon="🔍"/>, shadow: "shadow-teal-200" },
+      { bg: "bg-cyan-500", icon: <LottieSafeWrapper src="/tile-photos/chart.json" size={50} autoplay={true} loop={true} fallbackIcon="🔍"/>, shadow: "shadow-cyan-200" },
+      { bg: "bg-lime-500", icon: <LottieSafeWrapper src="/tile-photos/star.json" size={50} autoplay={true} loop={true} fallbackIcon="🔍"/>, shadow: "shadow-lime-200" },
+      { bg: "bg-amber-500", icon: <LottieSafeWrapper src="/tile-photos/photo.json" size={50} autoplay={true} loop={true} fallbackIcon="🔍"/>, shadow: "shadow-amber-200" },
+      { bg: "bg-emerald-500", icon: <LottieSafeWrapper src="/tile-photos/coin.json" size={50} autoplay={true} loop={true} fallbackIcon="🔍"/>, shadow: "shadow-emerald-200" },
+      { bg: "bg-violet-500", icon: <LottieSafeWrapper src="/tile-photos/man.json" size={50} autoplay={true} loop={true} fallbackIcon="🔍"/>, shadow: "shadow-violet-200" },
+      { bg: "bg-rose-500", icon: <LottieSafeWrapper src="/tile-photos/trolley.json" size={50} autoplay={true} loop={true} fallbackIcon="🔍"/>, shadow: "shadow-rose-200" },
+      { bg: "bg-sky-500", icon: <LottieSafeWrapper src="/tile-photos/eye.json" size={50} autoplay={true} loop={true} fallbackIcon="🔍"/>, shadow: "shadow-sky-200" },
+      { bg: "bg-slate-500", icon: <LottieSafeWrapper src="/tile-photos/woodpecker.json" size={50} autoplay={true} loop={true} fallbackIcon="🔍"/>, shadow: "shadow-slate-200" },
+      { bg: "bg-gray-500", icon: <LottieSafeWrapper src="/tile-photos/zoom.json" size={50} autoplay={true} loop={true} fallbackIcon="🔍"/>, shadow: "shadow-gray-200" },
     ]
 
     const design = tileDesigns[imageId - 1]
@@ -546,16 +547,16 @@ export default function TileMemoryGame({ onBack, sidebarOpen = true }: TileMemor
                       <Button
                         onClick={startGame}
                         variant="outline"
-                        className="flex items-center gap-2 font-medium bg-transparent rounded-2xl bg-"
+                        className="flex items-center gap-2 font-medium bg-transparent rounded-2xl bg-[#ffffff] shadow-[4px_4px_0px_0px_#333333] hover:bg-[#ffffff] hover:shadow-none hover:translate-y-1 hover:translate-x-1 transition-all duration-200 ease-in-out"
                       >
-                        <RotateCcw className="w-4 h-4" />
+                        <LottieSafeWrapper src="/reset.json" size={20} autoplay={true} loop={true} fallbackIcon="🔍"/>
                         New Game
                       </Button>
                       {isGameActive && (
                         <Button
                           onClick={endGame}
                           variant="destructive"
-                          className="flex items-center gap-2 font-medium rounded-2xl"
+                          className="flex items-center gap-2 text-white font-medium rounded-2xl bg-red-400 shadow-[4px_4px_0px_0px_#333333] hover:bg-red-400 hover:shadow-none hover:translate-y-1 hover:translate-x-1 transition-all duration-200 ease-in-out"
                         >
                           <X className="w-4 h-4" />
                           End Game
@@ -685,10 +686,10 @@ export default function TileMemoryGame({ onBack, sidebarOpen = true }: TileMemor
 
       {/* Game Completion Dialog */}
       <Dialog open={showCompletionDialog} onOpenChange={setShowCompletionDialog}>
-        <DialogContent className="sm:max-w-md rounded-3xl bg-[#fdedc9]">
+        <DialogContent className="sm:max-w-md rounded-3xl bg-[#fdedc9] text-black">
           <DialogHeader>
             <DialogTitle className="text-center text-2xl flex items-center justify-center gap-2 font-bold">
-              <Trophy className="w-8 h-8 text-primary" />
+              <LottieSafeWrapper src="/leaderboard.json" size={50} autoplay={true} loop={true} fallbackIcon="🔍"/>
               Congratulations!
             </DialogTitle>
             <DialogDescription className="text-center text-lg">
@@ -696,7 +697,7 @@ export default function TileMemoryGame({ onBack, sidebarOpen = true }: TileMemor
             </DialogDescription>
           </DialogHeader>
           <div className="text-center space-y-4">
-            <div className="text-6xl animate-bounce">🎉</div>
+            <div className="text-6xl animate-bounce"><LottieSafeWrapper src="/confetti.json" size={80} autoplay={true} loop={true} fallbackIcon="🔍"/></div>
             <div className="grid grid-cols-3 gap-4 text-center">
               <div className="space-y-1">
                 <p className="text-2xl font-bold text-primary font-mono">{formatTime(time)}</p>
@@ -724,7 +725,7 @@ export default function TileMemoryGame({ onBack, sidebarOpen = true }: TileMemor
                   value={playerName}
                   onChange={(e) => setPlayerName(e.target.value)}
                   onKeyPress={(e) => e.key === "Enter" && saveScore()}
-                  className="font-medium rounded-2xl"
+                  className="font-medium rounded-2xl bg-white"
                 />
               </div>
             </div>
@@ -732,12 +733,11 @@ export default function TileMemoryGame({ onBack, sidebarOpen = true }: TileMemor
           <DialogFooter className="flex gap-3 sm:gap-3">
             <Button
               onClick={() => setShowCompletionDialog(false)}
-              variant="outline"
-              className="flex-1 font-medium rounded-2xl"
+              className="flex-1 font-medium rounded-2xl bg-[#ffffff] shadow-[4px_4px_0px_0px_#333333] hover:bg-[#ffffff] hover:shadow-none hover:translate-y-1 hover:translate-x-1 transition-all duration-200 ease-in-out"
             >
               Skip
             </Button>
-            <Button onClick={saveScore} className="flex-1 font-medium rounded-2xl" disabled={!playerName.trim()}>
+            <Button onClick={saveScore} className=" text-white flex-1 font-medium rounded-2xl bg-[#cb6999] shadow-[4px_4px_0px_0px_#ffffff] hover:bg-[#cb6999] hover:shadow-none hover:translate-y-1 hover:translate-x-1 transition-all duration-200 ease-in-out" disabled={!playerName.trim()}>
               Save Score
             </Button>
           </DialogFooter>
