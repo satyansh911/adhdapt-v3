@@ -26,7 +26,7 @@ export default function ADHDDashboard() {
   const [completedTasksCount, setCompletedTasksCount] = useState(0);
 
   const activeTaskName = activeTaskId
-    ? tasks.find((t) => t.id === activeTaskId)?.name || "No task selected"
+    ? tasks.find((t) => t.id === activeTaskId)?.name
     : "No task selected";
 
   const handleAddTask = useCallback((name: string) => {

@@ -8,18 +8,15 @@ interface Props extends LucideProps {
   isActive?: boolean;  // Optional active state
 }
 
-const LeaderboardIcon: React.FC<Props> = ({ size = 30}) => {
+const NormalPrizeIcon: React.FC<Props> = ({ size = 40}) => {
   return (
     <Player
       autoplay
       loop
-      src="/leaderboard.json"
-      style={{
-        height: `${size}px`,
-        width: `${size}px`,
-      }}
+      src="/normalPrize.json"
+      style={{ height: `${size}px`, width: `${size}px` }}
     />
   );
 };
 
-export default LeaderboardIcon;
+export default NormalPrizeIcon;

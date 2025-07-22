@@ -3,17 +3,17 @@ import { Player } from "@lottiefiles/react-lottie-player";
 import { LucideProps } from "lucide-react";
 import React from "react";
 
-interface Props extends LucideProps {
+interface Props {
   size?: number;       // Optional size in pixels
   isActive?: boolean;  // Optional active state
 }
 
-const LeaderboardIcon: React.FC<Props> = ({ size = 30}) => {
+const MusicIcon: React.FC<Props> = ({ size = 40 }) => {
   return (
     <Player
       autoplay
       loop
-      src="/leaderboard.json"
+      src="/music.json"
       style={{
         height: `${size}px`,
         width: `${size}px`,
@@ -22,4 +22,4 @@ const LeaderboardIcon: React.FC<Props> = ({ size = 30}) => {
   );
 };
 
-export default LeaderboardIcon;
+export default MusicIcon;

@@ -4,17 +4,17 @@ import { LucideProps } from "lucide-react";
 import React from "react";
 
 interface Props extends LucideProps {
-  size?: number;
-  isActive?: boolean;
+  size?: number;       // Optional size in pixels
+  isActive?: boolean;  // Optional active state
 }
 
-const BadgeIcon: React.FC<Props> = ({ size = 40 }) => {
+const BadgeIcon: React.FC<Props> = ({ size = 40}) => {
   return (
     <Player
       autoplay
       loop
       src="/badge.json"
-      style={{ height: size, width: size }}
+      style={{ height: `${size}px`, width: `${size}px` }}
     />
   );
 };

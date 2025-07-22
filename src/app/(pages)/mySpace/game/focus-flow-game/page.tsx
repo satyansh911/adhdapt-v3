@@ -492,7 +492,7 @@ export default function FocusFlowGame({ onBack, sidebarOpen = true }: FocusFlowG
         {/* Header */}
         <div className="flex items-center justify-between mb-8 animate-fade-in-up">
           <div className="flex items-center gap-4">
-            <Button variant="outline" size="sm" onClick={onBack} className="rounded-full bg-transparent bg-[#edc9fd] shadow-[3px_3px_0px_0px_#4f99d0] hover:bg-[#edc9fd] hover:shadow-none hover:translate-x-1 hover:translate-y-1 transition-all duration-200 ease-in-out">
+            <Button variant="outline" size="sm" onClick={onBack} className="rounded-full bg-[#edc9fd] shadow-[3px_3px_0px_0px_#4f99d0] hover:bg-[#edc9fd] hover:shadow-none hover:translate-x-1 hover:translate-y-1 transition-all duration-200 ease-in-out">
               <ArrowIcon/>
               Back to Arcade
             </Button>
