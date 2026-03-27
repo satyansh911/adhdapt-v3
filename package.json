@@ -10,6 +10,8 @@
   },
   "dependencies": {
     "@ai-sdk/google": "^1.2.22",
+    "@clerk/nextjs": "^6.39.1",
+    "@gsap/react": "^2.1.2",
     "@heroui/button": "^2.2.22",
     "@heroui/link": "^2.2.19",
     "@heroui/navbar": "^2.2.20",
@@ -42,6 +44,7 @@
     "clsx": "^2.1.1",
     "date-fns": "^4.1.0",
     "framer-motion": "^12.23.0",
+    "gsap": "^3.14.2",
     "lucide-react": "^0.525.0",
     "next": "15.3.4",
     "next-themes": "^0.4.6",

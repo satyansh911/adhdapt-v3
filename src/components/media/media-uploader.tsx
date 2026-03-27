@@ -78,7 +78,7 @@ const MediaUploader: React.FC = () => {
             accept="image/*,video/*"
             onChange={handleFileChange}
             disabled={isUploading}
-            className="h-14 text-lg border-2 border-[#d04f99] bg-[#fdedc9] rounded-2xl shadow focus:border-[#d04f99] focus:ring-2 focus:ring-[#d04f99]/30 file:bg-[#d04f99] file:text-white file:rounded-2xl file:px-4 file:py-2 file:font-semibold file:border-0 file:mr-4"
+            className="h-14 text-lg border-2 border-[#d04f99] bg-[#fdedc9] rounded-2xl shadow focus:border-[#d04f99] focus:ring-2 focus:ring-[#d04f99]/30 file:bg-[#d04f99] file:text-white file:rounded-2xl file:px-3 file:py-4 file:relative file:bottom-1 file:right-3 file:font-semibold file:border-0 file:mr-4"
           />
           {selectedFile && (
             <p className="text-sm text-muted-foreground mt-1">

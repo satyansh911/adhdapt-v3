@@ -34,7 +34,7 @@ export default function TaskSchedulerPage() {
       const data = await response.json();
 
       // Convert ISO strings to Date objects
-      const processed: ScheduledTask[] = data.schedule.map((item: any) => ({
+      const processed: ScheduledTask[] = data?.schedule?.map((item: any) => ({
         ...item,
         startTime: new Date(item.startTime),
         endTime: new Date(item.endTime),

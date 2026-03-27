@@ -74,16 +74,15 @@ export default function JournalPage() {
             </Button>
           </div>
         </header>
-
         <main className="container mx-auto max-w-4xl px-4 pb-8">
           <Tabs defaultValue="journal" className="w-full">
-            <TabsList className="grid w-full grid-cols-3 md:grid-cols-4 rounded-2xl border-2 border-[#d04f99]/20 mb-6">
-              <TabsTrigger value="journal">Journal Entries</TabsTrigger>
-              <TabsTrigger value="media">Media Gallery</TabsTrigger>
-              <TabsTrigger value="collections">Collections</TabsTrigger>
+            <TabsList className="grid w-full grid-cols-3 md:grid-cols-4 rounded-2xl border-2 border-[#d04f99]/20">
+              <TabsTrigger value="journal" className="relative bottom-2 right-1">Journal Entries</TabsTrigger>
+              <TabsTrigger value="media" className="relative bottom-2 left-1">Media Gallery</TabsTrigger>
+              <TabsTrigger value="collections" className="relative bottom-2 left-1">Collections</TabsTrigger>
               <TabsTrigger
                 value="analytics-link"
-                className="hidden md:inline-flex"
+                className="hidden md:inline-flex relative bottom-2 left-1"
                 asChild
               >
                 <Link href="/analytics">Analytics</Link>
