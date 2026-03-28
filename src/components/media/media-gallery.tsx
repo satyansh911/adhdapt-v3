@@ -44,7 +44,8 @@ const MediaGallery: React.FC = () => {
       <CardContent className="space-y-6">
         {mediaItems.length === 0 ? (
           <p className="text-center text-muted-foreground py-8 text-lg">
-            No media uploaded yet. Use the "Upload Media" section to add some!
+            No media uploaded yet. Use the &quot;Upload Media&quot; section to add
+            some!
           </p>
         ) : (
           groupedMedia.map(([date, items]) => (
