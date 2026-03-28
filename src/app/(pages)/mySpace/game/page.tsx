@@ -4,7 +4,6 @@ import { useState, useEffect } from "react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
-import ThemeToggle from "@/components/theme-toggle"
 import { Menu, Users } from "lucide-react"
 import dynamic from "next/dynamic"
 import GameIcon from "@/components/ui/gamification"
@@ -20,6 +19,10 @@ import MindMazeIcon from "@/components/ui/mindMazeIcon"
 import HomeIcon from "@/components/ui/homeIcon"
 import SidebarIcon from "@/components/ui/sidebarLogo"
 import TimerIcon from "@/components/ui/timerIcon"
+
+const ThemeToggle = dynamic(() => import("@/components/theme-toggle"), {
+  ssr: false,
+})
 
 const TileMemoryGame = dynamic(
   () =>
