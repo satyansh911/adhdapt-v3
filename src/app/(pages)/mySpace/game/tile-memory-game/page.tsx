@@ -56,7 +56,7 @@ interface TileMemoryGameProps {
   sidebarOpen?: boolean
 }
 
-export default function TileMemoryGame({ onBack, sidebarOpen = true }: TileMemoryGameProps) {
+export function TileMemoryGame({ onBack, sidebarOpen = true }: TileMemoryGameProps) {
   const [tiles, setTiles] = useState<Tile[]>([])
   const [flippedTiles, setFlippedTiles] = useState<number[]>([])
   const [matchedPairs, setMatchedPairs] = useState(0)
@@ -738,4 +738,8 @@ export default function TileMemoryGame({ onBack, sidebarOpen = true }: TileMemor
       </Dialog>
     </div>
   )
+}
+
+export default function TileMemoryGamePage() {
+  return <TileMemoryGame onBack={() => window.history.back()} sidebarOpen />
 }

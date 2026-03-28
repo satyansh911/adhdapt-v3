@@ -117,7 +117,7 @@ interface IconHandle {
   playAnimation: () => void;
 }
 
-export default function SoundMemoryGame({ onBack, sidebarOpen }: SoundMemoryGameProps) {
+export function SoundMemoryGame({ onBack, sidebarOpen }: SoundMemoryGameProps) {
   const [gamePhase, setGamePhase] = useState<GamePhase>("idle")
   const [sonicBlueprint, setSonicBlueprint] = useState<number[]>([])
   const [userReplication, setUserReplication] = useState<number[]>([])
@@ -669,4 +669,8 @@ export default function SoundMemoryGame({ onBack, sidebarOpen }: SoundMemoryGame
       <LeaderboardDialog />
     </div>
   )
+}
+
+export default function SoundMemoryGamePage() {
+  return <SoundMemoryGame onBack={() => window.history.back()} sidebarOpen={true} />
 }

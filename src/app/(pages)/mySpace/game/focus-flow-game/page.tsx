@@ -59,7 +59,7 @@ interface FocusFlowGameProps {
   sidebarOpen?: boolean
 }
 
-export default function FocusFlowGame({ onBack, sidebarOpen = true }: FocusFlowGameProps) {
+export function FocusFlowGame({ onBack, sidebarOpen = true }: FocusFlowGameProps) {
   const [grid, setGrid] = useState<GridCell[][]>([])
   const [words, setWords] = useState<string[]>([])
   const [hiddenWords, setHiddenWords] = useState<WordPosition[]>([])
@@ -777,4 +777,8 @@ export default function FocusFlowGame({ onBack, sidebarOpen = true }: FocusFlowG
       </Dialog>
     </div>
   )
+}
+
+export default function FocusFlowGamePage() {
+  return <FocusFlowGame onBack={() => window.history.back()} sidebarOpen />
 }
