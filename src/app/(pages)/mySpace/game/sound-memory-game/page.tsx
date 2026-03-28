@@ -1,10 +1,9 @@
 "use client"
 
-import { useState, useCallback, useEffect, useRef } from "react"
+import { useState, useCallback, useEffect, useMemo, useRef } from "react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog"
-import { ArrowLeft, Volume2, VolumeX, Play, RotateCcw, Trophy, Medal, Award } from "lucide-react"
 import ArrowIcon from "@/components/ui/arrowIcon"
 import MindMazeIcon from "@/components/ui/mindMazeIcon"
 import MusicIcon from "@/components/ui/MusicIcon"
@@ -19,8 +18,6 @@ import VolumeOnIcon from "@/components/ui/VolumeOn"
 import VolumeOffIcon from "@/components/ui/VolumeOff"
 import TargetIcon from "@/components/ui/targetIcon"
 import ProgressIcon from "@/components/ui/ProgressIcon"
-import styles from "./sound_game.module.css";
-import BadgeIcon from "@/components/ui/badgeIcon"
 import Badge1Icon from "@/components/ui/Badge1Icon"
 import ResetIcon from "@/components/ui/resetIcon"
 import ConfettiIcon from "@/components/ui/ConfettiIcon"
@@ -134,7 +131,6 @@ export default function SoundMemoryGame({ onBack, sidebarOpen }: SoundMemoryGame
   const [showLeaderboard, setShowLeaderboard] = useState(false)
   const [playerName, setPlayerName] = useState("")
   const [showNameInput, setShowNameInput] = useState(false)
-  const [isNewHighScore, setIsNewHighScore] = useState(false)
 
   // strictly typed refs for icons
   const sylvanLeaperRef = useRef<IconHandle>(null)
@@ -142,54 +138,60 @@ export default function SoundMemoryGame({ onBack, sidebarOpen }: SoundMemoryGame
   const nectarSeekerRef = useRef<IconHandle>(null)
   const aqueousPaddlerRef = useRef<IconHandle>(null)
 
-  const iconRefs = [sylvanLeaperRef, felineStalkerRef, nectarSeekerRef, aqueousPaddlerRef]
+  const iconRefs = useMemo(
+    () => [sylvanLeaperRef, felineStalkerRef, nectarSeekerRef, aqueousPaddlerRef],
+    [],
+  )
 
-  const soundButtons: SoundButton[] = [
-    {
-      id: 0,
-      color: "bg-gradient-to-br from-green-400 to-green-600",
-      hoverColor: "hover:from-green-500 hover:to-green-700",
-      activeColor: "from-green-300 to-green-500",
-      glowColor: "shadow-green-400/50",
-      sound: 261.63,
-      emoji: <SquirrelIcon ref={sylvanLeaperRef} />,
-      name: "Squirrel",
-      shape: "rounded-full",
-    },
-    {
-      id: 1,
-      color: "bg-gradient-to-br from-blue-400 to-blue-600",
-      hoverColor: "hover:from-blue-500 hover:to-blue-700",
-      activeColor: "from-blue-300 to-blue-500",
-      glowColor: "shadow-blue-400/50",
-      sound: 293.66,
-      emoji: <CatIcon ref={felineStalkerRef} />,
-      name: "Cat",
-      shape: "rounded-[2rem]",
-    },
-    {
-      id: 2,
-      color: "bg-gradient-to-br from-yellow-400 to-yellow-600",
-      hoverColor: "hover:from-yellow-500 hover:to-yellow-700",
-      activeColor: "from-yellow-300 to-yellow-500",
-      glowColor: "shadow-yellow-400/50",
-      sound: 329.63,
-      emoji: <BeeIcon ref={nectarSeekerRef} />,
-      name: "Bee",
-      shape: "rounded-[3rem]",
-    },
-    {
-      id: 3,
-      color: "bg-gradient-to-br from-red-400 to-red-600",
-      hoverColor: "hover:from-red-500 hover:to-red-700",
-      activeColor: "from-red-300 to-red-500",
-      glowColor: "shadow-red-400/50",
-      sound: 349.23,
-      emoji: <DuckIcon ref={aqueousPaddlerRef} />,
-      name: "Duck",
-      shape: "rounded-[1.5rem]",
-    },
-  ]
+  const soundButtons: SoundButton[] = useMemo(
+    () => [
+      {
+        id: 0,
+        color: "bg-gradient-to-br from-green-400 to-green-600",
+        hoverColor: "hover:from-green-500 hover:to-green-700",
+        activeColor: "from-green-300 to-green-500",
+        glowColor: "shadow-green-400/50",
+        sound: 261.63,
+        emoji: <SquirrelIcon ref={sylvanLeaperRef} />,
+        name: "Squirrel",
+        shape: "rounded-full",
+      },
+      {
+        id: 1,
+        color: "bg-gradient-to-br from-blue-400 to-blue-600",
+        hoverColor: "hover:from-blue-500 hover:to-blue-700",
+        activeColor: "from-blue-300 to-blue-500",
+        glowColor: "shadow-blue-400/50",
+        sound: 293.66,
+        emoji: <CatIcon ref={felineStalkerRef} />,
+        name: "Cat",
+        shape: "rounded-[2rem]",
+      },
+      {
+        id: 2,
+        color: "bg-gradient-to-br from-yellow-400 to-yellow-600",
+        hoverColor: "hover:from-yellow-500 hover:to-yellow-700",
+        activeColor: "from-yellow-300 to-yellow-500",
+        glowColor: "shadow-yellow-400/50",
+        sound: 329.63,
+        emoji: <BeeIcon ref={nectarSeekerRef} />,
+        name: "Bee",
+        shape: "rounded-[3rem]",
+      },
+      {
+        id: 3,
+        color: "bg-gradient-to-br from-red-400 to-red-600",
+        hoverColor: "hover:from-red-500 hover:to-red-700",
+        activeColor: "from-red-300 to-red-500",
+        glowColor: "shadow-red-400/50",
+        sound: 349.23,
+        emoji: <DuckIcon ref={aqueousPaddlerRef} />,
+        name: "Duck",
+        shape: "rounded-[1.5rem]",
+      },
+    ],
+    [sylvanLeaperRef, felineStalkerRef, nectarSeekerRef, aqueousPaddlerRef],
+  )
 
   // Load leaderboard from localStorage on component mount
   useEffect(() => {
@@ -283,7 +285,7 @@ export default function SoundMemoryGame({ onBack, sidebarOpen }: SoundMemoryGame
       setStatusMessage("Your turn!")
       setUserReplication([])
     }
-  }, [playbackIndex, sonicBlueprint, playSound, iconRefs])
+  }, [playbackIndex, sonicBlueprint, playSound, iconRefs, soundButtons])
 
   useEffect(() => {
     if (gamePhase === "showing") {
@@ -307,7 +309,6 @@ export default function SoundMemoryGame({ onBack, sidebarOpen }: SoundMemoryGame
       setStatusMessage(`Game Over! Final Score: ${achievementPoints}`)
       setGamePhase("gameOver")
       if (achievementPoints > (leaderboard[leaderboard.length - 1]?.score || 0) || leaderboard.length < 10) {
-        setIsNewHighScore(true)
         setShowNameInput(true)
       }
       return

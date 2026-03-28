@@ -8,7 +8,7 @@ import { ProgressBar } from "@/components/task-scheduler/progress-bar";
 import type { Task, ScheduledTask } from "@/types/task";
 
 export default function TaskSchedulerPage() {
-  const [tasks, setTasks] = useState<Task[]>([]);
+  const [, setTasks] = useState<Task[]>([]);
   const [schedule, setSchedule] = useState<ScheduledTask[]>([]);
   const [isScheduling, setIsScheduling] = useState(false);
   const [completedTasks, setCompletedTasks] = useState<Set<string>>(new Set());

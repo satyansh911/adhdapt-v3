@@ -16,14 +16,13 @@ import {
   DialogDescription,
   DialogFooter,
 } from "@/components/ui/dialog"
-import { Timer, Trophy, RotateCcw, Play, Target, Award, ArrowLeft, Search, X, CheckCircle } from "lucide-react"
+import { X, CheckCircle } from "lucide-react"
 import Loader1 from "@/components/ui/Loader1"
 import SearchIcon from "@/components/ui/SearchIcon"
 import FocusFlowIcon from "@/components/ui/focusFlowIcon"
 import TimerIcon from "@/components/ui/timerIcon"
 import BadgeIcon from "@/components/ui/badgeIcon"
 import TargetIcon from "@/components/ui/targetIcon"
-import TrophyIcon from "@/components/ui/trophyIcon"
 import LeaderboardIcon from "@/components/ui/leaderboardIcon"
 import ArrowIcon from "@/components/ui/arrowIcon"
 import PencilIcon from "@/components/ui/PencilIcon"
@@ -277,7 +276,6 @@ export default function FocusFlowGame({ onBack, sidebarOpen = true }: FocusFlowG
     if (!isSelecting || gamePhase !== "playing") return
 
     const newSelection = [...selectedCells]
-    const lastCell = newSelection[newSelection.length - 1]
 
     // Check if this forms a valid line (horizontal, vertical, or diagonal)
     if (newSelection.length === 1 || isValidLine(newSelection[0], { row, col })) {
@@ -340,9 +338,6 @@ export default function FocusFlowGame({ onBack, sidebarOpen = true }: FocusFlowG
       clearSelection()
       return
     }
-
-    const selectedWord = selectedCells.map((cell) => grid[cell.row][cell.col].letter).join("")
-    const reverseWord = selectedWord.split("").reverse().join("")
 
     // Check if selected word matches any hidden word
     const matchedWord = hiddenWords.find((hiddenWord) => {

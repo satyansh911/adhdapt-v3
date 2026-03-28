@@ -230,7 +230,7 @@ The scheduledTime should be in HH:MM format and respect the preferred time slots
       schedule.sort((a, b) => a.startTime.getTime() - b.startTime.getTime());
 
       return NextResponse.json({ schedule });
-    } catch (fallbackError) {
+    } catch {
       return NextResponse.json(
         { error: "Failed to create schedule" },
         { status: 500 }

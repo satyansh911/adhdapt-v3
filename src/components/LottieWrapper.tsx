@@ -12,6 +12,15 @@ interface LottieSafeWrapperProps {
   className?: string
 }
 
+interface LottiePlayerProps {
+  autoplay?: boolean
+  loop?: boolean
+  src: string
+  style?: React.CSSProperties
+  className?: string
+  onError?: () => void
+}
+
 export const LottieSafeWrapper: React.FC<LottieSafeWrapperProps> = ({
   src,
   size = 24,
@@ -20,7 +29,7 @@ export const LottieSafeWrapper: React.FC<LottieSafeWrapperProps> = ({
   fallbackIcon = "⚡",
   className = "",
 }) => {
-  const [Player, setPlayer] = useState<any>(null)
+  const [Player, setPlayer] = useState<React.ComponentType<LottiePlayerProps> | null>(null)
   const [isMounted, setIsMounted] = useState(false)
   const [hasError, setHasError] = useState(false)
 
@@ -30,7 +39,7 @@ export const LottieSafeWrapper: React.FC<LottieSafeWrapperProps> = ({
         // Only load on client side
         if (typeof window !== "undefined") {
           const { Player: LottiePlayer } = await import("@lottiefiles/react-lottie-player")
-          setPlayer(() => LottiePlayer)
+          setPlayer(LottiePlayer as React.ComponentType<LottiePlayerProps>)
         }
       } catch (error) {
         console.error("Failed to load Lottie player:", error)

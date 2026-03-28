@@ -18,17 +18,9 @@ import {
   DialogFooter,
 } from "@/components/ui/dialog"
 import {
-  Timer,
-  Trophy,
-  RotateCcw,
-  Play,
   Zap,
   Star,
-  Flame,
-  Target,
   Clock,
-  Award,
-  ArrowLeft,
   X,
 } from "lucide-react"
 import TileIcon from "@/components/ui/tileGame"
@@ -694,7 +686,7 @@ export default function TileMemoryGame({ onBack, sidebarOpen = true }: TileMemor
               Congratulations!
             </DialogTitle>
             <DialogDescription className="text-center text-lg">
-              You've completed the memory challenge!
+              You&apos;ve completed the memory challenge!
             </DialogDescription>
           </DialogHeader>
           <div className="text-center space-y-4">

@@ -11,8 +11,6 @@ export async function POST(req: NextRequest) {
     );
   }
 
-  // Read the file buffer
-  const arrayBuf = await file.arrayBuffer();
   const resourceType = file.type.startsWith("video/") ? "video" : "image";
   const timestamp = Math.floor(Date.now() / 1000).toString();
   const folder = "adhd-journal-media";

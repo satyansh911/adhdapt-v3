@@ -4,7 +4,7 @@ import React, { useState, useEffect, useRef } from "react"
 import { Reveal } from "@/components/animations/Reveal"
 import { Navbar } from "@/components/ui/Navbar"
 import { PieChart, Pie, Cell, ResponsiveContainer, BarChart, Bar, XAxis, YAxis, Tooltip, CartesianGrid } from 'recharts'
-import { Sparkles, History, PenTool, LayoutDashboard, Brain, Star } from "lucide-react"
+import { History, PenTool, Star } from "lucide-react"
 import gsap from "gsap"
 
 const moodData = [
@@ -57,7 +57,7 @@ export default function JournalPage() {
               </h1>
               <div className="flex items-center gap-3 ml-1">
                  <div className="w-3 h-3 rounded-full bg-[#d04f99] animate-pulse"></div>
-                 <span className="text-xs font-black tracking-[0.3em] uppercase text-[#111]/40 uppercase">Reflection Active</span>
+                 <span className="text-xs font-black tracking-[0.3em] uppercase text-[#111]/40">Reflection Active</span>
               </div>
             </div>
 

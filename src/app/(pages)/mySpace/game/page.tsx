@@ -5,7 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import ThemeToggle from "@/components/theme-toggle"
-import { Brain, Gamepad2, Trophy, Star, Zap, Target, Menu, Home, Grid3X3, Puzzle, Timer, Users } from "lucide-react"
+import { Menu, Users } from "lucide-react"
 import TileMemoryGame from "./tile-memory-game/page"
 import GameIcon from "@/components/ui/gamification"
 import ArcadeIcon from "@/components/ui/ArcadeIcon"
@@ -164,7 +164,9 @@ export default function GameHub() {
                       disabled={!game.available}
                       onClick={(e) => {
                         e.stopPropagation()
-                        game.available && setCurrentGame(game.id)
+                        if (game.available) {
+                          setCurrentGame(game.id)
+                        }
                       }}
                     >
                       {game.available ? "Play Now" : "Coming Soon"}
@@ -208,21 +210,6 @@ export default function GameHub() {
             </div>
           </div>
         </div>
-      </div>
-    </div>
-  )
-
-  const ComingSoonPage = ({ gameName }: { gameName: string }) => (
-    <div className="min-h-screen bg-background flex items-center justify-center p-8">
-      <div className="text-center animate-fade-in-scale">
-        <div className="w-24 h-24 bg-primary/10 rounded-full flex items-center justify-center text-4xl mx-auto mb-6 animate-bounce">
-          🚀
-        </div>
-        <h2 className="text-3xl font-bold text-foreground mb-4">{gameName}</h2>
-        <p className="text-xl text-muted-foreground mb-8">This exciting game is coming soon!</p>
-        <Button onClick={() => setCurrentGame("welcome")} className="px-8 py-3 text-lg font-semibold rounded-2xl">
-          Back to Arcade
-        </Button>
       </div>
     </div>
   )

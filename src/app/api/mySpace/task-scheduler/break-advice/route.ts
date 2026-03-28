@@ -54,15 +54,12 @@ Keep it concise, positive, and ADHD-friendly. Focus on activities that take 5-15
     console.error("Error generating break advice:", error);
 
     // Fallback advice based on task type
-    const fallbackAdvice = getFallbackAdvice(
-      request.body?.taskName || "",
-      request.body?.timeOfDay || ""
-    );
+    const fallbackAdvice = getFallbackAdvice(request.body?.taskName || "");
     return NextResponse.json({ advice: fallbackAdvice });
   }
 }
 
-function getFallbackAdvice(taskName: string, timeOfDay: string): string {
+function getFallbackAdvice(taskName: string): string {
   const taskLower = taskName.toLowerCase();
 
   if (

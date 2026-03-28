@@ -1,9 +1,9 @@
 "use client"
 
-import React, { useState, useEffect } from "react"
+import React, { useState } from "react"
 import { Reveal } from "@/components/animations/Reveal"
 import { Navbar } from "@/components/ui/Navbar"
-import { Users, MessageSquare, Flame, Star, Zap, Target, ArrowRight } from "lucide-react"
+import { MessageSquare, Flame, Star, Zap, ArrowRight } from "lucide-react"
 
 const mockFeed = [
   { id: 1, user: "Satyansh", vibe: "Focused", activity: "Refactoring Nexus Hub", time: "2m ago", color: "text-[#2D8EFF]" },

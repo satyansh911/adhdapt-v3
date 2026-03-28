@@ -1,9 +1,10 @@
+/* eslint-disable react/no-unescaped-entities */
 "use client";
 
 import React, { useEffect, useRef } from "react";
 import { Navbar } from "@/components/ui/Navbar";
 import Link from "next/link";
-import { Calendar, MonitorPlay, Sparkles, Zap, Brain, Target, Activity, ZapOff, MousePointer2, Star, ArrowRight } from "lucide-react";
+import { Calendar, MonitorPlay, Sparkles, Zap, Brain, Target, Activity, MousePointer2, Star, ArrowRight } from "lucide-react";
 import { 
   Dialog, 
   DialogContent, 
