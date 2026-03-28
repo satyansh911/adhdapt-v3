@@ -56,7 +56,7 @@ interface TileMemoryGameProps {
   sidebarOpen?: boolean
 }
 
-function TileMemoryGame({ onBack, sidebarOpen = true }: TileMemoryGameProps) {
+export function TileMemoryGame({ onBack, sidebarOpen = true }: TileMemoryGameProps) {
   const [tiles, setTiles] = useState<Tile[]>([])
   const [flippedTiles, setFlippedTiles] = useState<number[]>([])
   const [matchedPairs, setMatchedPairs] = useState(0)

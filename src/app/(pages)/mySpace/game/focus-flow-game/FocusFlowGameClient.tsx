@@ -59,7 +59,7 @@ interface FocusFlowGameProps {
   sidebarOpen?: boolean
 }
 
-function FocusFlowGame({ onBack, sidebarOpen = true }: FocusFlowGameProps) {
+export function FocusFlowGame({ onBack, sidebarOpen = true }: FocusFlowGameProps) {
   const [grid, setGrid] = useState<GridCell[][]>([])
   const [words, setWords] = useState<string[]>([])
   const [hiddenWords, setHiddenWords] = useState<WordPosition[]>([])
