@@ -1,12 +1,24 @@
 import type { Metadata } from "next";
+import { Outfit, Playfair_Display } from "next/font/google";
 import "./globals.css";
-
-
 import { ClerkProvider } from '@clerk/nextjs'
 
+const outfit = Outfit({
+  subsets: ["latin"],
+  variable: "--font-outfit",
+  weight: ["400", "500", "700", "900"],
+});
+
+const playfair = Playfair_Display({
+  subsets: ["latin"],
+  variable: "--font-display",
+  weight: ["400", "500", "600", "700", "800", "900"],
+  style: ["normal", "italic"],
+});
+
 export const metadata: Metadata = {
-  title: "ADHDapt | Find Your Focus",
-  description: "A serene, luxury workspace tailored to quiet the mind.",
+  title: "ADHDapt | Focus Fest",
+  description: "A vibrant, high-energy cognitive toolkit.",
 };
 
 export default function RootLayout({
@@ -17,7 +29,7 @@ export default function RootLayout({
   return (
     <ClerkProvider>
       <html lang="en">
-        <body className="antialiased font-sans">
+        <body className={`${outfit.variable} ${playfair.variable} font-sans antialiased selection:bg-[#E91E63] selection:text-white`}>
           {children}
         </body>
       </html>

@@ -18,21 +18,8 @@ const config = {
     },
     extend: {
       fontFamily: {
-        sans: [
-          "system-ui",
-          "-apple-system",
-          "BlinkMacSystemFont",
-          "Segoe UI",
-          "Roboto",
-          "Oxygen",
-          "Ubuntu",
-          "Cantarell",
-          "Open Sans",
-          "Helvetica Neue",
-          "sans-serif",
-        ],
-        serif: ['"Playfair Display"', "serif"],
-        sans: ['"Montserrat"', "sans-serif"],
+        sans: ["var(--font-outfit)", "sans-serif"],
+        display: ["var(--font-display)", "serif"],
       },
       colors: {
         background: "hsl(var(--background))",

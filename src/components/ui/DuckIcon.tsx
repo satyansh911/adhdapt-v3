@@ -39,4 +39,6 @@ const DuckIcon = forwardRef(({ size = 80 }: Props, ref) => {
   );
 });
 
+DuckIcon.displayName = "DuckIcon";
+
 export default DuckIcon;

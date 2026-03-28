@@ -39,4 +39,6 @@ const SquirrelIcon = forwardRef(({ size = 80 }: Props, ref) => {
   );
 });
 
+SquirrelIcon.displayName = "SquirrelIcon";
+
 export default SquirrelIcon;

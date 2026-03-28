@@ -52,7 +52,7 @@ export const Reveal = ({
         opacity: 1,
         duration: duration,
         delay: delay,
-        ease: "power2.out",
+        ease: "back.out(1.7)",
         scrollTrigger: {
           trigger: containerRef.current,
           start: "top 85%", // Trigger when the top of the element hits 85% of the viewport height

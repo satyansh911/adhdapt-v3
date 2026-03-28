@@ -1,116 +1,116 @@
-@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,300..800;1,300..800&family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap');
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  /* Calder Clark Luxury Minimalist Aesthetic - Light Mode */
-  --background: 30 20% 97%; /* Warm Ivory */
-  --foreground: 60 2% 17%; /* Deep Charcoal */
-  --card: 30 20% 97%;
-  --card-foreground: 60 2% 17%;
-  --popover: 30 20% 97%;
-  --popover-foreground: 60 2% 17%;
-  
-  --primary: 75 10% 40%; /* Olive Green */
-  --primary-foreground: 30 20% 97%; /* Ivory Text */
-  
-  --secondary: 35 15% 79%; /* Dusty Taupe */
-  --secondary-foreground: 60 2% 17%;
-  
-  --muted: 40 22% 92%; /* Muted Sage Background */
-  --muted-foreground: 75 10% 40%;
-  
-  --accent: 40 22% 92%;
-  --accent-foreground: 60 2% 17%;
-  
-  --destructive: 0 60% 50%; /* Softer red for elegance */
-  --destructive-foreground: 30 20% 97%;
-  
-  --border: 35 15% 85%; /* Hairline delicate borders */
-  --input: 35 15% 85%;
-  --ring: 75 10% 40%; /* Focus rings in Olive Green */
-  
-  /* Chart/Stats */
-  --chart-1: 75 10% 40%;
-  --chart-2: 35 15% 79%;
-  --chart-3: 40 22% 92%;
-  --chart-4: 60 2% 17%;
-  --chart-5: 0 0% 80%;
-  
-  --sidebar: 30 20% 97%;
-  --sidebar-foreground: 60 2% 17%;
-  --sidebar-primary: 75 10% 40%;
-  --sidebar-primary-foreground: 30 20% 97%;
-  --sidebar-accent: 40 22% 92%;
-  --sidebar-accent-foreground: 60 2% 17%;
-  --sidebar-border: 35 15% 85%;
-  --sidebar-ring: 75 10% 40%;
-  
-  --radius: 0.2rem; /* Sharper borders for editorial feel */
+@layer base {
+  :root {
+    /* SUMMER GAME FEST VIBRANT LIGHT MODE Base Palette */
+    --background: 46 36% 96%; /* #F9F7F2 Off-white sand */
+    --foreground: 0 0% 7%; /* #111111 Deep Charcoal */
+    
+    --card: 0 0% 100%; /* #FFFFFF Pure White Cards */
+    --card-foreground: 0 0% 20%; /* #333333 Dark Gray */
+    
+    --popover: 0 0% 100%;
+    --popover-foreground: 0 0% 7%;
+    
+    /* ARCADEPINK & RETRO BRUTALIST TOKENS */
+    --arcade-pink: 326 56% 56%; /* #d04f99 */
+    --arcade-yellow: 42 90% 89%; /* #fdedc9 */
+    --arcade-teal: 182 43% 68%; /* #8acfd1 */
+    
+    /* Massive Border Radii (Pill / Squircle) */
+    --radius: 40px;
+  }
+
+  .dark {
+    /* WE ARE FORCING LIGHT MODE FOR SUMMER GAME FEST VIBE */
+    --background: 0 0% 7%;
+    --foreground: 46 36% 96%;
+    --card: 0 0% 12%;
+    --card-foreground: 0 0% 96%;
+    --primary: 342 83% 60%; 
+    --primary-foreground: 0 0% 100%;
+    --secondary: 212 100% 59%;
+    --secondary-foreground: 0 0% 100%;
+    --muted: 0 0% 15%;
+    --muted-foreground: 0 0% 70%;
+    --border: 0 0% 20%;
+    --ring: 342 83% 60%;
+  }
 }
 
-.dark {
-  /* Dark Mode adapted for Luxury Minimalist - Charcoal Base */
-  --background: 60 2% 14%; /* Rich Charcoal Base */
-  --foreground: 30 20% 95%; /* Soft Ivory Text */
-  --card: 60 2% 16%;
-  --card-foreground: 30 20% 95%;
-  --popover: 60 2% 16%;
-  --popover-foreground: 30 20% 95%;
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground font-sans antialiased;
+    /* Soft noise texture overlay for the SGF look */
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.03'/%3E%3C/svg%3E");
+    overflow-x: hidden;
+  }
   
-  --primary: 75 15% 50%; /* Lighter Olive for contrast */
-  --primary-foreground: 30 20% 97%;
-  
-  --secondary: 60 2% 22%;
-  --secondary-foreground: 30 20% 95%;
-  
-  --muted: 60 2% 20%;
-  --muted-foreground: 75 15% 60%;
-  
-  --accent: 60 2% 20%;
-  --accent-foreground: 30 20% 95%;
-  
-  --destructive: 0 50% 40%;
-  --destructive-foreground: 30 20% 95%;
-  
-  --border: 60 2% 25%;
-  --input: 60 2% 25%;
-  --ring: 75 15% 50%;
-  
-  --chart-1: 75 15% 50%;
-  --chart-2: 35 15% 60%;
-  --chart-3: 40 10% 30%;
-  --chart-4: 30 20% 80%;
-  --chart-5: 0 0% 40%;
-  
-  --sidebar: 60 2% 14%;
-  --sidebar-foreground: 30 20% 95%;
-  --sidebar-primary: 75 15% 50%;
-  --sidebar-primary-foreground: 30 20% 97%;
-  --sidebar-accent: 60 2% 20%;
-  --sidebar-accent-foreground: 30 20% 95%;
-  --sidebar-border: 60 2% 25%;
-  --sidebar-ring: 75 15% 50%;
+  html {
+     scroll-behavior: smooth;
+  }
+
+  /* Extreme heavy typography overrides */
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-sans tracking-tighter leading-none font-[900];
+  }
 }
 
+@layer utilities {
+  .sgf-gradient-text {
+    @apply bg-clip-text text-transparent bg-gradient-to-r from-[#E91E63] to-[#FF4B91];
+  }
+  
+  .sgf-button {
+    @apply bg-gradient-to-br from-[#FF4B91] to-[#E91E63] text-white rounded-full shadow-[0_4px_14px_0_rgba(233,30,99,0.2)] hover:shadow-[0_6px_20px_rgba(233,30,99,0.3)] hover:-translate-y-0.5 transition-all duration-300 px-8 py-3 font-bold active:scale-95;
+  }
+  
+  .sgf-card {
+    @apply rounded-[40px] border-4 border-[#111] bg-white shadow-[16px_16px_0px_#111] transition-all duration-300 hover:translate-x-1 hover:translate-y-1 hover:shadow-none;
+  }
 
+  .arcade-card {
+    @apply rounded-[40px] border-4 border-[#d04f99] bg-[#fdedc9] shadow-[5px_5px_0px_#d04f99] transition-all duration-300 hover:translate-x-1 hover:translate-y-1 hover:shadow-none;
+  }
 
+  .arcade-button {
+    @apply px-8 py-4 bg-[#8acfd1] border-4 border-[#d04f99] shadow-[5px_5px_0px_#d04f99] rounded-[24px] font-black text-[#111] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none transition-all active:scale-95;
+  }
 
+  .orb {
+    @apply absolute rounded-full mix-blend-multiply filter blur-3xl opacity-60 animate-pulse;
+  }
+  .orb-pink {
+    @apply bg-[#d04f99];
+  }
+  .orb-blue {
+    @apply bg-[#2D8EFF];
+  }
+  .orb-yellow {
+    @apply bg-[#FFC107];
+  }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: var(--font-sans);
+  .sgf-nav {
+    @apply border-4 border-[#111] bg-white/90 backdrop-blur-xl rounded-full shadow-[8px_8px_0px_#111];
+  }
 }
 
-/* .container {
-  display: flex;
-  justify-content: center;
+/* Custom scrollbar for friendly feel */
+::-webkit-scrollbar {
+  width: 10px;
 }
-
-.container-left {
-  display:flex;
-  justify-content: left;
-} */
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+::-webkit-scrollbar-thumb {
+  background: #ccc;
+  border-radius: 10px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #E91E63;
+}

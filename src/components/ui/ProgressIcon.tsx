@@ -1,6 +1,5 @@
 "use client";
 import { Player } from "@lottiefiles/react-lottie-player";
-import { LucideProps } from "lucide-react";
 import React from "react";
 
 interface Props {
