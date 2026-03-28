@@ -1,6 +1,7 @@
 "use client"
 
 import { useState, useEffect } from "react"
+import Image from "next/image"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
@@ -498,7 +499,7 @@ export default function TileMemoryGame({ onBack, sidebarOpen = true }: TileMemor
                       <p className="text-muted-foreground font-medium">Test your memory and build amazing streaks!</p>
                     </div>
                     <Button onClick={startGame} size="lg" className="px-8 py-4 text-lg text-black font-semibold rounded-2xl bg-[#8acfd1] shadow-[3px_3px_0px_0px_#d14e99] hover:bg-[#8acfd1] hover:shadow-none hover:translate-x-1 hover:translate-y-1 transition-all duration-200 ease-in-out">
-                      <img src="/play.png" className="w-6 h-6"/>
+                      <Image src="/play.png" alt="Play Icon" width={24} height={24} className="w-6 h-6 mr-2" />
                       Start New Game
                     </Button>
                   </div>

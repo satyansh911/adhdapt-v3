@@ -25,6 +25,7 @@ import Badge1Icon from "@/components/ui/Badge1Icon"
 import ResetIcon from "@/components/ui/resetIcon"
 import ConfettiIcon from "@/components/ui/ConfettiIcon"
 import NormalPrizeIcon from "@/components/ui/NormalPrizeIcon"
+import Image from "next/image"
 
 interface SoundMemoryGameProps {
   onBack: () => void
@@ -646,7 +647,7 @@ export default function SoundMemoryGame({ onBack, sidebarOpen }: SoundMemoryGame
                 variant={"outline"}
                 className="px-10 py-4 text-xl font-bold rounded-3xl bg-[#c9fded] border-black shadow-[3px_3px_0px_0px_#99d04f] hover:bg-[#c9fded] hover:shadow-none hover:translate-x-1 hover:translate-y-1 transition-all duration-200 ease-in-out"
               >
-                <img src="/play.png" className="w-5 h-5"/>
+                <Image src="/play.png" alt="Play Icon" width={20} height={20} className="w-5 h-5 mr-2" />
                 Start Listening
               </Button>
             )}
@@ -657,7 +658,7 @@ export default function SoundMemoryGame({ onBack, sidebarOpen }: SoundMemoryGame
                   onClick={startGame}
                   className="px-10 py-4 text-xl font-bold rounded-3xl bg-[#c9fded] shadow-[3px_3px_0px_0px_#99d04f] hover:bg-[#c9fded] hover:shadow-none hover:translate-x-1 hover:translate-y-1 transition-all duration-200"
                 >
-                  <img src="/play.png" className="w-5 h-5"/>
+                  <Image src="/play.png" alt="Play Icon" width={20} height={20} className="w-5 h-5 mr-2" />
                   Play Again
                 </Button>
                 <Button

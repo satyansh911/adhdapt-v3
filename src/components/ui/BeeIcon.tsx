@@ -39,4 +39,6 @@ const BeeIcon = forwardRef(({ size = 80 }: Props, ref) => {
   );
 });
 
+BeeIcon.displayName = "BeeIcon";
+
 export default BeeIcon;

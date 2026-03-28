@@ -29,6 +29,7 @@ import ArrowIcon from "@/components/ui/arrowIcon"
 import PencilIcon from "@/components/ui/PencilIcon"
 import ConfettiIcon from "@/components/ui/ConfettiIcon"
 import { LottieSafeWrapper } from "@/components/LottieWrapper"
+import Image from "next/image"
 
 interface GridCell {
   letter: string
@@ -553,7 +554,7 @@ export default function FocusFlowGame({ onBack, sidebarOpen = true }: FocusFlowG
                       <p className="text-muted-foreground font-medium">Search for hidden words in all directions!</p>
                     </div>
                     <Button onClick={startGame} size="lg" className="px-8 py-4 text-lg font-semibold rounded-2xl bg-[#ffffff] shadow-[3px_3px_0px_0px_#4f99d0] hover:bg-[#ffffff] hover:shadow-none hover:translate-x-1 hover:translate-y-1 transition-all duration-200 ease-in-out">
-                      <img src="/play.png" className="w-6 h-6"/>
+                      <Image src="/play.png" alt="Play Icon" width={24} height={24} className="w-6 h-6 mr-2" />
                       Start New Game
                     </Button>
                   </div>

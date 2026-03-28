@@ -12,6 +12,7 @@ import {
 import { useJournal } from "@/components/journal/journal-provider";
 import { format, parseISO } from "date-fns";
 import { ImageIcon, Video } from "lucide-react";
+import Image from "next/image";
 
 const MediaGallery: React.FC = () => {
   const { mediaItems } = useJournal();
@@ -58,12 +59,14 @@ const MediaGallery: React.FC = () => {
                     className="relative aspect-square rounded-md overflow-hidden group"
                   >
                     {item.type === "image" ? (
-                      <img
+                      <Image
                         src={item.url || "/placeholder.svg"}
                         alt={`Uploaded image from ${format(
                           parseISO(item.createdAt),
                           "PPP"
                         )}`}
+                        width={300}
+                        height={300}
                         className="w-full h-full object-cover transition-transform duration-200 group-hover:scale-105"
                       />
                     ) : (

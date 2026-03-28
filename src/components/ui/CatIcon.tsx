@@ -40,4 +40,6 @@ const CatIcon = forwardRef(({ size = 80 }: Props, ref) => {
   );
 });
 
+CatIcon.displayName = "CatIcon";
+
 export default CatIcon;

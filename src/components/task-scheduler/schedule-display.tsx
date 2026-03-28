@@ -15,7 +15,7 @@ import {
   Sparkles,
 } from "lucide-react";
 import type { ScheduledTask } from "@/types/task";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 
 interface ScheduleDisplayProps {
   schedule: ScheduledTask[];
@@ -90,7 +90,7 @@ export function ScheduleDisplay({
     return now >= task.startTime && now <= task.endTime;
   };
 
-  const getBreakAdvice = async (
+  const getBreakAdvice = useCallback(async (
     breakId: string,
     previousTask: ScheduledTask
   ) => {
@@ -137,7 +137,7 @@ export function ScheduleDisplay({
         return newSet;
       });
     }
-  };
+  }, [breakAdvice, loadingAdvice]);
 
   // Group schedule by time slots
   const groupedSchedule = schedule.reduce((groups, item) => {
@@ -160,7 +160,7 @@ export function ScheduleDisplay({
         getBreakAdvice(item.id, previousTask);
       }
     });
-  }, [schedule]);
+  }, [schedule, getBreakAdvice]);
 
   return (
     <Card className="border shadow-[5px_5px_0px_0px_#d04f99] border-[#d04f99] rounded-3xl bg-[#fdedc9]">

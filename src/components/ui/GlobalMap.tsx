@@ -92,7 +92,7 @@ export function GlobalMap() {
         </h2>
         
         <p className="text-[#666] text-lg font-medium leading-relaxed mb-8">
-          ADHD crossses all borders. Over <span className="text-[#2D8EFF] font-black">366M+ adults</span> globally use various "Design for the Glitch" strategies to thrive.
+          ADHD crossses all borders. Over <span className="text-[#2D8EFF] font-black">366M+ adults</span> globally use various &quot;Design for the Glitch&quot; strategies to thrive.
         </p>
 
         <div className="flex flex-col gap-4 w-full">
