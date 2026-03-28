@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Outfit, Playfair_Display } from "next/font/google";
 import "./globals.css";
-import { ClerkProvider } from '@clerk/nextjs'
+import { ClerkProvider } from "@clerk/nextjs";
 
 const outfit = Outfit({
   subsets: ["latin"],
@@ -26,13 +26,25 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const clerkPublishableKey = process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY;
+
+  const appShell = (
+    <html lang="en">
+      <body
+        className={`${outfit.variable} ${playfair.variable} font-sans antialiased selection:bg-[#E91E63] selection:text-white`}
+      >
+        {children}
+      </body>
+    </html>
+  );
+
+  if (!clerkPublishableKey) {
+    return appShell;
+  }
+
   return (
-    <ClerkProvider>
-      <html lang="en">
-        <body className={`${outfit.variable} ${playfair.variable} font-sans antialiased selection:bg-[#E91E63] selection:text-white`}>
-          {children}
-        </body>
-      </html>
+    <ClerkProvider publishableKey={clerkPublishableKey}>
+      {appShell}
     </ClerkProvider>
   );
 }

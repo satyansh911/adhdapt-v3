@@ -1,19 +1,28 @@
-import { clerkMiddleware, createRouteMatcher } from '@clerk/nextjs/server'
+import { clerkMiddleware, createRouteMatcher } from "@clerk/nextjs/server";
+import { NextResponse } from "next/server";
+
+const hasClerkEnv = Boolean(
+  process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY && process.env.CLERK_SECRET_KEY
+);
 
 // Define the absolute routes that do NOT require authentication
 const isPublicRoute = createRouteMatcher([
-  '/',
-  '/about',
-  '/login(.*)',
-  '/signup(.*)',
-  '/api/webhooks(.*)'
-])
+  "/",
+  "/about",
+  "/login(.*)",
+  "/signup(.*)",
+  "/api/webhooks(.*)",
+]);
 
-export default clerkMiddleware(async (auth, request) => {
+const authMiddleware = clerkMiddleware(async (auth, request) => {
   if (!isPublicRoute(request)) {
-    await auth.protect()
+    await auth.protect();
   }
-})
+});
+
+export default hasClerkEnv
+  ? authMiddleware
+  : () => NextResponse.next();
 
 export const config = {
   matcher: [
@@ -22,4 +31,4 @@ export const config = {
     // Always run for API routes
     '/(api|trpc)(.*)',
   ],
-}
+};

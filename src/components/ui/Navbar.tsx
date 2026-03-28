@@ -6,6 +6,8 @@ import { SignInButton, SignUpButton, UserButton, SignedIn, SignedOut } from "@cl
 import { Sparkles, LayoutGrid } from "lucide-react"
 
 export function Navbar() {
+  const hasClerk = Boolean(process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY)
+
   return (
     <header className="fixed top-6 left-1/2 transform -translate-x-1/2 z-50 flex items-center justify-between px-8 py-4 sgf-nav w-[90%] max-w-6xl transition-all duration-300">
       
@@ -47,28 +49,51 @@ export function Navbar() {
         
         <div className="h-8 w-px bg-[#111]/10 hidden md:block"></div>
 
-        <SignedOut>
-          <div className="flex items-center gap-4">
-            <SignInButton mode="modal">
-              <button className="text-[15px] font-black text-[#666] hover:text-[#111] transition-colors cursor-pointer">
-                LOG IN
-              </button>
-            </SignInButton>
-            <SignUpButton mode="modal">
-              <button className="px-8 py-3 bg-[#E91E63] text-white rounded-full font-black text-sm shadow-[4px_4px_0px_#111] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none transition-all border-2 border-[#111]">
-                SIGN UP
-              </button>
-            </SignUpButton>
-          </div>
-        </SignedOut>
+        {hasClerk ? (
+          <>
+            <SignedOut>
+              <div className="flex items-center gap-4">
+                <SignInButton mode="modal">
+                  <button className="text-[15px] font-black text-[#666] hover:text-[#111] transition-colors cursor-pointer">
+                    LOG IN
+                  </button>
+                </SignInButton>
+                <SignUpButton mode="modal">
+                  <button className="px-8 py-3 bg-[#E91E63] text-white rounded-full font-black text-sm shadow-[4px_4px_0px_#111] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none transition-all border-2 border-[#111]">
+                    SIGN UP
+                  </button>
+                </SignUpButton>
+              </div>
+            </SignedOut>
 
-        <SignedIn>
-          <UserButton afterSignOutUrl="/" appearance={{
-            elements: {
-              avatarBox: "w-10 h-10 rounded-full border-4 border-[#111] shadow-[4px_4px_0px_#111] hover:scale-110 transition-transform"
-            }
-          }} />
-        </SignedIn>
+            <SignedIn>
+              <UserButton
+                afterSignOutUrl="/"
+                appearance={{
+                  elements: {
+                    avatarBox:
+                      "w-10 h-10 rounded-full border-4 border-[#111] shadow-[4px_4px_0px_#111] hover:scale-110 transition-transform",
+                  },
+                }}
+              />
+            </SignedIn>
+          </>
+        ) : (
+          <div className="flex items-center gap-4">
+            <Link
+              href="/login"
+              className="text-[15px] font-black text-[#666] hover:text-[#111] transition-colors cursor-pointer"
+            >
+              LOG IN
+            </Link>
+            <Link
+              href="/signup"
+              className="px-8 py-3 bg-[#E91E63] text-white rounded-full font-black text-sm shadow-[4px_4px_0px_#111] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none transition-all border-2 border-[#111]"
+            >
+              SIGN UP
+            </Link>
+          </div>
+        )}
       </div>
     </header>
   )
