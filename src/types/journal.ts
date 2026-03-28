@@ -1,8 +1,14 @@
+import * as LucideIcons from "lucide-react";
+
+export type IconKey = keyof typeof LucideIcons;
+
 export interface Mood {
   id: string;
   name: string;
+  label: string; // Meaningful alias for name
+  emoji: string; // Added as requested
   color: string; // Tailwind color class, e.g., "bg-green-100 text-green-800"
-  icon?: string; // Lucide icon name, e.g., "Smile"
+  icon?: IconKey; // Strictly typed icon name
 }
 
 export interface Collection {

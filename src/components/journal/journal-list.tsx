@@ -15,6 +15,7 @@ import { useJournal } from "./journal-provider";
 import type { JournalEntry } from "@/types/journal";
 import { format, parseISO } from "date-fns";
 import { Edit, Trash2, Search, Filter, XCircle } from "lucide-react";
+import type { DateRange } from "react-day-picker";
 import {
   Popover,
   PopoverContent,
@@ -31,6 +32,7 @@ import {
 import { Badge } from "@/components/ui/badge";
 import * as LucideIcons from "lucide-react";
 import { cn } from "@/lib/utils";
+import type { IconKey } from "@/types/journal";
 import {
   Dialog,
   DialogContent,
@@ -55,19 +57,16 @@ const JournalList: React.FC<JournalListProps> = ({
 }) => {
   const {
     entries,
-    moods,
-    collections,
+    moods: moodPalette,
     deleteEntry,
     getMoodById,
     getCollectionName,
   } = useJournal();
   const [searchTerm, setSearchTerm] = useState("");
   const [filterMoodId, setFilterMoodId] = useState<string>(ALL_MOODS);
-  const [dateRange, setDateRange] = useState<
-    { from?: Date; to?: Date } | undefined
-  >(undefined);
+  const [dateRange, setDateRange] = useState<DateRange | undefined>(undefined);
 
-  const filteredEntries = useMemo(() => {
+  const curatedChronicle = useMemo(() => {
     let filtered = entries;
 
     if (searchTerm) {
@@ -94,7 +93,7 @@ const JournalList: React.FC<JournalListProps> = ({
       filtered = filtered.filter((entry) => {
         const entryDate = parseISO(entry.createdAt);
         // Add one day to 'to' date to include entries on that day
-        const toDatePlusOne = new Date(dateRange.to.getTime());
+        const toDatePlusOne = new Date(dateRange.to!.getTime());
         toDatePlusOne.setDate(toDatePlusOne.getDate() + 1);
         return entryDate < toDatePlusOne;
       });
@@ -162,7 +161,7 @@ const JournalList: React.FC<JournalListProps> = ({
                 </SelectTrigger>
                 <SelectContent className="rounded-2xl">
                   <SelectItem value={ALL_MOODS}>All Moods</SelectItem>
-                  {moods.map((mood) => (
+                  {moodPalette.map((mood) => (
                     <SelectItem key={mood.id} value={mood.id}>
                       {mood.name}
                     </SelectItem>
@@ -192,17 +191,17 @@ const JournalList: React.FC<JournalListProps> = ({
         </Popover>
       </div>
 
-      {filteredEntries.length === 0 ? (
+      {curatedChronicle.length === 0 ? (
         <p className="text-center text-muted-foreground py-8">
           No journal entries found.
         </p>
       ) : (
         <div className="grid gap-4">
-          {filteredEntries.map((entry) => {
-            const mood = getMoodById(entry.moodId);
+          {curatedChronicle.map((entry) => {
+            const emotionalAura = getMoodById(entry.moodId);
             const collectionName = getCollectionName(entry.collectionId);
-            const MoodIcon = mood?.icon
-              ? (LucideIcons as any)[mood.icon]
+            const AuraGlyph = emotionalAura?.icon
+              ? (LucideIcons[emotionalAura.icon as IconKey] as React.ElementType)
               : null;
 
             return (
@@ -227,12 +226,12 @@ const JournalList: React.FC<JournalListProps> = ({
                         Draft
                       </Badge>
                     )}
-                    {mood && (
+                    {emotionalAura && (
                       <Badge
-                        className={cn("flex items-center gap-1", mood.color)}
+                        className={cn("flex items-center gap-1", emotionalAura.color)}
                       >
-                        {MoodIcon && <MoodIcon className="h-3 w-3" />}
-                        {mood.name}
+                        {AuraGlyph && <AuraGlyph className="h-3 w-3" />}
+                        {emotionalAura.name}
                       </Badge>
                     )}
                     {collectionName && collectionName !== "No Collection" && (
@@ -273,7 +272,7 @@ const JournalList: React.FC<JournalListProps> = ({
                           </DialogTitle>
                           <DialogDescription>
                             This action cannot be undone. This will permanently
-                            delete your entry "{entry.title}".
+                            delete your entry &quot;{entry.title}&quot;.
                           </DialogDescription>
                         </DialogHeader>
                         <DialogFooter>

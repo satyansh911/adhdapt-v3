@@ -27,43 +27,44 @@ export async function POST(req: NextRequest) {
     .map((b) => b.toString(16).padStart(2, "0"))
     .join("");
 
-  const cloudinaryData = new FormData();
+  const uploadPayload = new FormData();
   // Append the file directly from the client's FormData
-  cloudinaryData.append("file", file);
-  cloudinaryData.append("folder", folder);
-  cloudinaryData.append("timestamp", timestamp);
-  cloudinaryData.append("api_key", process.env.CLOUDINARY_API_KEY!);
-  cloudinaryData.append("signature", signatureHex);
+  uploadPayload.append("file", file);
+  uploadPayload.append("folder", folder);
+  uploadPayload.append("timestamp", timestamp);
+  uploadPayload.append("api_key", process.env.CLOUDINARY_API_KEY!);
+  uploadPayload.append("signature", signatureHex);
 
-  const uploadUrl = `https://api.cloudinary.com/v1_1/${process.env.CLOUDINARY_CLOUD_NAME}/${resourceType}/upload`;
+  const uploadEndpoint = `https://api.cloudinary.com/v1_1/${process.env.CLOUDINARY_CLOUD_NAME}/${resourceType}/upload`;
 
   try {
-    const cloudRes = await fetch(uploadUrl, {
+    const apiResponse = await fetch(uploadEndpoint, {
       method: "POST",
-      body: cloudinaryData,
+      body: uploadPayload,
     });
 
-    if (!cloudRes.ok) {
-      const errText = await cloudRes.text();
+    if (!apiResponse.ok) {
+      const errorDetail = await apiResponse.text();
       return NextResponse.json(
-        { success: false, error: errText },
-        { status: cloudRes.status }
+        { success: false, error: errorDetail },
+        { status: apiResponse.status }
       );
     }
 
-    const result = await cloudRes.json();
+    const artifactMetadata = await apiResponse.json();
     return NextResponse.json({
       success: true,
       data: {
-        url: result.secure_url,
-        publicId: result.public_id,
+        url: artifactMetadata.secure_url,
+        publicId: artifactMetadata.public_id,
         type: resourceType,
       },
     });
-  } catch (err: any) {
-    console.error("Cloudinary upload error:", err);
+  } catch (exception: unknown) {
+    const errorMessage = exception instanceof Error ? exception.message : "Systemic upload failure.";
+    console.error("Cloudinary integration failure:", exception);
     return NextResponse.json(
-      { success: false, error: err?.message || "Upload failed." },
+      { success: false, error: errorMessage },
       { status: 500 }
     );
   }

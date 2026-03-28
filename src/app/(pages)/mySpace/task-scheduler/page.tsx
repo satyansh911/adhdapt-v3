@@ -13,55 +13,55 @@ export default function TaskSchedulerPage() {
   const [isScheduling, setIsScheduling] = useState(false);
   const [completedTasks, setCompletedTasks] = useState<Set<string>>(new Set());
 
-  const hasSchedule = Array.isArray(schedule) && schedule.length > 0;
+  const hasSchedulePresence = Array.isArray(schedule) && schedule.length > 0;
 
-  const handleTasksSubmit = async (newTasks: Task[], startTime: string) => {
-    setTasks(newTasks);
+  const orchestrateScheduling = async (workItems: Task[], startingTime: string) => {
+    setTasks(workItems);
     setIsScheduling(true);
 
     try {
-      const response = await fetch("/api/mySpace/task-scheduler/schedule", {
+      const apiResponse = await fetch("/api/mySpace/task-scheduler/schedule", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          tasks: newTasks,
-          startTime: startTime,
+          tasks: workItems,
+          startTime: startingTime,
         }),
       });
 
-      const data = await response.json();
+      const schedulingResult = await apiResponse.json();
 
-      // Convert ISO strings to Date objects
-      const processed: ScheduledTask[] = data?.schedule?.map((item: any) => ({
-        ...item,
-        startTime: new Date(item.startTime),
-        endTime: new Date(item.endTime),
-      }));
+      // Convert ISO strings to Date objects with explicit type safety
+      const hydratedSchedule: ScheduledTask[] = (schedulingResult?.schedule || []).map((taskRecord: { startTime: string; endTime: string }) => ({
+        ...taskRecord,
+        startTime: new Date(taskRecord.startTime),
+        endTime: new Date(taskRecord.endTime),
+      } as ScheduledTask));
 
-      setSchedule(processed);
-    } catch (error) {
-      console.error("Error scheduling tasks:", error);
+      setSchedule(hydratedSchedule);
+    } catch (exception: unknown) {
+      console.error("Task synchronization failure:", exception);
     } finally {
       setIsScheduling(false);
     }
   };
 
-  const handleReset = () => {
+  const purgeChronology = () => {
     setTasks([]);
     setSchedule([]);
     setCompletedTasks(new Set());
   };
 
-  const handleTaskComplete = (taskId: string) => {
-    const newCompleted = new Set(completedTasks);
-    if (newCompleted.has(taskId)) {
-      newCompleted.delete(taskId);
+  const toggleTaskCompletionStatus = (targetTaskId: string) => {
+    const updatedStatusSet = new Set(completedTasks);
+    if (updatedStatusSet.has(targetTaskId)) {
+      updatedStatusSet.delete(targetTaskId);
     } else {
-      newCompleted.add(taskId);
+      updatedStatusSet.add(targetTaskId);
     }
-    setCompletedTasks(newCompleted);
+    setCompletedTasks(updatedStatusSet);
   };
 
   return (
@@ -69,27 +69,27 @@ export default function TaskSchedulerPage() {
       <div className="container mx-auto px-4 py-8 max-w-4xl">
         <Header />
 
-        {hasSchedule && (
+        {hasSchedulePresence && (
           <ProgressBar schedule={schedule} completedTasks={completedTasks} />
         )}
 
         <div className="space-y-8">
           {/* Show schedule first when it exists */}
-          {hasSchedule && (
+          {hasSchedulePresence && (
             <ScheduleDisplay
               schedule={schedule}
-              onReset={handleReset}
+              onReset={purgeChronology}
               completedTasks={completedTasks}
-              onTaskComplete={handleTaskComplete}
+              onTaskComplete={toggleTaskCompletionStatus}
             />
           )}
 
           {/* Task input section - shown below schedule or at top if no schedule */}
           <TaskInput
-            onSubmit={handleTasksSubmit}
+            onSubmit={orchestrateScheduling}
             isLoading={isScheduling}
-            onReset={handleReset}
-            hasSchedule={hasSchedule}
+            onReset={purgeChronology}
+            hasSchedule={hasSchedulePresence}
           />
         </div>
       </div>

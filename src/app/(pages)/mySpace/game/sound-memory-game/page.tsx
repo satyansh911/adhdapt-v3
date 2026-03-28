@@ -26,6 +26,7 @@ import ResetIcon from "@/components/ui/resetIcon"
 import ConfettiIcon from "@/components/ui/ConfettiIcon"
 import NormalPrizeIcon from "@/components/ui/NormalPrizeIcon"
 import Image from "next/image"
+import { cn } from "@/lib/utils"
 
 interface SoundMemoryGameProps {
   onBack: () => void
@@ -115,29 +116,33 @@ const NameInputDialog = ({
     </Dialog>
   )
 
+interface IconHandle {
+  playAnimation: () => void;
+}
+
 export default function SoundMemoryGame({ onBack, sidebarOpen }: SoundMemoryGameProps) {
   const [gamePhase, setGamePhase] = useState<GamePhase>("idle")
-  const [sequence, setSequence] = useState<number[]>([])
-  const [playerSequence, setPlayerSequence] = useState<number[]>([])
-  const [currentLevel, setCurrentLevel] = useState(1)
-  const [score, setScore] = useState(0)
-  const [activeButton, setActiveButton] = useState<number | null>(null)
-  const [soundEnabled, setSoundEnabled] = useState(true)
-  const [showingIndex, setShowingIndex] = useState(0)
-  const [message, setMessage] = useState("Press Start to begin!")
+  const [sonicBlueprint, setSonicBlueprint] = useState<number[]>([])
+  const [userReplication, setUserReplication] = useState<number[]>([])
+  const [progressionTier, setProgressionTier] = useState(1)
+  const [achievementPoints, setAchievementPoints] = useState(0)
+  const [activeStimulus, setActiveStimulus] = useState<number | null>(null)
+  const [isAudioActive, setIsAudioActive] = useState(true)
+  const [playbackIndex, setPlaybackIndex] = useState(0)
+  const [statusMessage, setStatusMessage] = useState("Press Start to begin!")
   const [leaderboard, setLeaderboard] = useState<LeaderboardEntry[]>([])
   const [showLeaderboard, setShowLeaderboard] = useState(false)
   const [playerName, setPlayerName] = useState("")
   const [showNameInput, setShowNameInput] = useState(false)
   const [isNewHighScore, setIsNewHighScore] = useState(false)
 
-  // refs for icons
-  const squirrelRef = useRef<any>(null)
-  const catRef = useRef<any>(null)
-  const beeRef = useRef<any>(null)
-  const duckRef = useRef<any>(null)
+  // strictly typed refs for icons
+  const sylvanLeaperRef = useRef<IconHandle>(null)
+  const felineStalkerRef = useRef<IconHandle>(null)
+  const nectarSeekerRef = useRef<IconHandle>(null)
+  const aqueousPaddlerRef = useRef<IconHandle>(null)
 
-  const iconRefs = [squirrelRef, catRef, beeRef, duckRef]
+  const iconRefs = [sylvanLeaperRef, felineStalkerRef, nectarSeekerRef, aqueousPaddlerRef]
 
   const soundButtons: SoundButton[] = [
     {
@@ -147,42 +152,42 @@ export default function SoundMemoryGame({ onBack, sidebarOpen }: SoundMemoryGame
       activeColor: "from-green-300 to-green-500",
       glowColor: "shadow-green-400/50",
       sound: 261.63,
-      emoji: <SquirrelIcon ref={squirrelRef} />,
+      emoji: <SquirrelIcon ref={sylvanLeaperRef} />,
       name: "Squirrel",
       shape: "rounded-full",
     },
     {
       id: 1,
+      color: "bg-gradient-to-br from-blue-400 to-blue-600",
+      hoverColor: "hover:from-blue-500 hover:to-blue-700",
+      activeColor: "from-blue-300 to-blue-500",
+      glowColor: "shadow-blue-400/50",
+      sound: 293.66,
+      emoji: <CatIcon ref={felineStalkerRef} />,
+      name: "Cat",
+      shape: "rounded-[2rem]",
+    },
+    {
+      id: 2,
       color: "bg-gradient-to-br from-yellow-400 to-yellow-600",
       hoverColor: "hover:from-yellow-500 hover:to-yellow-700",
       activeColor: "from-yellow-300 to-yellow-500",
       glowColor: "shadow-yellow-400/50",
       sound: 329.63,
-      emoji: <CatIcon ref={catRef} />,
-      name: "Cat",
-      shape: "rounded-2xl rotate-45",
+      emoji: <BeeIcon ref={nectarSeekerRef} />,
+      name: "Bee",
+      shape: "rounded-[3rem]",
     },
     {
-      id: 2,
+      id: 3,
       color: "bg-gradient-to-br from-red-400 to-red-600",
       hoverColor: "hover:from-red-500 hover:to-red-700",
       activeColor: "from-red-300 to-red-500",
       glowColor: "shadow-red-400/50",
-      sound: 392.0,
-      emoji: <BeeIcon ref={beeRef} />,
-      name: "Bee",
-      shape: "rounded-3xl",
-    },
-    {
-      id: 3,
-      color: "bg-gradient-to-br from-blue-400 to-blue-600",
-      hoverColor: "hover:from-blue-500 hover:to-blue-700",
-      activeColor: "from-blue-300 to-blue-500",
-      glowColor: "shadow-blue-400/50",
-      sound: 523.25,
-      emoji: <DuckIcon ref={duckRef} />,
+      sound: 349.23,
+      emoji: <DuckIcon ref={aqueousPaddlerRef} />,
       name: "Duck",
-      shape: "rounded-full",
+      shape: "rounded-[1.5rem]",
     },
   ]
 
@@ -206,22 +211,6 @@ export default function SoundMemoryGame({ onBack, sidebarOpen }: SoundMemoryGame
     }
   }, [leaderboard])
 
-  // Check if current score qualifies for leaderboard
-  const checkHighScore = useCallback(
-    (finalScore: number, finalLevel: number) => {
-      const sortedLeaderboard = [...leaderboard].sort((a, b) => b.score - a.score)
-
-      // Always allow entry if less than 10 entries, or if score beats the lowest score
-      if (sortedLeaderboard.length < 10 || finalScore > (sortedLeaderboard[9]?.score || 0)) {
-        setIsNewHighScore(true)
-        setShowNameInput(true)
-        return true
-      }
-      return false
-    },
-    [leaderboard],
-  )
-
   // Add entry to leaderboard
   const addToLeaderboard = useCallback(
     (name: string, finalScore: number, finalLevel: number) => {
@@ -244,142 +233,108 @@ export default function SoundMemoryGame({ onBack, sidebarOpen }: SoundMemoryGame
     [leaderboard],
   )
 
-  // Sound generation with enhanced audio
-  const preloadedAudio = useRef<Record<number, HTMLAudioElement>>({
-    0: new Audio("/squirrel_sound.mp3"),
-    1: new Audio("/cat_sound.mp3"),
-    2: new Audio("/bee_sound.mp3"),
-    3: new Audio("/duck_sound.mp3"),
-  })
+  const toggleAudio = () => setIsAudioActive(!isAudioActive)
 
   const playSound = useCallback(
-    (id: number) => {
-      if (!soundEnabled) return
+    (frequency: number) => {
+      if (!isAudioActive) return
+      const audioCtx = new (window.AudioContext || (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext)()
+      const oscillator = audioCtx.createOscillator()
+      const gainNode = audioCtx.createGain()
 
-      const audio = preloadedAudio.current[id]
-      if (audio) {
-        audio.currentTime = 0
-        audio.play()
-      }
+      oscillator.type = "sine"
+      oscillator.frequency.setValueAtTime(frequency, audioCtx.currentTime)
+      gainNode.gain.setValueAtTime(0.5, audioCtx.currentTime)
+      gainNode.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.5)
+
+      oscillator.connect(gainNode)
+      gainNode.connect(audioCtx.destination)
+
+      oscillator.start()
+      oscillator.stop(audioCtx.currentTime + 0.5)
     },
-    [soundEnabled]
+    [isAudioActive],
   )
 
+  const startGame = () => {
+    const newBaseline = [Math.floor(Math.random() * 4)]
+    setSonicBlueprint(newBaseline)
+    setProgressionTier(1)
+    setAchievementPoints(0)
+    setUserReplication([])
+    setPlaybackIndex(0)
+    setGamePhase("showing")
+    setStatusMessage("Watch carefully!")
+  }
 
-  // Generate new sequence
-  const generateSequence = useCallback(() => {
-    const newSequence = []
-    for (let i = 0; i < currentLevel; i++) {
-      newSequence.push(Math.floor(Math.random() * 4))
-    }
-    setSequence(newSequence)
-    return newSequence
-  }, [currentLevel])
+  const playPattern = useCallback(async () => {
+    if (playbackIndex < sonicBlueprint.length) {
+      const buttonId = sonicBlueprint[playbackIndex]
+      setActiveStimulus(buttonId)
+      playSound(soundButtons[buttonId].sound)
+      iconRefs[buttonId].current?.playAnimation()
 
-  // Show sequence to player, now triggers icon animation
-  const showSequence = useCallback(
-    async (seq: number[]) => {
-      setGamePhase("showing")
-      setMessage("Watch and listen...")
-      setShowingIndex(0)
-
-      for (let i = 0; i < seq.length; i++) {
-        await new Promise((resolve) => setTimeout(resolve, 600))
-
-        setActiveButton(seq[i])
-        setShowingIndex(i + 1)
-
-        // Play icon animation
-        iconRefs[seq[i]].current?.playAnimation?.()
-        playSound(seq[i])
-
-
-        await new Promise((resolve) => setTimeout(resolve, 600))
-        setActiveButton(null)
-      }
-
+      setTimeout(() => {
+        setActiveStimulus(null)
+        setPlaybackIndex(playbackIndex + 1)
+      }, 600)
+    } else {
       setGamePhase("waiting")
-      setMessage("Now repeat the sequence!")
-      setPlayerSequence([])
-    },
-    [playSound, soundButtons, iconRefs],
-  )
+      setStatusMessage("Your turn!")
+      setUserReplication([])
+    }
+  }, [playbackIndex, sonicBlueprint, playSound, iconRefs])
 
-  // Start new game
-  const startGame = useCallback(() => {
-    setCurrentLevel(1)
-    setScore(0)
-    setPlayerSequence([])
-    setIsNewHighScore(false)
-    const newSeq = generateSequence()
-    showSequence(newSeq)
-  }, [generateSequence, showSequence])
+  useEffect(() => {
+    if (gamePhase === "showing") {
+      const timer = setTimeout(playPattern, 400)
+      return () => clearTimeout(timer)
+    }
+  }, [gamePhase, playPattern])
 
-  // Handle button click, now triggers icon animation
-  const handleButtonClick = useCallback(
-    (buttonId: number) => {
-      if (gamePhase !== "waiting") return
+  const handleButtonClick = (id: number) => {
+    if (gamePhase !== "waiting") return
 
-      const newPlayerSequence = [...playerSequence, buttonId]
-      setPlayerSequence(newPlayerSequence)
-      setActiveButton(buttonId)
+    playSound(soundButtons[id].sound)
+    iconRefs[id].current?.playAnimation()
+    setActiveStimulus(id)
+    setTimeout(() => setActiveStimulus(null), 300)
 
-      // Play icon animation
-      iconRefs[buttonId].current?.playAnimation?.()
-      playSound(buttonId)
-      setTimeout(() => setActiveButton(null), 200)
+    const updatedReplication = [...userReplication, id]
+    setUserReplication(updatedReplication)
 
-      // Check if sequence is correct so far
-      if (sequence[newPlayerSequence.length - 1] !== buttonId) {
-        // Wrong button - game over
-        setGamePhase("gameOver")
-        setMessage(`Game Over! Final Score: ${score}`)
-        checkHighScore(score, currentLevel - 1) // Check if it's a high score
-        return
+    if (id !== sonicBlueprint[updatedReplication.length - 1]) {
+      setStatusMessage(`Game Over! Final Score: ${achievementPoints}`)
+      setGamePhase("gameOver")
+      if (achievementPoints > (leaderboard[leaderboard.length - 1]?.score || 0) || leaderboard.length < 10) {
+        setIsNewHighScore(true)
+        setShowNameInput(true)
       }
+      return
+    }
 
-      // Check if sequence is complete
-      if (newPlayerSequence.length === sequence.length) {
-        // Correct sequence completed
-        const newScore = score + currentLevel * 10
-        setScore(newScore)
-        setCurrentLevel(currentLevel + 1)
-        setMessage("Great! Next level...")
-
-        setTimeout(() => {
-          const newSeq = generateSequence()
-          showSequence(newSeq)
-        }, 1000)
-      }
-    },
-    [
-      gamePhase,
-      playerSequence,
-      sequence,
-      score,
-      currentLevel,
-      playSound,
-      soundButtons,
-      generateSequence,
-      showSequence,
-      checkHighScore,
-      iconRefs,
-    ],
-  )
+    if (updatedReplication.length === sonicBlueprint.length) {
+      setAchievementPoints(achievementPoints + progressionTier * 10)
+      setProgressionTier(progressionTier + 1)
+      setStatusMessage("Great job! Next level...")
+      setPlaybackIndex(0)
+      setGamePhase("showing")
+      setSonicBlueprint([...sonicBlueprint, Math.floor(Math.random() * 4)])
+    }
+  }
 
   // Reset game
-  const resetGame = useCallback(() => {
+  const resetGame = () => {
+    setSonicBlueprint([])
+    setUserReplication([])
+    setProgressionTier(1)
+    setAchievementPoints(0)
+    setActiveStimulus(null)
+    setPlaybackIndex(0)
+    setStatusMessage("Press Start to begin!")
     setGamePhase("idle")
-    setSequence([])
-    setPlayerSequence([])
-    setCurrentLevel(1)
-    setScore(0)
-    setActiveButton(null)
-    setShowingIndex(0)
-    setMessage("Press Start to begin!")
-    setIsNewHighScore(false)
     setShowNameInput(false)
-  }, [])
+  }
 
   // Get rank icon based on position
   const getRankIcon = (position: number) => {
@@ -514,14 +469,14 @@ export default function SoundMemoryGame({ onBack, sidebarOpen }: SoundMemoryGame
               >
                 <LeaderboardIcon/>
               </Button>
-              <Button
-                onClick={() => setSoundEnabled(!soundEnabled)}
-                variant="ghost"
-                size="sm"
-                className="rounded-full w-12 h-12 bg-background/20 hover:bg-background/30 backdrop-blur-sm"
-              >
-                {soundEnabled ? <VolumeOnIcon/> : <VolumeOffIcon/>}
-              </Button>
+                <Button
+                  onClick={toggleAudio}
+                  variant="outline"
+                  size="icon"
+                  className="rounded-full bg-[#ffffff] border-2 border-black hover:bg-[#ffffff] shadow-[2px_2px_0px_0px_#333333] hover:shadow-none hover:translate-x-[1px] hover:translate-y-[1px] transition-all"
+                >
+                  {isAudioActive ? <VolumeOnIcon /> : <VolumeOffIcon />}
+                </Button>
             </div>
           </div>
 
@@ -532,7 +487,7 @@ export default function SoundMemoryGame({ onBack, sidebarOpen }: SoundMemoryGame
                 <CardContent className="p-6 text-center">
                   <div className="flex items-center gap-2 mb-2">
                     <span className="text-3xl"><MusicIcon/></span>
-                    <span className="text-3xl font-bold text-foreground">{currentLevel}</span>
+                    <span className="text-3xl font-bold text-foreground">{progressionTier - 1}</span>
                   </div>
                   <p className="text-sm text-muted-foreground font-medium">Level</p>
                 </CardContent>
@@ -545,7 +500,7 @@ export default function SoundMemoryGame({ onBack, sidebarOpen }: SoundMemoryGame
                 <CardContent className="p-6 text-center">
                   <div className="flex items-center gap-2 mb-2">
                     <span className="text-3xl"><Star1Icon/></span>
-                    <span className="text-3xl font-bold text-foreground">{score}</span>
+                    <span className="text-3xl font-bold text-foreground">{achievementPoints}</span>
                   </div>
                   <p className="text-sm text-muted-foreground font-medium">Score</p>
                 </CardContent>
@@ -568,75 +523,45 @@ export default function SoundMemoryGame({ onBack, sidebarOpen }: SoundMemoryGame
             </div>
 
             {/* Game Message */}
-            <div className="mb-8">
-              <p className="text-xl font-semibold text-foreground mb-4 animate-fade-in">{message}</p>
+            <div className="mb-8">                <p className="text-xl font-bold text-[#d04f99] mt-2 mb-6 min-h-[1.5rem] animate-pulse">
+                  {statusMessage}
+                </p>
 
-              {/* Progress indicator during sequence showing */}
-              {gamePhase === "showing" && (
-                <div className="flex justify-center gap-3 mb-6">
-                  {sequence.map((_, index) => (
-                    <div
-                      key={index}
-                      className={`w-4 h-4 rounded-full transition-all duration-500 ${
-                        index < showingIndex ? "bg-primary shadow-lg scale-110" : "bg-muted-foreground/30"
-                      }`}
-                    />
+                <div className="relative mb-2">
+                  <div className="flex gap-4 justify-center">
+                    {sonicBlueprint.map((_, index) => (
+                      <div
+                        key={index}
+                        className={cn(
+                          "w-3 h-3 rounded-full border border-black transition-all duration-300",
+                          index < playbackIndex ? "bg-[#d04f99] scale-110" : "bg-white",
+                        )}
+                      />
+                    ))}
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-2 gap-6 max-w-md mx-auto relative z-10">
+                  {soundButtons.map((btn) => (
+                    <button
+                      key={btn.id}
+                      onClick={() => handleButtonClick(btn.id)}
+                      disabled={gamePhase !== "waiting"}
+                      className={cn(
+                        "aspect-square rounded-3xl relative overflow-hidden transition-all duration-200 border-4 border-black group",
+                        btn.color,
+                        btn.glowColor,
+                        gamePhase === "waiting" ? "cursor-pointer hover:scale-105 active:scale-95" : "cursor-default",
+                        activeStimulus === btn.id ? "brightness-125 scale-110 z-20 shadow-[0_0_30px_rgba(255,255,255,0.8)]" : "opacity-90 hover:opacity-100",
+                        gamePhase === "waiting" ? btn.hoverColor : "",
+                        btn.id === activeStimulus ? "ring-4 ring-white" : "",
+                      )}
+                    >
+                      <span className="relative z-10 text-5xl filter drop-shadow-lg">{btn.emoji}</span>
+                    </button>
                   ))}
                 </div>
-              )}
-            </div>
-          </div>
-
-          {/* Enhanced Game Buttons */}
-          <div className="flex justify-center mb-12">
-            <div className="relative w-96 h-96">
-              {soundButtons.map((button, index) => {
-                const positions = [
-                  { top: "10%", left: "50%", transform: "translate(-50%, -50%)" }, // Top
-                  { top: "50%", left: "10%", transform: "translate(-50%, -50%)" }, // Left
-                  { top: "50%", right: "10%", transform: "translate(50%, -50%)" }, // Right
-                  { bottom: "10%", left: "50%", transform: "translate(-50%, 50%)" }, // Bottom
-                ]
-
-                return (
-                  <div key={button.id} className="absolute" style={positions[index]}>
-                    <button
-                      onClick={() => handleButtonClick(button.id)}
-                      disabled={gamePhase === "showing" || gamePhase === "idle"}
-                      className={`
-                        sound-button relative w-28 h-28 ${button.shape} transition-all duration-300 transform 
-                        hover:scale-110 disabled:cursor-not-allowed overflow-hidden
-                        ${
-                          activeButton === button.id
-                            ? `bg-gradient-to-br ${button.activeColor} scale-125 shadow-2xl ${button.glowColor} animate-sound-wave`
-                            : `${button.color} ${button.hoverColor} shadow-xl hover:shadow-2xl`
-                        }
-                        ${gamePhase === "waiting" ? "hover:shadow-2xl" : ""}
-                      `}
-                    >
-                      {/* Ripple effect */}
-                      {activeButton === button.id && (
-                        <div className="sound-button-ripple absolute inset-0 rounded-full"></div>
-                      )}
-
-                      {/* Emoji */}
-                      <span className="relative z-10 text-5xl filter drop-shadow-lg">{button.emoji}</span>
-
-                      {/* Glow effect */}
-                      <div className="absolute inset-0 rounded-full bg-white/20 opacity-0 hover:opacity-100 transition-opacity duration-300"></div>
-                    </button>
-                  </div>
-                )
-              })}
-
-              {/* Center decoration */}
-              <div
-                className={`absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 rounded-full backdrop-blur-sm border border-white/30 flex items-center justify-center ${styles.container}`}
-                style={{ width: "4rem", height: "4rem" }} // w-16 h-16
-              >
-                <div className="w-8 h-8 bg-gradient-to-br from-primary/50 to-primary/30 rounded-full animate-pulse"></div>
               </div>
-            </div>
           </div>
 
           {/* Control Buttons */}
@@ -731,15 +656,15 @@ export default function SoundMemoryGame({ onBack, sidebarOpen }: SoundMemoryGame
       </div>
 
       {/* Dialogs */}
-      <NameInputDialog
-        showNameInput={showNameInput}
-        setShowNameInput={setShowNameInput}
-        score={score}
-        currentLevel={currentLevel}
-        playerName={playerName}
-        setPlayerName={setPlayerName}
-        addToLeaderboard={addToLeaderboard}
-      />
+        <NameInputDialog
+          showNameInput={showNameInput}
+          setShowNameInput={setShowNameInput}
+          score={achievementPoints}
+          currentLevel={progressionTier}
+          playerName={playerName}
+          setPlayerName={setPlayerName}
+          addToLeaderboard={addToLeaderboard}
+        />
       <LeaderboardDialog />
     </div>
   )

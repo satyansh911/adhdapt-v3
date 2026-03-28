@@ -18,14 +18,22 @@ import {
 import { Bar, BarChart, XAxis, YAxis, ResponsiveContainer } from "recharts";
 import { Pie, PieChart, Cell, Legend } from "recharts";
 import * as LucideIcons from "lucide-react";
+import type { Mood, IconKey } from "@/types/journal";
+
+interface CustomYAxisTickProps {
+  x?: number;
+  y?: number;
+  payload?: { value: string };
+  moods: Mood[];
+}
 
 // Custom Y-Axis Tick component to render Lucide icons and text
-const CustomYAxisTick = ({ x, y, payload, moods }: any) => {
+const CustomYAxisTick = ({ x, y, payload, moods }: CustomYAxisTickProps) => {
   // Recharts sometimes sends an empty tick; skip it.
   if (!payload || payload.value === undefined) return null;
 
-  const mood = moods?.find((m: any) => m.name === payload.value);
-  const IconComponent = mood?.icon ? (LucideIcons as any)[mood.icon] : null;
+  const activeMood = moods?.find((m) => m.name === payload.value);
+  const IconComponent = activeMood?.icon ? (LucideIcons[activeMood.icon as IconKey] as React.ElementType) : null;
   const textOffset = IconComponent ? 20 : 0; // Adjust text position if icon is present
 
   return (
@@ -41,10 +49,11 @@ const CustomYAxisTick = ({ x, y, payload, moods }: any) => {
           style={{ overflow: "visible" }}
         >
           <div
-            xmlns="http://www.w3.org/1999/xhtml"
             className="flex items-center justify-end h-full"
           >
-            <IconComponent className="h-4 w-4 text-muted-foreground" />
+            {IconComponent && (IconComponent as React.ElementType) && (
+              <IconComponent className="h-4 w-4 text-muted-foreground" />
+            )}
           </div>
         </foreignObject>
       )}
@@ -65,16 +74,15 @@ const CustomYAxisTick = ({ x, y, payload, moods }: any) => {
 const MoodDashboard: React.FC = () => {
   const { entries, moods } = useJournal();
 
-  const moodData = useMemo(() => {
-    const counts: { [key: string]: number } = {};
-    entries.forEach((entry) => {
-      if (entry.moodId) {
-        counts[entry.moodId] = (counts[entry.moodId] || 0) + 1;
+  const vibrationAnalysis = useMemo(() => {
+    const activityCounts: { [key: string]: number } = {};
+    entries.forEach((record) => {
+      if (record.moodId) {
+        activityCounts[record.moodId] = (activityCounts[record.moodId] || 0) + 1;
       }
     });
 
-    // Map moods to chart data, assigning a chart color variable based on index
-    const chartColors = [
+    const paletteTokens = [
       "chart-1",
       "chart-2",
       "chart-3",
@@ -85,30 +93,30 @@ const MoodDashboard: React.FC = () => {
     ];
 
     return moods
-      .map((mood, index) => ({
+      .map((mood, idx) => ({
         name: mood.name,
-        count: counts[mood.id] || 0,
-        colorClass: mood.color.split(" ")[0].replace("bg-", ""), // e.g., "green-100"
-        chartColorVar: chartColors[index % chartColors.length], // Assign a chart color variable
+        count: activityCounts[mood.id] || 0,
+        colorClass: mood.color.split(" ")[0].replace("bg-", ""),
+        chartColorVar: paletteTokens[idx % paletteTokens.length],
         id: mood.id,
         icon: mood.icon,
       }))
-      .filter((m) => m.count > 0) // Only show moods with entries
-      .sort((a, b) => b.count - a.count); // Sort by count descending
+      .filter((analysis) => analysis.count > 0)
+      .sort((first, second) => second.count - first.count);
   }, [entries, moods]);
 
-  const totalEntries = entries.length;
+  const totalJournalPresence = entries.length;
 
   // Dynamically create chart config for ChartContainer
-  const chartConfig = useMemo(() => {
-    return moodData.reduce((acc, mood) => {
-      acc[mood.name] = {
+  const graphStructuralMap = useMemo(() => {
+    return vibrationAnalysis.reduce((memo, mood) => {
+      memo[mood.name] = {
         label: mood.name,
-        color: `hsl(var(--${mood.chartColorVar}))`, // Use assigned chart color variable
+        color: `hsl(var(--${mood.chartColorVar}))`,
       };
-      return acc;
-    }, {} as any);
-  }, [moodData]);
+      return memo;
+    }, {} as Record<string, { label: string; color: string }>);
+  }, [vibrationAnalysis]);
 
   return (
     <Card className="w-full max-w-3xl mx-auto">
@@ -117,7 +125,7 @@ const MoodDashboard: React.FC = () => {
         <CardDescription>Insights into your emotional trends.</CardDescription>
       </CardHeader>
       <CardContent className="grid gap-8">
-        {totalEntries === 0 ? (
+        {totalJournalPresence === 0 ? (
           <p className="text-center text-muted-foreground py-8 text-lg">
             No entries yet to analyze moods. Start writing!
           </p>
@@ -125,10 +133,10 @@ const MoodDashboard: React.FC = () => {
           <>
             <div className="h-[250px] w-full">
               <h3 className="text-lg font-semibold mb-4">Entries per Mood</h3>
-              <ChartContainer config={chartConfig} className="w-full h-full">
+              <ChartContainer config={graphStructuralMap} className="w-full h-full">
                 <ResponsiveContainer width="100%" height="100%">
                   <BarChart
-                    data={moodData}
+                    data={vibrationAnalysis}
                     layout="vertical"
                     margin={{ left: 50, right: 20 }}
                   >
@@ -153,26 +161,26 @@ const MoodDashboard: React.FC = () => {
 
             <div className="h-[250px] w-full">
               <h3 className="text-lg font-semibold mb-4">Mood Distribution</h3>
-              <ChartContainer config={chartConfig} className="w-full h-full">
+              <ChartContainer config={graphStructuralMap} className="w-full h-full">
                 <ResponsiveContainer width="100%" height="100%">
                   <PieChart>
                     <Pie
-                      data={moodData}
+                      data={vibrationAnalysis}
                       dataKey="count"
                       nameKey="name"
                       cx="50%"
                       cy="50%"
                       outerRadius={80}
                       labelLine={false}
-                      label={({ name, percent }) =>
+                      label={({ name, percent }: { name: string; percent: number }) =>
                         `${name} (${(percent * 100).toFixed(0)}%)`
                       }
                     >
-                      {moodData.map((entry, index) => (
+                      {vibrationAnalysis.map((summaryRecord, idx) => (
                         // Use chartColorVar for cell fill
                         <Cell
-                          key={`cell-${index}`}
-                          fill={`hsl(var(--${entry.chartColorVar}))`}
+                          key={`cell-${idx}`}
+                          fill={`hsl(var(--${summaryRecord.chartColorVar}))`}
                         />
                       ))}
                     </Pie>
@@ -185,15 +193,15 @@ const MoodDashboard: React.FC = () => {
                       verticalAlign="bottom"
                       align="center"
                       wrapperStyle={{ paddingTop: 20 }}
-                      formatter={(value) => {
-                        const mood = moods.find((m) => m.name === value);
-                        const Icon = mood?.icon
-                          ? (LucideIcons as any)[mood.icon]
+                      formatter={(key) => {
+                        const correspondingMood = moods.find((m) => m.name === key);
+                        const MoodIcon = correspondingMood?.icon
+                          ? (LucideIcons[correspondingMood.icon as IconKey] as React.ElementType)
                           : null;
                         return (
                           <span className="flex items-center gap-1 text-sm text-foreground">
-                            {Icon && <Icon className="h-4 w-4" />}
-                            {value}
+                            {MoodIcon && <MoodIcon className="h-4 w-4" />}
+                            {key}
                           </span>
                         );
                       }}

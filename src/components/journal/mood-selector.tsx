@@ -11,6 +11,7 @@ import { Badge } from "@/components/ui/badge";
 import { useJournal } from "./journal-provider";
 import * as LucideIcons from "lucide-react";
 import { cn } from "@/lib/utils";
+import type { IconKey } from "@/types/journal";
 
 interface MoodSelectorProps {
   selectedMoodId: string | null;
@@ -22,10 +23,10 @@ const MoodSelector: React.FC<MoodSelectorProps> = ({
   onSelectMood,
 }) => {
   const { moods } = useJournal();
-  const selectedMood = moods.find((m) => m.id === selectedMoodId);
+  const activeEmotionalState = moods.find((m) => m.id === selectedMoodId);
 
-  const IconComponent = selectedMood?.icon
-    ? (LucideIcons as any)[selectedMood.icon]
+  const IconComponent = activeEmotionalState?.icon
+    ? (LucideIcons[activeEmotionalState.icon as IconKey] as React.ElementType)
     : null;
 
   return (
@@ -35,22 +36,22 @@ const MoodSelector: React.FC<MoodSelectorProps> = ({
           variant="outline"
           className="w-full justify-start text-left font-normal bg-transparent"
         >
-          {selectedMood ? (
+          {activeEmotionalState ? (
             <div className="flex items-center gap-2">
               {IconComponent && <IconComponent className="h-4 w-4" />}
-              <span className={cn(selectedMood.color.split(" ")[1])}>
-                {selectedMood.name}
+              <span className={cn(activeEmotionalState.color.split(" ")[1])}>
+                {activeEmotionalState.name}
               </span>
             </div>
           ) : (
-            <span>Select Mood</span>
+            <span>Select Vibe</span>
           )}
         </Button>
       </PopoverTrigger>
       <PopoverContent className="w-[200px] p-2">
         <div className="grid grid-cols-2 gap-2">
           {moods.map((mood) => {
-            const MoodIcon = mood.icon ? (LucideIcons as any)[mood.icon] : null;
+            const VibeGlyph = mood.icon ? (LucideIcons[mood.icon as IconKey] as React.ElementType) : null;
             return (
               <Badge
                 key={mood.id}
@@ -63,7 +64,7 @@ const MoodSelector: React.FC<MoodSelectorProps> = ({
                 )}
                 onClick={() => onSelectMood(mood.id)}
               >
-                {MoodIcon && <MoodIcon className="h-4 w-4" />}
+                {VibeGlyph && <VibeGlyph className="h-4 w-4" />}
                 {mood.name}
               </Badge>
             );
@@ -75,7 +76,7 @@ const MoodSelector: React.FC<MoodSelectorProps> = ({
             )}
             onClick={() => onSelectMood(null)}
           >
-            No Mood
+            Clear Vibe
           </Badge>
         </div>
       </PopoverContent>
