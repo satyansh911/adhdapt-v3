@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import ThemeToggle from "@/components/theme-toggle"
 import { Menu, Users } from "lucide-react"
-import { TileMemoryGame } from "./tile-memory-game/TileMemoryGameClient"
+import dynamic from "next/dynamic"
 import GameIcon from "@/components/ui/gamification"
 import ArcadeIcon from "@/components/ui/ArcadeIcon"
 import TrophyIcon from "@/components/ui/trophyIcon"
@@ -20,8 +20,30 @@ import MindMazeIcon from "@/components/ui/mindMazeIcon"
 import HomeIcon from "@/components/ui/homeIcon"
 import SidebarIcon from "@/components/ui/sidebarLogo"
 import TimerIcon from "@/components/ui/timerIcon"
-import { FocusFlowGame } from "./focus-flow-game/FocusFlowGameClient"
-import { SoundMemoryGame } from "./sound-memory-game/SoundMemoryGameClient"
+
+const TileMemoryGame = dynamic(
+  () =>
+    import("./tile-memory-game/TileMemoryGameClient").then(
+      (mod) => mod.TileMemoryGame
+    ),
+  { ssr: false }
+)
+
+const FocusFlowGame = dynamic(
+  () =>
+    import("./focus-flow-game/FocusFlowGameClient").then(
+      (mod) => mod.FocusFlowGame
+    ),
+  { ssr: false }
+)
+
+const SoundMemoryGame = dynamic(
+  () =>
+    import("./sound-memory-game/SoundMemoryGameClient").then(
+      (mod) => mod.SoundMemoryGame
+    ),
+  { ssr: false }
+)
 
 type GameType = "welcome" | "tile-memory" | "focus-flow" | "sound-memory"
 
