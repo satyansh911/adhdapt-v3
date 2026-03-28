@@ -227,7 +227,6 @@ export default function PomodoroTimer() {
             value={[sessionDuration / 60]}
             onValueChange={handleSliderChange}
             className="[&>span:first-child]:h-2 [&>span:first-child]:bg-[#d04f99]/20 [&>span:first-child]:rounded-full [&>span:first-child>span]:bg-[#d04f99] [&>span:first-child>span]:rounded-full"
-            thumbClassName="[&>span]:w-5 [&>span]:h-5 [&>span]:bg-[#d04f99] [&>span]:border-2 [&>span]:border-white [&>span]:shadow-md"
             disabled={isRunning}
             aria-label="Focus duration slider"
             aria-valuetext={`Focus duration is ${sessionDuration / 60} minutes`}

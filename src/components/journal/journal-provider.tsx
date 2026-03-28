@@ -29,7 +29,7 @@ interface JournalContextType {
   addCollection: (name: string) => void;
   updateCollection: (id: string, name: string) => void;
   deleteCollection: (id: string) => void;
-  addMood: (name: string, color: string, icon?: string) => void;
+  addMood: (name: string, color: string, icon?: Mood["icon"]) => void;
   addMediaItem: (item: Omit<MediaItem, "id" | "createdAt">) => void; // Added addMediaItem
   getCollectionName: (id: string | null) => string;
   getMoodById: (id: string | null) => Mood | undefined;
@@ -41,42 +41,56 @@ const DEFAULT_MOODS: Mood[] = [
   {
     id: uuidv4(),
     name: "Happy",
+    label: "Happy",
+    emoji: "🙂",
     color: "bg-green-100 text-green-800",
     icon: "Smile",
   },
   {
     id: uuidv4(),
     name: "Anxious",
+    label: "Anxious",
+    emoji: "😟",
     color: "bg-yellow-100 text-yellow-800",
     icon: "Frown",
   },
   {
     id: uuidv4(),
     name: "Tired",
+    label: "Tired",
+    emoji: "😴",
     color: "bg-gray-100 text-gray-800",
     icon: "Moon",
   },
   {
     id: uuidv4(),
     name: "Focused",
+    label: "Focused",
+    emoji: "🎯",
     color: "bg-blue-100 text-blue-800",
     icon: "Target",
   },
   {
     id: uuidv4(),
     name: "Neutral",
+    label: "Neutral",
+    emoji: "😐",
     color: "bg-purple-100 text-purple-800",
     icon: "Meh",
   },
   {
     id: uuidv4(),
     name: "Energetic",
+    label: "Energetic",
+    emoji: "⚡",
     color: "bg-orange-100 text-orange-800",
     icon: "Zap",
   },
   {
     id: uuidv4(),
     name: "Calm",
+    label: "Calm",
+    emoji: "🍃",
     color: "bg-teal-100 text-teal-800",
     icon: "Leaf",
   },
@@ -186,9 +200,15 @@ export const JournalProvider: React.FC<{ children: React.ReactNode }> = ({
     );
   }, []);
 
-  const addMood = useCallback((name: string, color: string, icon?: string) => {
-    setMoods((prev) => [...prev, { id: uuidv4(), name, color, icon }]);
-  }, []);
+  const addMood = useCallback(
+    (name: string, color: string, icon?: Mood["icon"]) => {
+      setMoods((prev) => [
+        ...prev,
+        { id: uuidv4(), name, label: name, emoji: "🙂", color, icon },
+      ]);
+    },
+    []
+  );
 
   const addMediaItem = useCallback(
     (item: Omit<MediaItem, "id" | "createdAt">) => {

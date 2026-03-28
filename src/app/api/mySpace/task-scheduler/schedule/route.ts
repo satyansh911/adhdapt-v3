@@ -239,8 +239,20 @@ The scheduledTime should be in HH:MM format and respect the preferred time slots
   }
 }
 
-function createTimeSlotAwareSchedule(tasks: Task[], startDateTime: Date) {
-  const schedule = [];
+type TimeSlotScheduledItem = {
+  id: string;
+  name: string;
+  duration: number;
+  type: "task" | "break";
+  scheduledTime: string;
+  originalTaskId?: string;
+};
+
+function createTimeSlotAwareSchedule(
+  tasks: Task[],
+  startDateTime: Date
+): TimeSlotScheduledItem[] {
+  const schedule: TimeSlotScheduledItem[] = [];
 
   // Define time slot ranges
   const timeSlots = {

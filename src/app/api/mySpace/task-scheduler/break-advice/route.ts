@@ -7,6 +7,10 @@ const google = createGoogleGenerativeAI({
 });
 
 export async function POST(request: NextRequest) {
+  let taskName = "";
+  let taskDuration: number | string = "";
+  let timeOfDay = "";
+
   try {
     if (!process.env.GOOGLE_GENERATIVE_AI_API_KEY) {
       return NextResponse.json(
@@ -15,7 +19,15 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const { taskName, taskDuration, timeOfDay } = await request.json();
+    const payload = (await request.json()) as {
+      taskName?: string;
+      taskDuration?: number | string;
+      timeOfDay?: string;
+    };
+
+    taskName = payload.taskName ?? "";
+    taskDuration = payload.taskDuration ?? "";
+    timeOfDay = payload.timeOfDay ?? "";
 
     if (!taskName) {
       return NextResponse.json(
@@ -54,7 +66,7 @@ Keep it concise, positive, and ADHD-friendly. Focus on activities that take 5-15
     console.error("Error generating break advice:", error);
 
     // Fallback advice based on task type
-    const fallbackAdvice = getFallbackAdvice(request.body?.taskName || "");
+    const fallbackAdvice = getFallbackAdvice(taskName);
     return NextResponse.json({ advice: fallbackAdvice });
   }
 }
