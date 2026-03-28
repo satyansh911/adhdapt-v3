@@ -6,21 +6,48 @@ import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { Menu, Users } from "lucide-react"
 import dynamic from "next/dynamic"
-import GameIcon from "@/components/ui/gamification"
-import ArcadeIcon from "@/components/ui/ArcadeIcon"
-import TrophyIcon from "@/components/ui/trophyIcon"
-import LightningIcon from "@/components/ui/lightningIcon"
-import StarIcon from "@/components/ui/starIcon"
-import TileIcon from "@/components/ui/tileGame"
-import ScienceIcon from "@/components/ui/scienceIcon"
-import EngageIcon from "@/components/ui/engagingIcon"
-import FocusFlowIcon from "@/components/ui/focusFlowIcon"
-import MindMazeIcon from "@/components/ui/mindMazeIcon"
-import HomeIcon from "@/components/ui/homeIcon"
-import SidebarIcon from "@/components/ui/sidebarLogo"
-import TimerIcon from "@/components/ui/timerIcon"
 
 const ThemeToggle = dynamic(() => import("@/components/theme-toggle"), {
+  ssr: false,
+})
+
+const GameIcon = dynamic(() => import("@/components/ui/gamification"), {
+  ssr: false,
+})
+const ArcadeIcon = dynamic(() => import("@/components/ui/ArcadeIcon"), {
+  ssr: false,
+})
+const TrophyIcon = dynamic(() => import("@/components/ui/trophyIcon"), {
+  ssr: false,
+})
+const LightningIcon = dynamic(() => import("@/components/ui/lightningIcon"), {
+  ssr: false,
+})
+const StarIcon = dynamic(() => import("@/components/ui/starIcon"), {
+  ssr: false,
+})
+const TileIcon = dynamic(() => import("@/components/ui/tileGame"), {
+  ssr: false,
+})
+const ScienceIcon = dynamic(() => import("@/components/ui/scienceIcon"), {
+  ssr: false,
+})
+const EngageIcon = dynamic(() => import("@/components/ui/engagingIcon"), {
+  ssr: false,
+})
+const FocusFlowIcon = dynamic(() => import("@/components/ui/focusFlowIcon"), {
+  ssr: false,
+})
+const MindMazeIcon = dynamic(() => import("@/components/ui/mindMazeIcon"), {
+  ssr: false,
+})
+const HomeIcon = dynamic(() => import("@/components/ui/homeIcon"), {
+  ssr: false,
+})
+const SidebarIcon = dynamic(() => import("@/components/ui/sidebarLogo"), {
+  ssr: false,
+})
+const TimerIcon = dynamic(() => import("@/components/ui/timerIcon"), {
   ssr: false,
 })
 
