@@ -39,7 +39,7 @@ export const LottieSafeWrapper: React.FC<LottieSafeWrapperProps> = ({
         // Only load on client side
         if (typeof window !== "undefined") {
           const { Player: LottiePlayer } = await import("@lottiefiles/react-lottie-player")
-          setPlayer(LottiePlayer as React.ComponentType<LottiePlayerProps>)
+          setPlayer(() => LottiePlayer as React.ComponentType<LottiePlayerProps>)
         }
       } catch (error) {
         console.error("Failed to load Lottie player:", error)
