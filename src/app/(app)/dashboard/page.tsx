@@ -3,17 +3,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useUser } from "@clerk/nextjs";
-import {
-  Gamepad2,
-  CalendarCheck,
-  Smile,
-  NotebookPen,
-  ListChecks,
-  Users,
-  Play,
-  Plus,
-  type LucideIcon,
-} from "lucide-react";
+import { Play, Plus } from "lucide-react";
 import {
   getMoodEntries,
   getTaskBreakdowns,
@@ -25,8 +15,7 @@ interface ModuleTile {
   href: string;
   title: string;
   sub: string;
-  icon: LucideIcon;
-  accent: string;
+  img: string;
   featured?: boolean;
 }
 
@@ -80,12 +69,12 @@ export default function DashboardPage() {
     const lastNote = notes[0];
 
     setModules([
-      { href: "/game", title: "Focus Fest", sub: "3 brain-training games", icon: Gamepad2, accent: "#0d5b5e", featured: true },
-      { href: "/scheduler", title: "Scheduler", sub: "Plan your day", icon: CalendarCheck, accent: "#ED1C24" },
-      { href: "/mood", title: "Mood", sub: lastMood ? `Last check-in ${relativeDay(lastMood.createdAt)}` : "Check in — 20s", icon: Smile, accent: "#2D8EFF" },
-      { href: "/journal", title: "Journal", sub: lastNote ? `Last entry ${relativeDay(lastNote.createdAt)}` : "Start writing", icon: NotebookPen, accent: "#F5B000" },
-      { href: "/tasks", title: "Task Breakdown", sub: openTasks ? `${openTasks} task${openTasks > 1 ? "s" : ""} in progress` : "Break down a big task", icon: ListChecks, accent: "#ED1C24" },
-      { href: "/community", title: "Community", sub: "Join the conversation", icon: Users, accent: "#2D8EFF" },
+      { href: "/game", title: "Focus Fest", sub: "3 brain-training games", img: "/home/focus%20fest.png", featured: true },
+      { href: "/scheduler", title: "Scheduler", sub: "Plan your day", img: "/home/scheduler.png" },
+      { href: "/mood", title: "Mood", sub: lastMood ? `Last check-in ${relativeDay(lastMood.createdAt)}` : "Check in — 20s", img: "/home/mood.png" },
+      { href: "/journal", title: "Journal", sub: lastNote ? `Last entry ${relativeDay(lastNote.createdAt)}` : "Start writing", img: "/home/journal.png" },
+      { href: "/tasks", title: "Task Breakdown", sub: openTasks ? `${openTasks} task${openTasks > 1 ? "s" : ""} in progress` : "Break down a big task", img: "/home/task%20breakdown.png" },
+      { href: "/community", title: "Community", sub: "Join the conversation", img: "/home/community.png" },
     ]);
     setLoaded(true);
   }, []);
@@ -98,8 +87,10 @@ export default function DashboardPage() {
       {/* Greeting + real stats */}
       <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
         <div>
-          <h1 className="font-display text-3xl font-extrabold leading-none md:text-[34px]">
-            Hey {firstName} 👋
+          <h1 className="flex items-center gap-2 font-display text-3xl font-extrabold leading-none md:text-[34px]">
+            Hey {firstName}
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src="/home/wave.png" alt="wave" className="h-8 w-8 object-contain" />
           </h1>
           <p className="mt-1.5 text-sm font-medium text-[#a09da8]">
             {today} · Let&apos;s make today gentle and doable.
@@ -107,7 +98,11 @@ export default function DashboardPage() {
         </div>
         <div className="flex gap-3">
           <div className="rounded-2xl border border-white/10 bg-[#FFC107]/[.12] px-4 py-3 text-center">
-            <div className="text-[22px] font-[900] text-[#F5B000]">{loaded ? `${streak}🔥` : "—"}</div>
+            <div className="flex items-center justify-center gap-1 text-[22px] font-[900] text-[#F5B000]">
+              {loaded ? streak : "—"}
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src="/home/fire.png" alt="streak" className="h-6 w-6 object-contain" />
+            </div>
             <div className="text-[10.5px] font-semibold text-[#f0cf7a]">day streak</div>
           </div>
           <div className="rounded-2xl border border-white/10 bg-[#2D8EFF]/[.14] px-4 py-3 text-center">
@@ -155,7 +150,7 @@ export default function DashboardPage() {
       {/* Module grid */}
       <h4 className="mb-3.5 text-[12px] font-bold uppercase tracking-[0.14em] text-[#8b8892]">Jump back in</h4>
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        {(loaded ? modules : []).map(({ href, title, sub, icon: Icon, accent, featured }) => (
+        {(loaded ? modules : []).map(({ href, title, sub, img, featured }) => (
           <Link
             key={href}
             href={href}
@@ -165,7 +160,8 @@ export default function DashboardPage() {
                 : "rounded-3xl border border-white/10 bg-[#17171b] p-5 transition-transform hover:-translate-y-0.5"
             }
           >
-            <Icon className="h-6 w-6" style={{ color: accent }} />
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src={img} alt={title} className="h-10 w-10 object-contain" />
             <h5 className="mb-0.5 mt-3 text-[17px] font-extrabold" style={featured ? { color: "#0d3f41" } : undefined}>
               {title}
             </h5>

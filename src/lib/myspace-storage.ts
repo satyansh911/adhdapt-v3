@@ -34,6 +34,22 @@ export interface JournalNote {
   createdAt: string; // ISO
 }
 
+export interface ScheduleBlock {
+  id: string;
+  time: string; // "HH:MM" 24h
+  title: string;
+  done: boolean;
+  accent: string;
+}
+
+export interface CommunityReply {
+  id: string;
+  author: string;
+  initials: string;
+  body: string;
+  createdAt: string; // ISO
+}
+
 export interface CommunityPost {
   id: string;
   author: string;
@@ -41,6 +57,8 @@ export interface CommunityPost {
   room: string;
   body: string;
   hearts: number;
+  likedByMe?: boolean;
+  replies?: CommunityReply[];
   createdAt: string; // ISO
 }
 
@@ -50,6 +68,7 @@ const KEYS = {
   tasks: "adhd-task-breakdowns",
   journal: "adhd-journal-notes",
   community: "adhd-community-posts",
+  schedule: "adhd-schedule",
 } as const;
 
 function read<T>(key: string, fallback: T): T {
@@ -92,5 +111,16 @@ export const getCommunityPosts = (): CommunityPost[] =>
   read<CommunityPost[]>(KEYS.community, []);
 export const saveCommunityPosts = (posts: CommunityPost[]) =>
   write(KEYS.community, posts);
+
+// Schedule blocks are stored per calendar day, keyed by "YYYY-MM-DD".
+export const getSchedule = (dateKey: string): ScheduleBlock[] => {
+  const all = read<Record<string, ScheduleBlock[]>>(KEYS.schedule, {});
+  return all[dateKey] ?? [];
+};
+export const saveSchedule = (dateKey: string, blocks: ScheduleBlock[]) => {
+  const all = read<Record<string, ScheduleBlock[]>>(KEYS.schedule, {});
+  all[dateKey] = blocks;
+  write(KEYS.schedule, all);
+};
 
 export const storageKeys = KEYS;

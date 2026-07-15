@@ -2,7 +2,6 @@
 
 import { useEffect, useMemo, useState } from "react";
 import { Plus, X, Check, Maximize2, ArrowRight } from "lucide-react";
-import LottiePlaceholder from "@/components/myspace/LottiePlaceholder";
 import {
   getTaskBreakdowns,
   saveTaskBreakdowns,
@@ -108,7 +107,8 @@ export default function TasksPage() {
 
         {breakActive ? (
           <>
-            <LottiePlaceholder name="break-breathe" note="Gentle breathing loop." className="mb-6 h-24 w-24 border-[#8acfd1]" />
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src="/home/mood.png" alt="Take a breath" className="mb-6 h-24 w-24 object-contain" />
             <span className="text-[12px] font-bold uppercase tracking-[0.2em] text-[#8acfd1]">Break time</span>
             <h1 className="mt-3 font-display text-5xl font-extrabold text-white">{fmt(breakLeft)}</h1>
             <p className="mt-3 max-w-sm text-[#bbb]">Rest is part of the work. Stretch, sip water, look out a window. 💛</p>
@@ -125,14 +125,15 @@ export default function TasksPage() {
             <p className="mt-4 text-sm text-[#9a97a3]">from &ldquo;{active.title}&rdquo;</p>
             <button
               onClick={completeCurrentInFocus}
-              className="mt-10 inline-flex items-center gap-2 rounded-2xl bg-[#ED1C24] px-8 py-4 text-base font-extrabold text-white shadow-[4px_4px_0_#ED1C24]"
+              className="mt-10 inline-flex items-center gap-2 rounded-2xl bg-[#ED1C24] px-8 py-4 text-base font-extrabold text-white shadow-[4px_4px_0_#111]"
             >
               <Check className="h-5 w-5" /> Done — take a break
             </button>
           </>
         ) : (
           <>
-            <LottiePlaceholder name="task-complete" note="Plays once on completion." className="mb-6 h-28 w-28 border-[#FFC107]" />
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src="/home/celebrate.png" alt="Celebrate" className="mb-6 h-28 w-28 object-contain" />
             <h1 className="font-display text-4xl font-extrabold text-white">All steps done! 🎉</h1>
             <p className="mt-3 text-[#bbb]">You broke the scary thing into wins. That counts.</p>
             <button onClick={() => setFocusMode(false)} className="mt-8 rounded-2xl bg-[#FFC107] px-6 py-3 font-extrabold text-[#ececf0]">
@@ -185,7 +186,7 @@ export default function TasksPage() {
 
       {/* Active task breakdown */}
       {active ? (
-        <div className="hoverable mt-6 rounded-3xl border-2 border-[#111] bg-[#17171b] p-6 shadow-[5px_5px_0_#ED1C24]">
+        <div className="mt-6 rounded-3xl border-2 border-[#111] bg-[#17171b] p-6">
           <div className="flex items-start justify-between gap-4">
             <h2 className="text-xl font-extrabold">{active.title}</h2>
             {/* progress ring */}
