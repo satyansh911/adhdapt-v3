@@ -1,7 +1,8 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
+import { useClerk, useUser } from "@clerk/nextjs";
 import {
   LayoutDashboard,
   Gamepad2,
@@ -11,6 +12,7 @@ import {
   ListChecks,
   Users,
   Zap,
+  LogOut,
   type LucideIcon,
 } from "lucide-react";
 
@@ -40,6 +42,16 @@ function isActive(pathname: string, href: string) {
 
 export default function AppShell({ children }: { children: React.ReactNode }) {
   const pathname = usePathname() || "";
+  const router = useRouter();
+  const { user } = useUser();
+  const { signOut } = useClerk();
+
+  const displayName =
+    user?.fullName || user?.firstName || user?.username || "Your space";
+  const initials =
+    (user?.firstName?.[0] ?? "") + (user?.lastName?.[0] ?? "") ||
+    user?.username?.slice(0, 2).toUpperCase() ||
+    "ME";
 
   return (
     <div className="flex min-h-screen bg-[#080808] text-[#ececf0]">
@@ -74,16 +86,29 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
           })}
         </nav>
 
-        <div className="mt-auto flex items-center gap-2.5 rounded-2xl bg-white/55 p-2.5">
-          <span className="flex h-9 w-9 items-center justify-center rounded-full bg-[#ED1C24] text-[13px] font-extrabold text-white">
-            JR
-          </span>
-          <span className="leading-tight">
-            <span className="block text-[12.5px] font-bold">Jordan</span>
-            <span className="block text-[10.5px] font-medium text-[#c98fb0]">
-              Individual
+        <div className="mt-auto flex items-center gap-2.5 rounded-2xl bg-white/[.06] p-2.5">
+          {user?.imageUrl ? (
+            // eslint-disable-next-line @next/next/no-img-element
+            <img src={user.imageUrl} alt={displayName} className="h-9 w-9 flex-shrink-0 rounded-full object-cover" />
+          ) : (
+            <span className="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-full bg-[#ED1C24] text-[13px] font-extrabold text-white">
+              {initials}
+            </span>
+          )}
+          <span className="min-w-0 flex-1 leading-tight">
+            <span className="block truncate text-[12.5px] font-bold">{displayName}</span>
+            <span className="block truncate text-[10.5px] font-medium text-[#c98fb0]">
+              {user?.primaryEmailAddress?.emailAddress ?? "Signed in"}
             </span>
           </span>
+          <button
+            onClick={() => signOut(() => router.push("/login"))}
+            title="Log out"
+            aria-label="Log out"
+            className="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-lg text-[#c98fb0] transition-colors hover:bg-[#ED1C24] hover:text-white"
+          >
+            <LogOut className="h-4 w-4" />
+          </button>
         </div>
       </aside>
 

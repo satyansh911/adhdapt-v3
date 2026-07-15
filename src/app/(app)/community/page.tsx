@@ -1,49 +1,68 @@
 "use client";
 
-import { useState } from "react";
-import { Heart, MessageCircle, Radio, Users, Send } from "lucide-react";
+import { useEffect, useState } from "react";
+import { useUser } from "@clerk/nextjs";
+import { Heart, Users, Send } from "lucide-react";
+import {
+  getCommunityPosts,
+  saveCommunityPosts,
+  type CommunityPost,
+} from "@/lib/myspace-storage";
 
 const ROOMS = [
-  { id: "inatt", name: "Inattentive", color: "#2D8EFF", bg: "#eaf3ff" },
-  { id: "hyper", name: "Hyperactive", color: "#ED1C24", bg: "#fde9f3" },
-  { id: "comb", name: "Combined", color: "#ED1C24", bg: "#fde9f3" },
-  { id: "timeblind", name: "Time-Blind Club", color: "#F5B000", bg: "#fff7e0" },
-  { id: "bodydouble", name: "Body-Doubling", color: "#0d5b5e", bg: "#e6f7f7" },
+  { id: "Inattentive", name: "Inattentive", color: "#2D8EFF" },
+  { id: "Hyperactive", name: "Hyperactive", color: "#ED1C24" },
+  { id: "Combined", name: "Combined", color: "#ED1C24" },
+  { id: "Time-Blind Club", name: "Time-Blind Club", color: "#F5B000" },
+  { id: "Body-Doubling", name: "Body-Doubling", color: "#0d5b5e" },
 ];
 
-interface Post {
-  id: string;
-  author: string;
-  initials: string;
-  room: string;
-  color: string;
-  time: string;
-  body: string;
-  hearts: number;
-  replies: number;
+const roomColor = (room: string) => ROOMS.find((r) => r.id === room)?.color ?? "#ED1C24";
+
+function relativeTime(iso: string): string {
+  const s = Math.floor((Date.now() - new Date(iso).getTime()) / 1000);
+  if (s < 60) return "just now";
+  if (s < 3600) return `${Math.floor(s / 60)}m ago`;
+  if (s < 86400) return `${Math.floor(s / 3600)}h ago`;
+  return `${Math.floor(s / 86400)}d ago`;
 }
 
-const MOCK_POSTS: Post[] = [
-  { id: "p1", author: "Sam R.", initials: "SR", room: "Time-Blind Club", color: "#F5B000", time: "12m", body: "Anyone else set a timer for 20 min and look up 3 hours later? Just me hyperfocusing on reorganizing my fonts folder again 😅", hearts: 24, replies: 6 },
-  { id: "p2", author: "Priya K.", initials: "PK", room: "Inattentive", color: "#2D8EFF", time: "48m", body: "Small win: I broke 'do taxes' into 8 tiny steps in the Task tool and did step one. That's the whole post. Celebrating anyway. 🎉", hearts: 61, replies: 14 },
-  { id: "p3", author: "Marcus T.", initials: "MT", room: "Body-Doubling", color: "#0d5b5e", time: "2h", body: "Doing a focus sprint at 3pm ET if anyone wants to body-double. Cameras optional, snacks encouraged.", hearts: 18, replies: 9 },
-];
-
 export default function CommunityPage() {
+  const { user } = useUser();
   const [active, setActive] = useState<string>("all");
-  const [posts, setPosts] = useState(MOCK_POSTS);
+  const [room, setRoom] = useState<string>("Combined");
+  const [posts, setPosts] = useState<CommunityPost[]>([]);
   const [draft, setDraft] = useState("");
 
-  const visible = active === "all" ? posts : posts.filter((p) => p.room === ROOMS.find((r) => r.id === active)?.name);
+  useEffect(() => setPosts(getCommunityPosts()), []);
+
+  const persist = (next: CommunityPost[]) => {
+    setPosts(next);
+    saveCommunityPosts(next);
+  };
+
+  const visible = active === "all" ? posts : posts.filter((p) => p.room === active);
 
   const like = (id: string) =>
-    setPosts((prev) => prev.map((p) => (p.id === id ? { ...p, hearts: p.hearts + 1 } : p)));
+    persist(posts.map((p) => (p.id === id ? { ...p, hearts: p.hearts + 1 } : p)));
 
   const post = () => {
     if (!draft.trim()) return;
-    setPosts((prev) => [
-      { id: `p${Date.now()}`, author: "You", initials: "YO", room: "Combined", color: "#ED1C24", time: "now", body: draft.trim(), hearts: 0, replies: 0 },
-      ...prev,
+    const name = user?.firstName || user?.username || "You";
+    const initials =
+      ((user?.firstName?.[0] ?? "") + (user?.lastName?.[0] ?? "")) ||
+      name.slice(0, 2).toUpperCase();
+    persist([
+      {
+        id: `p${Date.now()}`,
+        author: name,
+        initials,
+        room,
+        body: draft.trim(),
+        hearts: 0,
+        createdAt: new Date().toISOString(),
+      },
+      ...posts,
     ]);
     setDraft("");
   };
@@ -58,15 +77,32 @@ export default function CommunityPage() {
         <Users className="h-8 w-8 text-[#ED1C24]" />
       </div>
 
-      {/* Body-doubling live strip */}
-      <div className="mt-5 flex items-center gap-3 rounded-2xl border-2 border-[#111] bg-[#8acfd1] px-4 py-3 shadow-[4px_4px_0_#111]">
-        <span className="flex items-center gap-1.5 rounded-full bg-[#ED1C24] px-2.5 py-1 text-[11px] font-extrabold text-white">
-          <Radio className="h-3.5 w-3.5" /> LIVE
-        </span>
-        <span className="flex-1 text-sm font-bold text-[#0d3f41]">
-          3 body-doubling rooms open now · 11 people focusing
-        </span>
-        <button className="rounded-xl bg-[#0d5b5e] px-3.5 py-2 text-xs font-extrabold text-white">Join</button>
+      {/* Composer */}
+      <div className="mt-6 rounded-2xl border border-white/10 bg-[#17171b] p-3">
+        <div className="flex gap-2">
+          <input
+            value={draft}
+            onChange={(e) => setDraft(e.target.value)}
+            onKeyDown={(e) => e.key === "Enter" && post()}
+            placeholder="Share a small win or a struggle…"
+            className="flex-1 rounded-xl bg-[#080808] px-3.5 py-2.5 text-sm outline-none"
+          />
+          <button onClick={post} className="flex items-center gap-1.5 rounded-xl bg-[#ED1C24] px-4 text-sm font-extrabold text-white">
+            <Send className="h-4 w-4" />
+          </button>
+        </div>
+        <div className="mt-2 flex flex-wrap gap-1.5">
+          {ROOMS.map((r) => (
+            <button
+              key={r.id}
+              onClick={() => setRoom(r.id)}
+              className={`rounded-full px-2.5 py-1 text-[11px] font-bold ${room === r.id ? "text-white" : "text-[#8b8892]"}`}
+              style={{ background: room === r.id ? r.color : "transparent", border: `1px solid ${r.color}66` }}
+            >
+              {r.name}
+            </button>
+          ))}
+        </div>
       </div>
 
       {/* Room filter */}
@@ -82,25 +118,11 @@ export default function CommunityPage() {
             key={r.id}
             onClick={() => setActive(r.id)}
             className={`rounded-full border-2 px-3.5 py-1.5 text-xs font-extrabold ${active === r.id ? "border-[#111]" : "border-transparent"}`}
-            style={{ background: r.bg, color: r.color }}
+            style={{ background: `${r.color}22`, color: r.color }}
           >
             {r.name}
           </button>
         ))}
-      </div>
-
-      {/* Composer */}
-      <div className="mt-5 flex gap-2 rounded-2xl border border-white/10 bg-[#17171b] p-3">
-        <input
-          value={draft}
-          onChange={(e) => setDraft(e.target.value)}
-          onKeyDown={(e) => e.key === "Enter" && post()}
-          placeholder="Share a small win or a struggle…"
-          className="flex-1 rounded-xl bg-[#080808] px-3.5 py-2.5 text-sm outline-none"
-        />
-        <button onClick={post} className="flex items-center gap-1.5 rounded-xl bg-[#ED1C24] px-4 text-sm font-extrabold text-white">
-          <Send className="h-4 w-4" />
-        </button>
       </div>
 
       {/* Feed */}
@@ -108,13 +130,13 @@ export default function CommunityPage() {
         {visible.map((p) => (
           <article key={p.id} className="hoverable rounded-3xl border-2 border-[#111] bg-[#17171b] p-5 shadow-[4px_4px_0_#111]">
             <div className="flex items-center gap-3">
-              <span className="flex h-10 w-10 items-center justify-center rounded-full text-sm font-extrabold text-white" style={{ background: p.color }}>
+              <span className="flex h-10 w-10 items-center justify-center rounded-full text-sm font-extrabold text-white" style={{ background: roomColor(p.room) }}>
                 {p.initials}
               </span>
               <div>
                 <div className="text-sm font-extrabold">{p.author}</div>
                 <div className="text-[11px] font-medium text-[#8b8892]">
-                  <span style={{ color: p.color }}>{p.room}</span> · {p.time} ago
+                  <span style={{ color: roomColor(p.room) }}>{p.room}</span> · {relativeTime(p.createdAt)}
                 </div>
               </div>
             </div>
@@ -123,14 +145,13 @@ export default function CommunityPage() {
               <button onClick={() => like(p.id)} className="flex items-center gap-1.5 hover:text-[#ED1C24]">
                 <Heart className="h-4 w-4" /> {p.hearts}
               </button>
-              <span className="flex items-center gap-1.5">
-                <MessageCircle className="h-4 w-4" /> {p.replies}
-              </span>
             </div>
           </article>
         ))}
         {visible.length === 0 && (
-          <p className="py-10 text-center text-sm text-[#8b8892]">No posts in this room yet — start the conversation. 🌱</p>
+          <p className="py-12 text-center text-sm text-[#8b8892]">
+            No posts yet — share the first small win. 🌱
+          </p>
         )}
       </div>
     </div>

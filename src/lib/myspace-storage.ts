@@ -34,11 +34,22 @@ export interface JournalNote {
   createdAt: string; // ISO
 }
 
+export interface CommunityPost {
+  id: string;
+  author: string;
+  initials: string;
+  room: string;
+  body: string;
+  hearts: number;
+  createdAt: string; // ISO
+}
+
 const KEYS = {
   role: "adhd-user-role",
   mood: "adhd-mood-entries",
   tasks: "adhd-task-breakdowns",
   journal: "adhd-journal-notes",
+  community: "adhd-community-posts",
 } as const;
 
 function read<T>(key: string, fallback: T): T {
@@ -76,5 +87,10 @@ export const getJournalNotes = (): JournalNote[] =>
   read<JournalNote[]>(KEYS.journal, []);
 export const saveJournalNotes = (notes: JournalNote[]) =>
   write(KEYS.journal, notes);
+
+export const getCommunityPosts = (): CommunityPost[] =>
+  read<CommunityPost[]>(KEYS.community, []);
+export const saveCommunityPosts = (posts: CommunityPost[]) =>
+  write(KEYS.community, posts);
 
 export const storageKeys = KEYS;
