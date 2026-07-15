@@ -1,9 +1,16 @@
 import type { NextConfig } from "next";
+import bundleAnalyzer from "@next/bundle-analyzer";
 
-const nextConfig = {
+// Enable with: ANALYZE=true npx next build
+// Opens interactive treemaps of the client/server bundles in .next/analyze.
+const withBundleAnalyzer = bundleAnalyzer({
+  enabled: process.env.ANALYZE === "true",
+});
+
+const nextConfig: NextConfig = {
   experimental: {
     optimizeCss: false,
   },
 };
 
-export default nextConfig;
+export default withBundleAnalyzer(nextConfig);

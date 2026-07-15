@@ -32,7 +32,7 @@ export function Navbar() {
           <Link href="/journal" className="text-[#666] hover:text-[#d04f99] transition-colors">Journal</Link>
           <Link href="/community" className="text-[#666] hover:text-[#2D8EFF] transition-colors">Board</Link>
           <Link href="/about" className="text-[#666] hover:text-[#FFC107] transition-colors">Archive</Link>
-          <Link href="/mySpace/game" className="text-[#666] hover:text-[#d04f99] transition-colors flex items-center gap-1.5 ml-2">
+          <Link href="/game" className="text-[#666] hover:text-[#d04f99] transition-colors flex items-center gap-1.5 ml-2">
             <span className="px-1.5 py-0.5 rounded-md bg-[#d04f99]/10 text-[#d04f99] text-[10px] uppercase font-black">Play</span>
             Arcade
           </Link>

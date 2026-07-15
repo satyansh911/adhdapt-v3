@@ -1,83 +1,43 @@
-"use client"
+"use client";
 
-import type React from "react"
-import { useState, useEffect, Suspense } from "react"
+import type React from "react";
+import OptimizedLottie from "@/components/OptimizedLottie";
 
 interface LottieSafeWrapperProps {
-  src: string
-  size?: number
-  autoplay?: boolean
-  loop?: boolean
-  fallbackIcon?: string
-  className?: string
-}
-
-interface LottiePlayerProps {
-  autoplay?: boolean
-  loop?: boolean
-  src: string
-  style?: React.CSSProperties
-  className?: string
-  onError?: () => void
+  src: string;
+  size?: number;
+  autoplay?: boolean;
+  /**
+   * Kept for backwards compatibility. `loop` now maps to OptimizedLottie's
+   * `active`: when true the animation loops continuously (only while on
+   * screen); when false it plays once and freezes on its last frame.
+   */
+  loop?: boolean;
+  fallbackIcon?: string;
+  className?: string;
 }
 
 export const LottieSafeWrapper: React.FC<LottieSafeWrapperProps> = ({
   src,
   size = 24,
-  autoplay = true,
-  loop = true,
+  loop = false,
   fallbackIcon = "⚡",
   className = "",
 }) => {
-  const [Player, setPlayer] = useState<React.ComponentType<LottiePlayerProps> | null>(null)
-  const [isMounted, setIsMounted] = useState(false)
-  const [hasError, setHasError] = useState(false)
-
-  useEffect(() => {
-    const loadPlayer = async () => {
-      try {
-        // Only load on client side
-        if (typeof window !== "undefined") {
-          const { Player: LottiePlayer } = await import("@lottiefiles/react-lottie-player")
-          setPlayer(() => LottiePlayer as React.ComponentType<LottiePlayerProps>)
-        }
-      } catch (error) {
-        console.error("Failed to load Lottie player:", error)
-        setHasError(true)
-      } finally {
-        setIsMounted(true)
-      }
-    }
-
-    loadPlayer()
-  }, [])
-
-  const FallbackComponent = () => (
-    <div
-      style={{ height: size, width: size }}
-      className={`flex items-center justify-center bg-muted/20 rounded-lg ${hasError ? "" : "animate-pulse"} ${className}`}
-    >
-      <span style={{ fontSize: size * 0.6 }} className="text-muted-foreground">
-        {fallbackIcon}
-      </span>
-    </div>
-  )
-
-  // Always show fallback during SSR or if Player failed to load
-  if (!isMounted || !Player || hasError) {
-    return <FallbackComponent />
-  }
-
   return (
-    <Suspense fallback={<FallbackComponent />}>
-      <Player
-        autoplay={autoplay}
-        loop={loop}
-        src={src}
-        style={{ height: size, width: size }}
-        className={className}
-        onError={() => setHasError(true)}
-      />
-    </Suspense>
-  )
-}
+    <OptimizedLottie
+      src={src}
+      size={size}
+      active={loop}
+      className={className}
+      fallback={
+        <span
+          style={{ fontSize: size * 0.6 }}
+          className="flex h-full w-full items-center justify-center text-muted-foreground"
+        >
+          {fallbackIcon}
+        </span>
+      }
+    />
+  );
+};

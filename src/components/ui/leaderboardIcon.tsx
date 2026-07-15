@@ -1,23 +1,20 @@
 "use client";
-import { Player } from "@lottiefiles/react-lottie-player";
 import { LucideProps } from "lucide-react";
 import React from "react";
+import OptimizedLottie from "@/components/OptimizedLottie";
 
 interface Props extends LucideProps {
-  size?: number;       // Optional size in pixels
-  isActive?: boolean;  // Optional active state
+  size?: number;
+  isActive?: boolean;
 }
 
-const LeaderboardIcon: React.FC<Props> = ({ size = 30}) => {
+const LeaderboardIcon: React.FC<Props> = ({ size = 30, isActive = false, className }) => {
   return (
-    <Player
-      autoplay
-      loop
+    <OptimizedLottie
       src="/leaderboard.json"
-      style={{
-        height: `${size}px`,
-        width: `${size}px`,
-      }}
+      size={size}
+      active={isActive}
+      className={className as string | undefined}
     />
   );
 };

@@ -18,8 +18,8 @@ const config = {
     },
     extend: {
       fontFamily: {
-        sans: ["var(--font-outfit)", "sans-serif"],
-        display: ["var(--font-display)", "serif"],
+        sans: ['"Google Sans"', "var(--font-outfit)", "sans-serif"],
+        display: ['"Google Sans"', "var(--font-display)", "sans-serif"],
       },
       colors: {
         background: "hsl(var(--background))",

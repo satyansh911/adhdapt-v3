@@ -1,20 +1,20 @@
 "use client";
-import { Player } from "@lottiefiles/react-lottie-player";
 import { LucideProps } from "lucide-react";
 import React from "react";
+import OptimizedLottie from "@/components/OptimizedLottie";
 
 interface Props extends LucideProps {
   size?: number;
   isActive?: boolean;
 }
 
-const ArrowIcon: React.FC<Props> = ({ size = 30 }) => {
+const ArrowIcon: React.FC<Props> = ({ size = 30, isActive = false, className }) => {
   return (
-    <Player
-      autoplay
-      loop
+    <OptimizedLottie
       src="/arrow.json"
-      style={{ height: size, width: size, transform: "rotate(180deg)" }}
+      size={size}
+      active={isActive}
+      className={className as string | undefined}
     />
   );
 };

@@ -1,21 +1,71 @@
+/* Google Sans (proprietary — served via the cdnfonts CDN). Swap for a
+   self-hosted @font-face if you have the licensed .woff2 files. */
+@import url("https://fonts.cdnfonts.com/css/google-sans");
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 @layer base {
+  /* Google Sans everywhere, with the previous fonts as graceful fallbacks. */
   :root {
-    /* SUMMER GAME FEST VIBRANT LIGHT MODE Base Palette */
-    --background: 46 36% 96%; /* #F9F7F2 Off-white sand */
-    --foreground: 0 0% 7%; /* #111111 Deep Charcoal */
-    
-    --card: 0 0% 100%; /* #FFFFFF Pure White Cards */
-    --card-foreground: 0 0% 20%; /* #333333 Dark Gray */
-    
-    --popover: 0 0% 100%;
-    --popover-foreground: 0 0% 7%;
+    --font-google-sans: "Google Sans", var(--font-outfit), system-ui, sans-serif;
+  }
+  html,
+  body {
+    font-family: var(--font-google-sans);
+  }
+}
+
+@layer utilities {
+  /* Smooth, consistent interaction feedback for anything clickable. */
+  a,
+  button,
+  [role="button"] {
+    transition:
+      transform 0.16s ease,
+      box-shadow 0.16s ease,
+      background-color 0.16s ease,
+      color 0.16s ease,
+      border-color 0.16s ease,
+      opacity 0.16s ease;
+  }
+  /* Brightness (not transform) so it composes with Tailwind hover:translate
+     utilities already on many buttons instead of overriding them. */
+  button:not(:disabled):hover,
+  [role="button"]:hover {
+    filter: brightness(1.08);
+  }
+
+  /* Gentle glow + border for cards. Add `hoverable` to any card-like element.
+     Uses shadow/border only (no transform) so it never fights per-element
+     translate utilities. */
+  .hoverable {
+    transition:
+      box-shadow 0.18s ease,
+      border-color 0.18s ease,
+      background-color 0.18s ease;
+  }
+  .hoverable:hover {
+    box-shadow: 0 18px 44px -22px rgba(237, 28, 36, 0.6);
+    border-color: rgba(237, 28, 36, 0.45);
+  }
+}
+
+@layer base {
+  :root {
+    /* BLACK + LOGO RED/GOLD theme */
+    --background: 0 0% 3%; /* #080808 black page */
+    --foreground: 0 0% 95%; /* #f2f2f2 near-white */
+
+    --card: 240 5% 10%; /* #17171b elevated surface */
+    --card-foreground: 0 0% 95%;
+
+    --popover: 240 5% 10%;
+    --popover-foreground: 0 0% 95%;
     
     /* ARCADEPINK & RETRO BRUTALIST TOKENS */
-    --arcade-pink: 326 56% 56%; /* #d04f99 */
+    --arcade-pink: 326 56% 56%; /* #ED1C24 */
     --arcade-yellow: 42 90% 89%; /* #fdedc9 */
     --arcade-teal: 182 43% 68%; /* #8acfd1 */
     
@@ -63,11 +113,11 @@
 
 @layer utilities {
   .sgf-gradient-text {
-    @apply bg-clip-text text-transparent bg-gradient-to-r from-[#E91E63] to-[#FF4B91];
+    @apply bg-clip-text text-transparent bg-gradient-to-r from-[#ED1C24] to-[#FF4B91];
   }
   
   .sgf-button {
-    @apply bg-gradient-to-br from-[#FF4B91] to-[#E91E63] text-white rounded-full shadow-[0_4px_14px_0_rgba(233,30,99,0.2)] hover:shadow-[0_6px_20px_rgba(233,30,99,0.3)] hover:-translate-y-0.5 transition-all duration-300 px-8 py-3 font-bold active:scale-95;
+    @apply bg-gradient-to-br from-[#FF4B91] to-[#ED1C24] text-white rounded-full shadow-[0_4px_14px_0_rgba(233,30,99,0.2)] hover:shadow-[0_6px_20px_rgba(233,30,99,0.3)] hover:-translate-y-0.5 transition-all duration-300 px-8 py-3 font-bold active:scale-95;
   }
   
   .sgf-card {
@@ -75,18 +125,18 @@
   }
 
   .arcade-card {
-    @apply rounded-[40px] border-4 border-[#d04f99] bg-[#fdedc9] shadow-[5px_5px_0px_#d04f99] transition-all duration-300 hover:translate-x-1 hover:translate-y-1 hover:shadow-none;
+    @apply rounded-[40px] border-4 border-[#ED1C24] bg-[#fdedc9] shadow-[5px_5px_0px_#ED1C24] transition-all duration-300 hover:translate-x-1 hover:translate-y-1 hover:shadow-none;
   }
 
   .arcade-button {
-    @apply px-8 py-4 bg-[#8acfd1] border-4 border-[#d04f99] shadow-[5px_5px_0px_#d04f99] rounded-[24px] font-black text-[#111] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none transition-all active:scale-95;
+    @apply px-8 py-4 bg-[#8acfd1] border-4 border-[#ED1C24] shadow-[5px_5px_0px_#ED1C24] rounded-[24px] font-black text-[#111] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none transition-all active:scale-95;
   }
 
   .orb {
     @apply absolute rounded-full mix-blend-multiply filter blur-3xl opacity-60 animate-pulse;
   }
   .orb-pink {
-    @apply bg-[#d04f99];
+    @apply bg-[#ED1C24];
   }
   .orb-blue {
     @apply bg-[#2D8EFF];
@@ -112,5 +162,5 @@
   border-radius: 10px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #E91E63;
+  background: #ED1C24;
 }
