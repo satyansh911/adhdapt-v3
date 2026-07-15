@@ -1,18 +1,20 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
+import { useUser } from "@clerk/nextjs";
 import { Plus, X, Check, Maximize2, ArrowRight } from "lucide-react";
-import {
-  getTaskBreakdowns,
-  saveTaskBreakdowns,
-  type TaskBreakdown,
-  type SubTask,
-} from "@/lib/myspace-storage";
+import { useSupabase } from "@/hooks/use-supabase";
+import { listTasks, createTask as dbCreateTask, updateTaskSubtasks } from "@/lib/db";
+import type { TaskBreakdown, SubTask } from "@/lib/myspace-storage";
 
 const uid = () => Math.random().toString(36).slice(2, 9);
 const BREAK_SECONDS = 5 * 60;
 
 export default function TasksPage() {
+  const supabase = useSupabase();
+  const { user } = useUser();
+  const userId = user?.id;
+
   const [tasks, setTasks] = useState<TaskBreakdown[]>([]);
   const [activeId, setActiveId] = useState<string | null>(null);
   const [bigInput, setBigInput] = useState("");
@@ -24,10 +26,12 @@ export default function TasksPage() {
   const [breakLeft, setBreakLeft] = useState(BREAK_SECONDS);
 
   useEffect(() => {
-    const loaded = getTaskBreakdowns();
-    setTasks(loaded);
-    if (loaded[0]) setActiveId(loaded[0].id);
-  }, []);
+    if (!supabase || !userId) return;
+    listTasks(supabase, userId).then((loaded) => {
+      setTasks(loaded);
+      if (loaded[0]) setActiveId(loaded[0].id);
+    });
+  }, [supabase, userId]);
 
   useEffect(() => {
     if (!breakActive) return;
@@ -38,9 +42,10 @@ export default function TasksPage() {
     return () => clearInterval(id);
   }, [breakActive]);
 
-  const persist = (next: TaskBreakdown[]) => {
-    setTasks(next);
-    saveTaskBreakdowns(next);
+  // Persist a single task's subtasks (locally + to Supabase).
+  const saveSubtasks = (taskId: string, subtasks: SubTask[]) => {
+    setTasks((prev) => prev.map((t) => (t.id === taskId ? { ...t, subtasks } : t)));
+    if (supabase && userId) updateTaskSubtasks(supabase, userId, taskId, subtasks);
   };
 
   const active = tasks.find((t) => t.id === activeId) || null;
@@ -52,34 +57,28 @@ export default function TasksPage() {
     ? active.subtasks.filter((s) => s.done).length / active.subtasks.length
     : 0;
 
-  const createTask = () => {
-    if (!bigInput.trim()) return;
-    const t: TaskBreakdown = {
-      id: uid(),
-      title: bigInput.trim(),
-      subtasks: [],
-      createdAt: new Date().toISOString(),
-    };
-    persist([t, ...tasks]);
-    setActiveId(t.id);
+  const createTask = async () => {
+    if (!bigInput.trim() || !supabase || !userId) return;
+    const t = await dbCreateTask(supabase, userId, bigInput.trim());
+    if (t) {
+      setTasks((prev) => [t, ...prev]);
+      setActiveId(t.id);
+    }
     setBigInput("");
   };
 
   const addSub = () => {
     if (!subInput.trim() || !active) return;
     const sub: SubTask = { id: uid(), title: subInput.trim(), done: false };
-    persist(tasks.map((t) => (t.id === active.id ? { ...t, subtasks: [...t.subtasks, sub] } : t)));
+    saveSubtasks(active.id, [...active.subtasks, sub]);
     setSubInput("");
   };
 
   const toggleSub = (sid: string) => {
     if (!active) return;
-    persist(
-      tasks.map((t) =>
-        t.id === active.id
-          ? { ...t, subtasks: t.subtasks.map((s) => (s.id === sid ? { ...s, done: !s.done } : s)) }
-          : t
-      )
+    saveSubtasks(
+      active.id,
+      active.subtasks.map((s) => (s.id === sid ? { ...s, done: !s.done } : s))
     );
   };
 

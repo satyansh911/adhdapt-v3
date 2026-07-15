@@ -1,8 +1,11 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useUser } from "@clerk/nextjs";
 import { Check, Play, Music, X } from "lucide-react";
-import { getMoodEntries, saveMoodEntries, type MoodEntry } from "@/lib/myspace-storage";
+import { useSupabase } from "@/hooks/use-supabase";
+import { listMoods, addMood } from "@/lib/db";
+import type { MoodEntry } from "@/lib/myspace-storage";
 
 const WEATHERS = [
   { score: 1, emoji: "⛈️", label: "Stormy", color: "#7c8db5" },
@@ -22,6 +25,10 @@ const SESSIONS = [
 ];
 
 export default function MoodPage() {
+  const supabase = useSupabase();
+  const { user } = useUser();
+  const uid = user?.id;
+
   const [selected, setSelected] = useState(3);
   const [intensity, setIntensity] = useState(3);
   const [note, setNote] = useState("");
@@ -29,22 +36,22 @@ export default function MoodPage() {
   const [justSaved, setJustSaved] = useState(false);
   const [playing, setPlaying] = useState<string | null>(null);
 
-  useEffect(() => setEntries(getMoodEntries()), []);
+  useEffect(() => {
+    if (!supabase || !uid) return;
+    listMoods(supabase, uid).then(setEntries);
+  }, [supabase, uid]);
 
   const weather = WEATHERS.find((w) => w.score === selected)!;
 
-  const save = () => {
-    const entry: MoodEntry = {
-      id: `m${Date.now()}`,
+  const save = async () => {
+    if (!supabase || !uid) return;
+    const created = await addMood(supabase, uid, {
       score: selected,
       emoji: weather.emoji,
       label: weather.label,
       note: note.trim() || undefined,
-      createdAt: new Date().toISOString(),
-    };
-    const next = [entry, ...entries];
-    setEntries(next);
-    saveMoodEntries(next);
+    });
+    if (created) setEntries((prev) => [created, ...prev]);
     setNote("");
     setJustSaved(true);
     setTimeout(() => setJustSaved(false), 2200);

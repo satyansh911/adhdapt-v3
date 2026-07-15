@@ -4,12 +4,8 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useUser } from "@clerk/nextjs";
 import { Play, Plus } from "lucide-react";
-import {
-  getMoodEntries,
-  getTaskBreakdowns,
-  getJournalNotes,
-  type TaskBreakdown,
-} from "@/lib/myspace-storage";
+import { useSupabase } from "@/hooks/use-supabase";
+import { listMoods, listTasks, listJournal } from "@/lib/db";
 
 interface ModuleTile {
   href: string;
@@ -41,6 +37,8 @@ function relativeDay(iso: string): string {
 
 export default function DashboardPage() {
   const { user } = useUser();
+  const supabase = useSupabase();
+  const uid = user?.id;
   const [loaded, setLoaded] = useState(false);
   const [streak, setStreak] = useState(0);
   const [subDone, setSubDone] = useState(0);
@@ -49,9 +47,15 @@ export default function DashboardPage() {
   const [modules, setModules] = useState<ModuleTile[]>([]);
 
   useEffect(() => {
-    const moods = getMoodEntries();
-    const tasks: TaskBreakdown[] = getTaskBreakdowns();
-    const notes = getJournalNotes();
+    if (!supabase || !uid) return;
+    let cancelled = false;
+    (async () => {
+      const [moods, tasks, notes] = await Promise.all([
+        listMoods(supabase, uid),
+        listTasks(supabase, uid),
+        listJournal(supabase, uid),
+      ]);
+      if (cancelled) return;
 
     const moodDays = new Set(moods.map((m) => dayKey(m.createdAt)));
     setStreak(moodStreak(moodDays));
@@ -76,8 +80,12 @@ export default function DashboardPage() {
       { href: "/tasks", title: "Task Breakdown", sub: openTasks ? `${openTasks} task${openTasks > 1 ? "s" : ""} in progress` : "Break down a big task", img: "/home/task%20breakdown.png" },
       { href: "/community", title: "Community", sub: "Join the conversation", img: "/home/community.png" },
     ]);
-    setLoaded(true);
-  }, []);
+      setLoaded(true);
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, [supabase, uid]);
 
   const today = new Date().toLocaleDateString("en-US", { weekday: "long", month: "long", day: "numeric" });
   const firstName = user?.firstName || user?.username || "there";

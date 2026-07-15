@@ -10,13 +10,11 @@ import {
   ResponsiveContainer,
   CartesianGrid,
 } from "recharts";
+import { useUser } from "@clerk/nextjs";
 import { Sparkles, NotebookPen } from "lucide-react";
-import {
-  getJournalNotes,
-  saveJournalNotes,
-  getMoodEntries,
-  type JournalNote,
-} from "@/lib/myspace-storage";
+import { useSupabase } from "@/hooks/use-supabase";
+import { listJournal, addJournal, listMoods } from "@/lib/db";
+import type { JournalNote } from "@/lib/myspace-storage";
 
 const PROMPTS = [
   "What's one small thing that went okay today?",
@@ -26,48 +24,48 @@ const PROMPTS = [
 ];
 
 export default function JournalPage() {
+  const supabase = useSupabase();
+  const { user } = useUser();
+  const uid = user?.id;
+
   const [text, setText] = useState("");
   const [prompt, setPrompt] = useState(PROMPTS[0]);
   const [notes, setNotes] = useState<JournalNote[]>([]);
   const [moodSeries, setMoodSeries] = useState<{ day: string; mood: number }[]>([]);
 
   useEffect(() => {
-    setNotes(getJournalNotes());
+    if (!supabase || !uid) return;
+    listJournal(supabase, uid).then(setNotes);
+
     // Build a 14-day mood-over-time series from saved mood check-ins.
-    const entries = getMoodEntries();
-    const byDay = new Map<string, { sum: number; n: number }>();
-    entries.forEach((e) => {
-      const key = new Date(e.createdAt).toISOString().slice(0, 10);
-      const cur = byDay.get(key) || { sum: 0, n: 0 };
-      byDay.set(key, { sum: cur.sum + e.score, n: cur.n + 1 });
-    });
-    const series: { day: string; mood: number }[] = [];
-    for (let i = 13; i >= 0; i--) {
-      const d = new Date();
-      d.setDate(d.getDate() - i);
-      const key = d.toISOString().slice(0, 10);
-      const agg = byDay.get(key);
-      series.push({
-        day: d.toLocaleDateString("en-US", { month: "numeric", day: "numeric" }),
-        mood: agg ? Math.round((agg.sum / agg.n) * 10) / 10 : 0,
+    listMoods(supabase, uid).then((entries) => {
+      const byDay = new Map<string, { sum: number; n: number }>();
+      entries.forEach((e) => {
+        const key = new Date(e.createdAt).toISOString().slice(0, 10);
+        const cur = byDay.get(key) || { sum: 0, n: 0 };
+        byDay.set(key, { sum: cur.sum + e.score, n: cur.n + 1 });
       });
-    }
-    setMoodSeries(series);
-  }, []);
+      const series: { day: string; mood: number }[] = [];
+      for (let i = 13; i >= 0; i--) {
+        const d = new Date();
+        d.setDate(d.getDate() - i);
+        const key = d.toISOString().slice(0, 10);
+        const agg = byDay.get(key);
+        series.push({
+          day: d.toLocaleDateString("en-US", { month: "numeric", day: "numeric" }),
+          mood: agg ? Math.round((agg.sum / agg.n) * 10) / 10 : 0,
+        });
+      }
+      setMoodSeries(series);
+    });
+  }, [supabase, uid]);
 
   const hasMood = useMemo(() => moodSeries.some((p) => p.mood > 0), [moodSeries]);
 
-  const save = () => {
-    if (!text.trim()) return;
-    const note: JournalNote = {
-      id: `j${Date.now()}`,
-      text: text.trim(),
-      prompt,
-      createdAt: new Date().toISOString(),
-    };
-    const next = [note, ...notes];
-    setNotes(next);
-    saveJournalNotes(next);
+  const save = async () => {
+    if (!text.trim() || !supabase || !uid) return;
+    const created = await addJournal(supabase, uid, { text: text.trim(), prompt });
+    if (created) setNotes((prev) => [created, ...prev]);
     setText("");
   };
 

@@ -14,11 +14,10 @@ import {
   Loader2,
   CalendarDays,
 } from "lucide-react";
-import {
-  getSchedule,
-  saveSchedule,
-  type ScheduleBlock,
-} from "@/lib/myspace-storage";
+import { useUser } from "@clerk/nextjs";
+import { useSupabase } from "@/hooks/use-supabase";
+import { getScheduleDay, saveScheduleDay } from "@/lib/db";
+import type { ScheduleBlock } from "@/lib/myspace-storage";
 
 const ACCENTS = ["#2D8EFF", "#F5B000", "#ED1C24", "#8acfd1", "#8fc0ff", "#0d5b5e"];
 const uid = () => Math.random().toString(36).slice(2, 9);
@@ -71,6 +70,10 @@ interface Suggestion {
 }
 
 export default function SchedulerPage() {
+  const supabase = useSupabase();
+  const { user } = useUser();
+  const userId = user?.id;
+
   const { remaining, running, toggle, reset } = useCountdown(FOCUS_SECONDS);
   const progress = useMemo(() => 1 - remaining / FOCUS_SECONDS, [remaining]);
 
@@ -84,15 +87,16 @@ export default function SchedulerPage() {
 
   // Load blocks for the selected day.
   useEffect(() => {
-    setBlocks(getSchedule(selected));
-  }, [selected]);
+    if (!supabase || !userId) return;
+    getScheduleDay(supabase, userId, selected).then(setBlocks);
+  }, [supabase, userId, selected]);
 
   const persist = useCallback(
     (next: ScheduleBlock[]) => {
       setBlocks(next);
-      saveSchedule(selected, next);
+      if (supabase && userId) saveScheduleDay(supabase, userId, selected, next);
     },
-    [selected]
+    [supabase, userId, selected]
   );
 
   const addBlock = () =>
