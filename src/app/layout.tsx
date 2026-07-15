@@ -17,8 +17,17 @@ const playfair = Playfair_Display({
 });
 
 export const metadata: Metadata = {
-  title: "ADHDapt | Focus Fest",
-  description: "A vibrant, high-energy cognitive toolkit.",
+  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000"),
+  title: "ADHDapt",
+  description: "The calmer system for the ADHD brain.",
+  icons: { icon: "/home/logo.png", shortcut: "/home/logo.png", apple: "/home/logo.png" },
+  openGraph: {
+    title: "ADHDapt",
+    siteName: "ADHDapt",
+    description: "The calmer system for the ADHD brain.",
+    images: ["/home/logo.png"],
+  },
+  twitter: { card: "summary", title: "ADHDapt", images: ["/home/logo.png"] },
 };
 
 export default function RootLayout({

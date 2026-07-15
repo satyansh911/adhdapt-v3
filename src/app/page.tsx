@@ -9,7 +9,7 @@ import SiteFooter from "@/components/landing/SiteFooter";
 import Reveal from "@/components/landing/Reveal";
 
 export const metadata = {
-  title: "ADHDapt — the calmer system",
+  title: "ADHDapt",
   description: "Turn overwhelm into a playful, low-pressure playground built for the ADHD brain.",
 };
 
