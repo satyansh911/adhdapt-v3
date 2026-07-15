@@ -1,8 +1,11 @@
 "use client";
 
+import { useEffect } from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useClerk, useUser } from "@clerk/nextjs";
+import { useSupabase } from "@/hooks/use-supabase";
+import { migrateLocalData } from "@/lib/migrate-local";
 import { LogOut, type LucideIcon } from "lucide-react";
 
 interface NavItem {
@@ -44,6 +47,12 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
   const router = useRouter();
   const { user } = useUser();
   const { signOut } = useClerk();
+  const supabase = useSupabase();
+
+  // One-time import of any pre-backend localStorage data for this user.
+  useEffect(() => {
+    if (supabase && user?.id) migrateLocalData(supabase, user.id);
+  }, [supabase, user?.id]);
 
   const displayName =
     user?.fullName || user?.firstName || user?.username || "Your space";
