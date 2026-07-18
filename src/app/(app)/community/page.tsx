@@ -167,10 +167,11 @@ export default function CommunityPage() {
   };
 
   return (
-    // Mobile: leave room for the fixed bottom tab bar (~3.5rem) so the
-    // composer never ends up hidden underneath it. Desktop has no bottom
-    // bar, so it takes the full viewport height.
-    <div className="flex h-[calc(100dvh-3.5rem)] flex-col md:h-dvh md:flex-row">
+    // Mobile: leave room for the fixed bottom tab bar so the composer never
+    // ends up hidden underneath it. Desktop has no bottom bar, so it takes the
+    // full viewport height. (Underscores are required inside Tailwind's
+    // arbitrary calc() so the CSS keeps the whitespace around the minus.)
+    <div className="flex h-[calc(100dvh_-_3.5rem)] flex-col md:h-dvh md:flex-row">
       {/* Channel rail */}
       <aside className="flex-shrink-0 border-b border-white/10 bg-[#141414] p-3 md:h-full md:w-64 md:overflow-y-auto md:border-b-0 md:border-r">
         <h1 className="px-1 py-2 font-display text-2xl font-extrabold">Community</h1>
