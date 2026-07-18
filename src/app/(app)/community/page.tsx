@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useUser } from "@clerk/nextjs";
-import { Send, Hash, Users, MessageCircle, Loader2, WifiOff } from "lucide-react";
+import { Send, Hash, Users, MessageCircle, Loader2, WifiOff, Menu, X } from "lucide-react";
 import { useSupabase, isSupabaseConfigured } from "@/hooks/use-supabase";
 
 interface Message {
@@ -50,6 +50,7 @@ export default function CommunityPage() {
   const [draft, setDraft] = useState("");
   const [loading, setLoading] = useState(true);
   const [sending, setSending] = useState(false);
+  const [railOpen, setRailOpen] = useState(false); // mobile channel drawer
   const bottomRef = useRef<HTMLDivElement>(null);
 
   // Register my profile + load the directory (for DMs).
@@ -155,8 +156,11 @@ export default function CommunityPage() {
     const active = selected === id;
     return (
       <button
-        onClick={() => setSelected(id)}
-        className={`flex w-full items-center gap-2.5 rounded-xl px-3 py-2 text-left text-sm font-bold transition-colors ${
+        onClick={() => {
+          setSelected(id);
+          setRailOpen(false); // close the mobile drawer after picking
+        }}
+        className={`flex w-full items-center gap-2.5 rounded-xl px-3 py-2.5 text-left text-sm font-bold transition-colors ${
           active ? "bg-[#ED1C24] text-white" : "text-[#c98fb0] hover:bg-white/5"
         }`}
       >
@@ -171,45 +175,58 @@ export default function CommunityPage() {
     // ends up hidden underneath it. Desktop has no bottom bar, so it takes the
     // full viewport height. (Underscores are required inside Tailwind's
     // arbitrary calc() so the CSS keeps the whitespace around the minus.)
-    <div className="flex h-[calc(100dvh_-_3.5rem)] flex-col md:h-dvh md:flex-row">
-      {/* Channel rail */}
-      <aside className="flex-shrink-0 border-b border-white/10 bg-[#141414] p-3 md:h-full md:w-64 md:overflow-y-auto md:border-b-0 md:border-r">
-        <h1 className="px-1 py-2 font-display text-2xl font-extrabold">Community</h1>
+    <div className="relative flex h-[calc(100dvh_-_3.5rem)] flex-col md:h-dvh md:flex-row">
+      {/* Backdrop when the mobile channel drawer is open */}
+      {railOpen && (
+        <div className="fixed inset-0 z-[45] bg-black/50 md:hidden" onClick={() => setRailOpen(false)} />
+      )}
 
-        <div className="mt-1 flex gap-1 overflow-x-auto md:flex-col md:overflow-visible">
-          <div className="min-w-max md:min-w-0">
-            <ChannelBtn id="general" label="General" icon={Hash} />
-          </div>
-
-          <div className="hidden px-1 pb-1 pt-3 text-[10px] font-bold uppercase tracking-wider text-[#8b8892] md:block">
-            Group rooms
-          </div>
-          {GROUPS.map((g) => (
-            <div key={g.slug} className="min-w-max md:min-w-0">
-              <ChannelBtn id={`room:${g.slug}`} label={g.label} color={g.color} icon={Users} />
-            </div>
-          ))}
-
-          <div className="hidden px-1 pb-1 pt-3 text-[10px] font-bold uppercase tracking-wider text-[#8b8892] md:block">
-            Direct messages
-          </div>
-          {dmPartners.map((p) => (
-            <div key={p.id} className="min-w-max md:min-w-0">
-              <ChannelBtn id={dmChannel(myId, p.id)} label={p.name} icon={MessageCircle} />
-            </div>
-          ))}
-          {dmPartners.length === 0 && (
-            <p className="hidden px-2 py-1 text-[11px] text-[#6a6774] md:block">
-              Others appear here once they open Community.
-            </p>
-          )}
+      {/* Channel rail: a slide-in drawer on mobile, a static column on desktop */}
+      <aside
+        className={`fixed inset-y-0 left-0 z-50 flex w-72 max-w-[80%] transform flex-col overflow-y-auto bg-[#141414] p-3 transition-transform duration-200 md:static md:z-auto md:h-full md:w-64 md:max-w-none md:translate-x-0 md:border-r md:border-white/10 ${
+          railOpen ? "translate-x-0" : "-translate-x-full"
+        }`}
+      >
+        <div className="mb-1 flex items-center justify-between px-1 py-2">
+          <h1 className="font-display text-2xl font-extrabold">Community</h1>
+          <button onClick={() => setRailOpen(false)} className="md:hidden" aria-label="Close">
+            <X className="h-5 w-5 text-[#8b8892]" />
+          </button>
         </div>
+
+        <ChannelBtn id="general" label="General" icon={Hash} />
+
+        <div className="px-1 pb-1 pt-3 text-[10px] font-bold uppercase tracking-wider text-[#8b8892]">
+          Group rooms
+        </div>
+        {GROUPS.map((g) => (
+          <ChannelBtn key={g.slug} id={`room:${g.slug}`} label={g.label} color={g.color} icon={Users} />
+        ))}
+
+        <div className="px-1 pb-1 pt-3 text-[10px] font-bold uppercase tracking-wider text-[#8b8892]">
+          Direct messages
+        </div>
+        {dmPartners.map((p) => (
+          <ChannelBtn key={p.id} id={dmChannel(myId, p.id)} label={p.name} icon={MessageCircle} />
+        ))}
+        {dmPartners.length === 0 && (
+          <p className="px-2 py-1 text-[11px] text-[#6a6774]">
+            Others appear here once they open Community.
+          </p>
+        )}
       </aside>
 
       {/* Chat pane */}
       <section className="flex min-h-0 flex-1 flex-col">
-        <header className="flex-shrink-0 border-b border-white/10 px-5 py-3">
-          <h2 className="text-lg font-extrabold">{channelTitle()}</h2>
+        <header className="flex flex-shrink-0 items-center gap-3 border-b border-white/10 px-4 py-3">
+          <button
+            onClick={() => setRailOpen(true)}
+            className="flex h-8 w-8 items-center justify-center rounded-lg text-[#c98fb0] hover:bg-white/5 md:hidden"
+            aria-label="Channels"
+          >
+            <Menu className="h-5 w-5" />
+          </button>
+          <h2 className="truncate text-lg font-extrabold">{channelTitle()}</h2>
         </header>
 
         <div className="flex min-h-0 flex-1 flex-col gap-3 overflow-y-auto px-5 py-4">
