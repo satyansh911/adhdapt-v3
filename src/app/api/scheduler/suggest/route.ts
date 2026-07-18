@@ -1,10 +1,10 @@
 import { type NextRequest, NextResponse } from "next/server";
 import { generateObject } from "ai";
-import { createGoogleGenerativeAI } from "@ai-sdk/google";
+import { createGroq } from "@ai-sdk/groq";
 import { z } from "zod";
 
-const google = createGoogleGenerativeAI({
-  apiKey: process.env.GOOGLE_GENERATIVE_AI_API_KEY,
+const groq = createGroq({
+  apiKey: process.env.GROQ_API_KEY,
 });
 
 const schema = z.object({
@@ -24,7 +24,7 @@ const schema = z.object({
 });
 
 export async function POST(request: NextRequest) {
-  if (!process.env.GOOGLE_GENERATIVE_AI_API_KEY) {
+  if (!process.env.GROQ_API_KEY) {
     return NextResponse.json({ error: "AI service not configured." }, { status: 500 });
   }
 
@@ -46,7 +46,7 @@ export async function POST(request: NextRequest) {
 
   try {
     const { object } = await generateObject({
-      model: google("gemini-1.5-flash"),
+      model: groq("llama-3.3-70b-versatile"),
       schema,
       prompt: `You are a kind, practical ADHD coach helping someone shape their day.
 Given today's schedule below, suggest a gentler, more focus-friendly ordering:
@@ -65,6 +65,10 @@ Respond with a one-sentence encouraging message and the reordered blocks.`,
     return NextResponse.json(object);
   } catch (err) {
     console.error("AI schedule suggestion failed:", err);
-    return NextResponse.json({ error: "Couldn't reach the AI right now. Try again." }, { status: 502 });
+    const detail = err instanceof Error ? err.message : "Unknown error";
+    return NextResponse.json(
+      { error: `Couldn't reach the AI right now. (${detail})` },
+      { status: 502 }
+    );
   }
 }
