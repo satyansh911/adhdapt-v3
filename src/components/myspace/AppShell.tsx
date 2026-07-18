@@ -35,8 +35,8 @@ function NavIcon({ item, className }: { item: NavItem; className: string }) {
   return <Icon className={className} />;
 }
 
-// Mobile shows a condensed tab bar.
-const MOBILE_TABS = ["/dashboard", "/game", "/scheduler", "/mood", "/community"];
+// Mobile shows all sections in the tab bar.
+const MOBILE_TABS = ["/dashboard", "/game", "/scheduler", "/mood", "/journal", "/tasks", "/community"];
 
 function isActive(pathname: string, href: string) {
   return pathname === href || pathname.startsWith(href + "/");
@@ -123,20 +123,20 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
       {/* Main content */}
       <main className={`min-h-0 flex-1 ${isFullBleed ? "" : "pb-20 md:pb-0"}`}>{children}</main>
 
-      {/* Mobile bottom tab bar */}
-      <nav className="fixed bottom-0 left-0 right-0 z-40 flex items-center justify-around border-t-2 border-[#111] bg-[#141414] px-2 py-3 md:hidden">
+      {/* Mobile bottom tab bar — all sections, sized to fit without wrapping */}
+      <nav className="fixed bottom-0 left-0 right-0 z-40 flex items-center justify-between gap-0.5 overflow-x-auto border-t-2 border-[#111] bg-[#141414] px-1.5 py-2 md:hidden">
         {NAV.filter((n) => MOBILE_TABS.includes(n.href)).map((item) => {
           const active = isActive(pathname, item.href);
           return (
             <Link
               key={item.href}
               href={item.href}
-              className={`flex flex-col items-center gap-0.5 ${
+              className={`flex min-w-0 flex-1 flex-col items-center gap-0.5 rounded-lg px-0.5 py-1 ${
                 active ? "text-[#ED1C24]" : "text-[#c98fb0]"
               }`}
             >
-              <NavIcon item={item} className="h-[22px] w-[22px]" />
-              <span className={`text-[9px] ${active ? "font-extrabold" : "font-semibold"}`}>
+              <NavIcon item={item} className="h-[19px] w-[19px]" />
+              <span className={`text-[8px] leading-none ${active ? "font-extrabold" : "font-semibold"}`}>
                 {item.short}
               </span>
             </Link>
