@@ -35,8 +35,8 @@ function NavIcon({ item, className }: { item: NavItem; className: string }) {
   return <Icon className={className} />;
 }
 
-// Mobile shows a condensed 5-tab bar.
-const MOBILE_TABS = ["/dashboard", "/game", "/scheduler", "/mood", "/journal"];
+// Mobile shows a condensed tab bar.
+const MOBILE_TABS = ["/dashboard", "/game", "/scheduler", "/mood", "/community"];
 
 function isActive(pathname: string, href: string) {
   return pathname === href || pathname.startsWith(href + "/");
@@ -48,6 +48,10 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
   const { user } = useUser();
   const { signOut } = useClerk();
   const supabase = useSupabase();
+  // Community manages its own full-bleed, fixed-height layout (chat rail +
+  // scrollable messages + composer), so it shouldn't get the bottom padding
+  // other pages use to clear the fixed mobile tab bar.
+  const isFullBleed = pathname.startsWith("/community");
 
   // One-time import of any pre-backend localStorage data for this user.
   useEffect(() => {
@@ -117,7 +121,7 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
       </aside>
 
       {/* Main content */}
-      <main className="flex-1 pb-20 md:pb-0">{children}</main>
+      <main className={`min-h-0 flex-1 ${isFullBleed ? "" : "pb-20 md:pb-0"}`}>{children}</main>
 
       {/* Mobile bottom tab bar */}
       <nav className="fixed bottom-0 left-0 right-0 z-40 flex items-center justify-around border-t-2 border-[#111] bg-[#141414] px-2 py-3 md:hidden">
