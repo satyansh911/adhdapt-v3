@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import dynamic from "next/dynamic";
 import {
@@ -136,6 +136,12 @@ function WelcomePage({ onPlay }: { onPlay: (id: GameType) => void }) {
 export default function GameHub() {
   const [currentGame, setCurrentGame] = useState<GameType>("welcome");
   const [sidebarOpen, setSidebarOpen] = useState(true);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const t = setTimeout(() => setIsLoading(false), 2200);
+    return () => clearTimeout(t);
+  }, []);
 
   const renderCurrentGame = () => {
     switch (currentGame) {
@@ -149,6 +155,22 @@ export default function GameHub() {
         return <WelcomePage onPlay={setCurrentGame} />;
     }
   };
+
+  if (isLoading) {
+    return (
+      <div className="flex min-h-screen flex-col items-center justify-center bg-[#080808] text-[#ececf0]">
+        <div className="flex h-20 w-20 animate-pulse items-center justify-center rounded-2xl bg-[#ED1C24]/15">
+          <Gamepad2 className="h-10 w-10 text-[#ED1C24]" />
+        </div>
+        <h2 className="mt-5 font-display text-2xl font-extrabold">Entering the arcade…</h2>
+        <p className="mt-1 text-sm font-medium text-[#8b8892]">Preparing your brain-training experience…</p>
+        <div className="mt-6 h-1 w-40 overflow-hidden rounded-full bg-white/10">
+          <div className="h-full w-1/2 animate-[loadbar_1.1s_ease-in-out_infinite] rounded-full bg-[#ED1C24]" />
+        </div>
+        <style>{`@keyframes loadbar{0%{transform:translateX(-100%)}100%{transform:translateX(300%)}}`}</style>
+      </div>
+    );
+  }
 
   return (
     <div className="flex min-h-screen bg-[#080808] text-[#ececf0]">
