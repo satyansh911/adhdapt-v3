@@ -1,398 +1,218 @@
-"use client"
+"use client";
 
-import { useState, useEffect } from "react"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Button } from "@/components/ui/button"
-import { Badge } from "@/components/ui/badge"
-import { Menu, Users } from "lucide-react"
-import dynamic from "next/dynamic"
-
-const ThemeToggle = dynamic(() => import("@/components/theme-toggle"), {
-  ssr: false,
-})
-
-const GameIcon = dynamic(() => import("@/components/ui/gamification"), {
-  ssr: false,
-})
-const ArcadeIcon = dynamic(() => import("@/components/ui/ArcadeIcon"), {
-  ssr: false,
-})
-const TrophyIcon = dynamic(() => import("@/components/ui/trophyIcon"), {
-  ssr: false,
-})
-const LightningIcon = dynamic(() => import("@/components/ui/lightningIcon"), {
-  ssr: false,
-})
-const StarIcon = dynamic(() => import("@/components/ui/starIcon"), {
-  ssr: false,
-})
-const TileIcon = dynamic(() => import("@/components/ui/tileGame"), {
-  ssr: false,
-})
-const ScienceIcon = dynamic(() => import("@/components/ui/scienceIcon"), {
-  ssr: false,
-})
-const EngageIcon = dynamic(() => import("@/components/ui/engagingIcon"), {
-  ssr: false,
-})
-const FocusFlowIcon = dynamic(() => import("@/components/ui/focusFlowIcon"), {
-  ssr: false,
-})
-const MindMazeIcon = dynamic(() => import("@/components/ui/mindMazeIcon"), {
-  ssr: false,
-})
-const HomeIcon = dynamic(() => import("@/components/ui/homeIcon"), {
-  ssr: false,
-})
-const SidebarIcon = dynamic(() => import("@/components/ui/sidebarLogo"), {
-  ssr: false,
-})
-const TimerIcon = dynamic(() => import("@/components/ui/timerIcon"), {
-  ssr: false,
-})
+import { useState } from "react";
+import Link from "next/link";
+import dynamic from "next/dynamic";
+import {
+  Menu,
+  Home,
+  Gamepad2,
+  LayoutGrid,
+  Sparkles,
+  Music,
+  Trophy,
+  Zap,
+  Star,
+  Timer,
+  Users,
+  FlaskConical,
+  ArrowLeft,
+  type LucideIcon,
+} from "lucide-react";
 
 const TileMemoryGame = dynamic(
-  () =>
-    import("./tile-memory-game/TileMemoryGameClient").then(
-      (mod) => mod.TileMemoryGame
-    ),
+  () => import("./tile-memory-game/TileMemoryGameClient").then((m) => m.TileMemoryGame),
   { ssr: false }
-)
-
+);
 const FocusFlowGame = dynamic(
-  () =>
-    import("./focus-flow-game/FocusFlowGameClient").then(
-      (mod) => mod.FocusFlowGame
-    ),
+  () => import("./focus-flow-game/FocusFlowGameClient").then((m) => m.FocusFlowGame),
   { ssr: false }
-)
-
+);
 const SoundMemoryGame = dynamic(
-  () =>
-    import("./sound-memory-game/SoundMemoryGameClient").then(
-      (mod) => mod.SoundMemoryGame
-    ),
+  () => import("./sound-memory-game/SoundMemoryGameClient").then((m) => m.SoundMemoryGame),
   { ssr: false }
-)
+);
 
-type GameType = "welcome" | "tile-memory" | "focus-flow" | "sound-memory"
+type GameType = "welcome" | "tile-memory" | "focus-flow" | "sound-memory";
 
-export default function GameHub() {
-  const [currentGame, setCurrentGame] = useState<GameType>("welcome")
-  const [sidebarOpen, setSidebarOpen] = useState(true)
-  const [isLoading, setIsLoading] = useState(true)
+interface Game {
+  id: GameType;
+  name: string;
+  description: string;
+  icon: LucideIcon;
+  color: string;
+  difficulty: string;
+  players: string;
+}
 
-  // Loading effect - same as your original
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setIsLoading(false)
-    }, 3000)
-    return () => clearTimeout(timer)
-  }, [])
+const GAMES: Game[] = [
+  { id: "tile-memory", name: "TileTango", description: "Match tiles & boost your memory", icon: LayoutGrid, color: "#ED1C24", difficulty: "Medium", players: "Single Player" },
+  { id: "focus-flow", name: "SpellBound", description: "Attention-training exercises", icon: Sparkles, color: "#2D8EFF", difficulty: "Easy", players: "Single Player" },
+  { id: "sound-memory", name: "EchoCritters", description: "Sound memory game", icon: Music, color: "#0d9488", difficulty: "Medium", players: "Single Player" },
+];
 
-  const games = [
-    {
-      id: "tile-memory" as GameType,
-      name: "TileTango",
-      description: "Match tiles & boost your memory",
-      icon: TileIcon,
-      color: "bg-pink-500",
-      available: true,
-      difficulty: "Medium",
-      players: "Single Player",
-    },
-    {
-      id: "focus-flow" as GameType,
-      name: "SpellBound",
-      description: "Attention training exercises",
-      icon: FocusFlowIcon,
-      color: "bg-blue-500",
-      available: true,
-      difficulty: "Easy",
-      players: "Single Player",
-    },
-    {
-      id: "sound-memory" as GameType,
-      name: "EchoCritters",
-      description: "Sound memory game",
-      icon: MindMazeIcon,
-      color: "bg-green-500",
-      available: true,
-      difficulty: "Medium",
-      players: "Single Player",
-    },
-  ]
+const STATS = [
+  { icon: Trophy, value: "3", label: "Games Available", color: "#FFC107" },
+  { icon: Zap, value: "∞", label: "Skill Building", color: "#ED1C24" },
+  { icon: Star, value: "Fun", label: "Learning Style", color: "#2D8EFF" },
+];
 
-  const WelcomePage = () => (
-    <div className="min-h-screen bg-background p-2 animate-fade-in">
-      <div className="max-w-5xl mx-auto">
-        {/* Welcome Header */}
-        <div className="text-center mb-10 animate-fade-in-up">
-            <div className="mb-5">
-                <ArcadeIcon/>
-                <div className="flex items-center justify-center gap-4">
-                    <h1 className="text-5xl md:text-6xl font-bold text-foreground">ADHDapt</h1>
-                </div>
-                <div className="h-5">
-                    <h1 className="font-bold relative tracking-[0.6em] left-[38px] -top-2">ARCA</h1>
-                    <h1 className="font-bold tracking-[0.6em] relative left-[117px] -top-8">DE</h1>
-                </div>
-            </div>
-          
-          <p className="text-xl text-muted-foreground font-medium max-w-2xl mx-auto">
-            Welcome to your personal brain training center! Choose from our collection of engaging games designed to
-            boost attention, memory, and cognitive skills.
-          </p>
+const FEATURES = [
+  { icon: FlaskConical, title: "Science-Based", text: "Designed with cognitive-science principles to effectively train attention and memory." },
+  { icon: Sparkles, title: "Engaging & Fun", text: "Colorful, interactive games that make brain training enjoyable and motivating." },
+];
+
+function WelcomePage({ onPlay }: { onPlay: (id: GameType) => void }) {
+  return (
+    <div className="mx-auto max-w-5xl px-5 py-10 md:px-8">
+      {/* Header */}
+      <div className="mb-10 text-center">
+        <div className="mx-auto mb-5 flex h-20 w-20 items-center justify-center rounded-2xl bg-[#ED1C24]/15">
+          <Gamepad2 className="h-10 w-10 text-[#ED1C24]" />
         </div>
+        <h1 className="font-display text-5xl font-extrabold md:text-6xl">Focus Fest</h1>
+        <p className="mx-auto mt-4 max-w-2xl text-lg font-medium leading-relaxed text-[#a8a5b0]">
+          Your personal brain-training arcade. Pick a game built to boost attention, memory, and cognitive skills — playful, never pressured.
+        </p>
+      </div>
 
-        {/* Stats Overview */}
-        <div className="grid md:grid-cols-3 gap-6 mb-12 animate-slide-in">
-          <Card className="border rounded-3xl bg-[#fdedc9] shadow-[5px_5px_0px_0px_#d04f99] border-[#d04f99]">
-            <CardContent className="p-6 text-center">
-              <TrophyIcon/>
-              <h3 className="text-2xl font-bold text-[#d04f99]">3</h3>
-              <p className="text-[#d04f99] font-medium">Games Available</p>
-            </CardContent>
-          </Card>
-          <Card className="border rounded-3xl bg-[#fdedc9] shadow-[5px_5px_0px_0px_#d04f99] border-[#d04f99]">
-            <CardContent className="p-6 text-center">
-              <LightningIcon/>
-              <h3 className="text-2xl font-bold text-[#d04f99]">&infin;</h3>
-              <p className="text-[#d04f99] font-medium">Skill Building</p>
-            </CardContent>
-          </Card>
-          <Card className="border rounded-3xl bg-[#fdedc9] shadow-[5px_5px_0px_0px_#d04f99] border-[#d04f99]">
-            <CardContent className="p-6 text-center">
-              <StarIcon/>
-              <h3 className="text-2xl font-bold text-[#d04f99]">Fun</h3>
-              <p className="text-[#d04f99] font-medium">Learning Style</p>
-            </CardContent>
-          </Card>
-        </div>
-
-        {/* Game Selection */}
-        <div className="animate-fade-in-up" style={{ animationDelay: "0.3s" }}>
-          <h2 className="text-3xl font-bold text-center mb-8 text-foreground">Choose Your Challenge</h2>
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {games.map((game, index) => {
-              const IconComponent = game.icon
-              return (
-                <Card
-                  key={game.id}
-                  className={`border bg-[#fdedc9] shadow-[5px_5px_0px_0px_#d04f99] border-[#d04f99] rounded-3xl hover:shadow-none hover:translate-x-1 hover:translate-y-1 transition-all duration-200 ease-in-out cursor-pointer animate-slide-in ${
-                    !game.available ? "opacity-60" : ""
-                  }`}
-                  style={{ animationDelay: `${index * 0.1}s` }}
-                  onClick={() => game.available && setCurrentGame(game.id)}
-                >
-                  <CardHeader className={`${game.color} text-white rounded-t-3xl relative overflow-hidden`}>
-                    <div className="absolute top-0 right-0 w-20 h-20 bg-white/10 rounded-full -translate-y-10 translate-x-10"></div>
-                    <div className="relative z-10">
-                      <div className="flex items-center justify-between mb-2">
-                        <IconComponent className="w-8 h-8" />
-                        {!game.available && (
-                          <Badge variant="secondary" className="bg-white/20 text-white border-white/30">
-                            Coming Soon
-                          </Badge>
-                        )}
-                      </div>
-                      <CardTitle className="text-xl font-bold">{game.name}</CardTitle>
-                    </div>
-                  </CardHeader>
-                  <CardContent className="p-6">
-                    <p className="text-muted-foreground mb-4 font-medium">{game.description}</p>
-                    <div className="flex justify-between items-center mb-4">
-                      <div className="flex items-center gap-2">
-                        <TimerIcon/>
-                        <span className="text-sm text-muted-foreground">{game.difficulty}</span>
-                      </div>
-                      <div className="flex items-center gap-2">
-                        <Users className="w-4 h-4 text-muted-foreground" />
-                        <span className="text-sm text-muted-foreground">{game.players}</span>
-                      </div>
-                    </div>
-                    <Button
-                      className="w-full rounded-2xl font-semibold bg-[#8acfd1] hover:bg-[#ffffff] shadow-[5px_5px_0px_0px_#d04f99] border-[#d04f99]"
-                      disabled={!game.available}
-                      onClick={(e) => {
-                        e.stopPropagation()
-                        if (game.available) {
-                          setCurrentGame(game.id)
-                        }
-                      }}
-                    >
-                      {game.available ? "Play Now" : "Coming Soon"}
-                    </Button>
-                  </CardContent>
-                </Card>
-              )
-            })}
+      {/* Stats */}
+      <div className="mb-12 grid gap-5 sm:grid-cols-3">
+        {STATS.map((s) => (
+          <div key={s.label} className="rounded-3xl border border-white/10 bg-[#17171b] p-6 text-center">
+            <s.icon className="mx-auto h-8 w-8" style={{ color: s.color }} />
+            <h3 className="mt-3 text-2xl font-[900]" style={{ color: s.color }}>{s.value}</h3>
+            <p className="mt-1 text-sm font-semibold text-[#8b8892]">{s.label}</p>
           </div>
-        </div>
+        ))}
+      </div>
 
-        {/* Features Section */}
-        <div className="mt-16 animate-fade-in-up" style={{ animationDelay: "0.5s" }}>
-          <div className="mb-5">
-                <div className="flex items-center justify-center gap-4">
-                    <h1 className="text-5xl md:text-6xl font-bold text-foreground">Why ADHDapt?</h1>
-                </div>
-                <div className="h-5">
-                    <h1 className="font-bold relative tracking-[0.6em] left-[570px] -top-2">ARCA</h1>
-                    <h1 className="font-bold tracking-[0.6em] relative left-[670px] -top-8">DE</h1>
-                </div>
+      {/* Game selection */}
+      <h2 className="mb-8 text-center font-display text-3xl font-extrabold">Choose your challenge</h2>
+      <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+        {GAMES.map((game) => (
+          <button
+            key={game.id}
+            onClick={() => onPlay(game.id)}
+            className="group overflow-hidden rounded-3xl border-2 border-[#111] bg-[#17171b] text-left shadow-[5px_5px_0_#ED1C24] transition-transform hover:translate-x-0.5 hover:translate-y-0.5 hover:shadow-none"
+          >
+            <div className="relative flex items-center gap-3 px-5 py-4" style={{ background: game.color }}>
+              <span className="flex h-11 w-11 items-center justify-center rounded-xl bg-white/20">
+                <game.icon className="h-6 w-6 text-white" />
+              </span>
+              <span className="text-xl font-extrabold text-white">{game.name}</span>
             </div>
-          <div className="grid md:grid-cols-2 gap-3">
-            <div className="text-center mb-10">
-              <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4">
-                <ScienceIcon/>
+            <div className="p-5">
+              <p className="mb-4 text-sm font-medium text-[#a8a5b0]">{game.description}</p>
+              <div className="mb-4 flex items-center justify-between text-[13px] text-[#8b8892]">
+                <span className="flex items-center gap-1.5"><Timer className="h-4 w-4" /> {game.difficulty}</span>
+                <span className="flex items-center gap-1.5"><Users className="h-4 w-4" /> {game.players}</span>
               </div>
-              <h3 className="text-xl font-bold mb-2">Science-Based</h3>
-              <p className="text-muted-foreground">
-                Games designed with cognitive science principles to effectively train attention and memory skills.
-              </p>
+              <span className="block rounded-2xl bg-[#ED1C24] py-2.5 text-center text-sm font-extrabold text-white transition-colors group-hover:bg-[#c8151c]">
+                Play now
+              </span>
             </div>
-            <div className="text-center mb-10">
-              <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4">
-                <EngageIcon/>
-              </div>
-              <h3 className="text-xl font-bold mb-2">Engaging & Fun</h3>
-              <p className="text-muted-foreground">
-                Colorful, interactive games that make brain training <br/>enjoyable and motivating for all ages.
-              </p>
+          </button>
+        ))}
+      </div>
+
+      {/* Features */}
+      <h2 className="mb-8 mt-16 text-center font-display text-3xl font-extrabold">Why ADHDapt?</h2>
+      <div className="grid gap-5 sm:grid-cols-2">
+        {FEATURES.map((f) => (
+          <div key={f.title} className="rounded-3xl border border-white/10 bg-[#17171b] p-6 text-center">
+            <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-[#ED1C24]/15">
+              <f.icon className="h-7 w-7 text-[#ED1C24]" />
             </div>
+            <h3 className="mb-2 text-xl font-extrabold">{f.title}</h3>
+            <p className="text-sm leading-relaxed text-[#a8a5b0]">{f.text}</p>
           </div>
-        </div>
+        ))}
       </div>
     </div>
-  )
+  );
+}
+
+export default function GameHub() {
+  const [currentGame, setCurrentGame] = useState<GameType>("welcome");
+  const [sidebarOpen, setSidebarOpen] = useState(true);
 
   const renderCurrentGame = () => {
     switch (currentGame) {
-      case "welcome":
-        return <WelcomePage />
       case "tile-memory":
-        return <TileMemoryGame onBack={() => setCurrentGame("welcome")} sidebarOpen={sidebarOpen} />
+        return <TileMemoryGame onBack={() => setCurrentGame("welcome")} sidebarOpen={sidebarOpen} />;
       case "focus-flow":
-        return <FocusFlowGame onBack={() => setCurrentGame("welcome")} sidebarOpen={sidebarOpen} />
+        return <FocusFlowGame onBack={() => setCurrentGame("welcome")} sidebarOpen={sidebarOpen} />;
       case "sound-memory":
-        return <SoundMemoryGame onBack={() => setCurrentGame("welcome")} sidebarOpen={sidebarOpen} />
+        return <SoundMemoryGame onBack={() => setCurrentGame("welcome")} sidebarOpen={sidebarOpen} />;
       default:
-        return <WelcomePage />
+        return <WelcomePage onPlay={setCurrentGame} />;
     }
-  }
-
-  // Loading screen - same as your original
-  if (isLoading) {
-    return (
-      <div className="min-h-screen bg-background flex items-center justify-center">
-        <div className="text-center animate-fade-in-scale">
-          <GameIcon/>
-          <h2 className="text-2xl font-bold text-foreground mb-2">Entering the arcade...</h2>
-          <p className="text-muted-foreground">Preparing your brain training experience...</p>
-        </div>
-      </div>
-    )
-  }
+  };
 
   return (
-    <div
-      className={`flex min-h-screen transition-colors duration-500 ${
-        currentGame === "focus-flow" ? "bg-[#d8eaf8]" : "bg-background"
-      }`}
-    >
+    <div className="flex min-h-screen bg-[#080808] text-[#ececf0]">
       {/* Sidebar */}
-      <div
-        className={`${sidebarOpen ? "w-80" : "w-16"} transition-all duration-300 border-r border-border flex flex-col animate-slide-in ${
-          currentGame === "focus-flow" ? "bg-[#a8d4f9]" : currentGame === "sound-memory" ? "bg-[#d4f9a8]" : "bg-[#f8d8ea]"
-        }`}
+      <aside
+        className={`${sidebarOpen ? "w-64" : "w-16"} flex flex-shrink-0 flex-col border-r border-white/10 bg-[#141414] transition-all duration-300`}
       >
-        {/* Sidebar Header */}
-        <div className="p-2 border-b border-border">
-          <div className="flex items-center justify-between">
-            {sidebarOpen && (
-              <div className="flex items-center gap-3">
-                <div className="relative left-4 w-10 h-10 bg-primary/10 rounded-full flex items-center justify-center">
-                  <SidebarIcon/>
-                </div>
-                <div className="relative left-4 top-2">
-                <div className="flex items-center justify-center gap-4">
-                    <h1 className="text-lg font-bold text-foreground">ADHDapt</h1>
-                </div>
-                <div className="h-5">
-                    <h1 className="text-[0.5rem] font-bold relative tracking-[0.6em] left-[25px] -top-2">ARCA</h1>
-                    <h1 className="text-[0.5rem] font-bold tracking-[0.6em] relative left-[72px] -top-5">DE</h1>
-                </div>
-            </div>
-              </div>
-            )}
-            <Button variant="ghost" size="sm" onClick={() => setSidebarOpen(!sidebarOpen)} className="rounded-full">
-              <Menu className="relative left-1 w-4 h-4" />
-            </Button>
-          </div>
+        <div className="flex items-center justify-between gap-2 border-b border-white/10 p-3">
+          {sidebarOpen && (
+            <Link href="/dashboard" className="flex items-center">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src="/home/logo.png" alt="ADHDapt" className="h-8 w-auto" />
+            </Link>
+          )}
+          <button
+            onClick={() => setSidebarOpen((v) => !v)}
+            className="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-lg text-[#c98fb0] hover:bg-white/5"
+            aria-label="Toggle sidebar"
+          >
+            <Menu className="h-4 w-4" />
+          </button>
         </div>
 
-        {/* Navigation */}
-        <div className="flex-1 p-4">
-          <nav className="space-y-2">
-            {/* Home */}
-            <Button
-              variant={currentGame === "welcome" ? "default" : "ghost"}
-              className={`justify-start rounded-3xl ${!sidebarOpen ? "px-1.5 w-[40px]" : "w-full relative left-2 px-1.5"}`}
-              onClick={() => setCurrentGame("welcome")}
+        <nav className="flex-1 space-y-1.5 p-3">
+          <button
+            onClick={() => setCurrentGame("welcome")}
+            className={`flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-bold ${
+              currentGame === "welcome" ? "bg-[#ED1C24] text-white" : "text-[#c98fb0] hover:bg-white/5"
+            }`}
+          >
+            <Home className="h-[18px] w-[18px] flex-shrink-0" />
+            {sidebarOpen && "Arcade Home"}
+          </button>
+
+          {sidebarOpen && (
+            <p className="px-3 pb-1 pt-4 text-[10px] font-bold uppercase tracking-wider text-[#8b8892]">Games</p>
+          )}
+          {GAMES.map((game) => (
+            <button
+              key={game.id}
+              onClick={() => setCurrentGame(game.id)}
+              className={`flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-bold ${
+                currentGame === game.id ? "bg-[#ED1C24] text-white" : "text-[#c98fb0] hover:bg-white/5"
+              }`}
             >
-              <HomeIcon/>
-              {sidebarOpen && <span className="ml-3">Home</span>}
-            </Button>
+              <game.icon className="h-[18px] w-[18px] flex-shrink-0" style={currentGame !== game.id ? { color: game.color } : undefined} />
+              {sidebarOpen && game.name}
+            </button>
+          ))}
+        </nav>
 
-            {/* Games */}
-            {sidebarOpen && (
-              <div className="pt-4">
-                <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-2 px-3">Games</p>
-              </div>
-            )}
-
-            {games.map((game) => {
-              const IconComponent = game.icon
-              return (
-                <Button
-                  key={game.id}
-                  variant={currentGame === game.id ? "default" : "ghost"}
-                  className={`w-full justify-start rounded-2xl ${!sidebarOpen ? "px-0" : "px-2"} ${
-                    !game.available ? "opacity-50" : ""
-                  }`}
-                  onClick={() => game.available && setCurrentGame(game.id)}
-                  disabled={!game.available}
-                >
-                  <IconComponent className="relative left-10 w-5 h-5" />
-                  {sidebarOpen && (
-                    <div className="ml-3 flex-1 text-left">
-                      <div className="flex items-center justify-between">
-                        <span>{game.name}</span>
-                        {!game.available && (
-                          <Badge variant="secondary" className="text-xs">
-                            Soon
-                          </Badge>
-                        )}
-                      </div>
-                    </div>
-                  )}
-                </Button>
-              )
-            })}
-          </nav>
+        <div className="border-t border-white/10 p-3">
+          <Link
+            href="/dashboard"
+            className="flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-bold text-[#8b8892] hover:bg-white/5"
+          >
+            <ArrowLeft className="h-[18px] w-[18px] flex-shrink-0" />
+            {sidebarOpen && "Back to app"}
+          </Link>
         </div>
+      </aside>
 
-        {/* Theme Toggle */}
-        <div className="p-4 border-t border-border">
-          <div className={`flex items-center ${sidebarOpen ? "justify-between" : "justify-center"}`}>
-            {sidebarOpen && <span className="text-sm text-muted-foreground">Theme</span>}
-            <ThemeToggle />
-          </div>
-        </div>
-      </div>
-
-      {/* Main Content */}
-      <div className="flex-1 overflow-auto transition-all duration-300">{renderCurrentGame()}</div>
+      {/* Main */}
+      <main className="flex-1 overflow-auto">{renderCurrentGame()}</main>
     </div>
-  )
+  );
 }

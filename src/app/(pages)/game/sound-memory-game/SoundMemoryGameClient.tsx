@@ -71,7 +71,7 @@ const NameInputDialog = ({
     addToLeaderboard: (name: string, score: number, level: number) => void
   }) => (
     <Dialog open={showNameInput} onOpenChange={setShowNameInput}>
-      <DialogContent className="sm:max-w-md bg-[#eef6e6] text-black">
+      <DialogContent className="sm:max-w-md bg-[#17171b] text-[#ececf0]">
         <DialogHeader>
           <ConfettiIcon size={80} />
           <DialogTitle className="text-center"> New High Score!</DialogTitle>
@@ -104,7 +104,7 @@ const NameInputDialog = ({
             <Button onClick={() => addToLeaderboard(playerName, score, currentLevel - 1)} className="flex-1 rounded-2xl bg-[#c9fded] shadow-[3px_3px_0px_0px_#99d04f] hover:bg-[#c9fded] hover:shadow-none hover:translate-x-1 hover:translate-y-1 transition-all duration-200 ease-in-out">
               Save Score
             </Button>
-            <Button onClick={() => setShowNameInput(false)} className="flex-1 rounded-2xl bg-[#ffffff] shadow-[3px_3px_0px_0px_#333333] hover:bg-[#ffffff] hover:shadow-none hover:translate-x-1 hover:translate-y-1 transition-all duration-200 ease-in-out">
+            <Button onClick={() => setShowNameInput(false)} className="flex-1 rounded-2xl bg-[#17171b] shadow-[3px_3px_0px_0px_#333333] hover:bg-[#17171b] hover:shadow-none hover:translate-x-1 hover:translate-y-1 transition-all duration-200 ease-in-out">
               Skip
             </Button>
           </div>
@@ -358,9 +358,9 @@ export function SoundMemoryGame({ onBack, sidebarOpen }: SoundMemoryGameProps) {
   // Leaderboard dialog
   const LeaderboardDialog = () => (
     <Dialog open={showLeaderboard} onOpenChange={setShowLeaderboard}>
-      <DialogContent className="sm:max-w-2xl max-h-[80vh] overflow-y-auto bg-[#eef6e6]">
+      <DialogContent className="sm:max-w-2xl max-h-[80vh] overflow-y-auto bg-[#17171b]">
         <DialogHeader>
-          <DialogTitle className="text-center flex items-center justify-center gap-2 text-black">
+          <DialogTitle className="text-center flex items-center justify-center gap-2 text-[#ececf0]">
             <MedalIcon/>
             Leaderboard
             <MedalIcon/>
@@ -383,7 +383,7 @@ export function SoundMemoryGame({ onBack, sidebarOpen }: SoundMemoryGameProps) {
                     ? "bg-gray-300"
                     : index === 2
                     ? "bg-blue-300"
-                    : "bg-white"
+                    : "bg-[#17171b]"
                 }`}
               >
                 <div className="flex-shrink-0">{getRankIcon(index + 1)}</div>
@@ -407,7 +407,7 @@ export function SoundMemoryGame({ onBack, sidebarOpen }: SoundMemoryGameProps) {
   )
 
   return (
-    <div className={`min-h-screen bg-[#eaf8d8] transition-all duration-300 ${sidebarOpen ? "ml-0" : "ml-0"}`}>
+    <div className={`min-h-screen bg-[#0d0d10] transition-all duration-300 ${sidebarOpen ? "ml-0" : "ml-0"}`}>
       {/* Dynamic animated background */}
       <div className="min-h-screen relative overflow-hidden">
         {/* Enhanced background elements with animations */}
@@ -474,7 +474,7 @@ export function SoundMemoryGame({ onBack, sidebarOpen }: SoundMemoryGameProps) {
                   onClick={toggleAudio}
                   variant="outline"
                   size="icon"
-                  className="rounded-full bg-[#ffffff] border-2 border-black hover:bg-[#ffffff] shadow-[2px_2px_0px_0px_#333333] hover:shadow-none hover:translate-x-[1px] hover:translate-y-[1px] transition-all"
+                  className="rounded-full bg-[#17171b] border-2 border-black hover:bg-[#17171b] shadow-[2px_2px_0px_0px_#333333] hover:shadow-none hover:translate-x-[1px] hover:translate-y-[1px] transition-all"
                 >
                   {isAudioActive ? <VolumeOnIcon /> : <VolumeOffIcon />}
                 </Button>
@@ -524,7 +524,7 @@ export function SoundMemoryGame({ onBack, sidebarOpen }: SoundMemoryGameProps) {
             </div>
 
             {/* Game Message */}
-            <div className="mb-8">                <p className="text-xl font-bold text-[#d04f99] mt-2 mb-6 min-h-[1.5rem] animate-pulse">
+            <div className="mb-8">                <p className="text-xl font-bold text-[#ED1C24] mt-2 mb-6 min-h-[1.5rem] animate-pulse">
                   {statusMessage}
                 </p>
 
@@ -535,7 +535,7 @@ export function SoundMemoryGame({ onBack, sidebarOpen }: SoundMemoryGameProps) {
                         key={index}
                         className={cn(
                           "w-3 h-3 rounded-full border border-black transition-all duration-300",
-                          index < playbackIndex ? "bg-[#d04f99] scale-110" : "bg-white",
+                          index < playbackIndex ? "bg-[#ED1C24] scale-110" : "bg-[#17171b]",
                         )}
                       />
                     ))}
@@ -589,7 +589,7 @@ export function SoundMemoryGame({ onBack, sidebarOpen }: SoundMemoryGameProps) {
                 </Button>
                 <Button
                   onClick={resetGame}
-                  className="px-8 py-4 text-lg font-semibold rounded-3xl bg-[#ffffff] shadow-[3px_3px_0px_0px_#333333] hover:bg-[#ffffff] hover:shadow-none hover:translate-x-1 hover:translate-y-1 transition-all duration-200"
+                  className="px-8 py-4 text-lg font-semibold rounded-3xl bg-[#17171b] shadow-[3px_3px_0px_0px_#333333] hover:bg-[#17171b] hover:shadow-none hover:translate-x-1 hover:translate-y-1 transition-all duration-200"
                   style={{ animationDelay: "0.1s" }}
                 >
                   <ResetIcon size={20}/>
@@ -601,7 +601,7 @@ export function SoundMemoryGame({ onBack, sidebarOpen }: SoundMemoryGameProps) {
             {(gamePhase === "waiting" || gamePhase === "showing") && (
               <Button
                 onClick={resetGame}
-                className="px-8 py-3 text-lg font-semibold rounded-3xl bg-[#ffffff] shadow-[3px_3px_0px_0px_#333333] hover:bg-[#ffffff] hover:shadow-none hover:translate-x-1 hover:translate-y-1 transition-all duration-200"
+                className="px-8 py-3 text-lg font-semibold rounded-3xl bg-[#17171b] shadow-[3px_3px_0px_0px_#333333] hover:bg-[#17171b] hover:shadow-none hover:translate-x-1 hover:translate-y-1 transition-all duration-200"
               >
                 <ResetIcon size={20}/>
                 Reset Game

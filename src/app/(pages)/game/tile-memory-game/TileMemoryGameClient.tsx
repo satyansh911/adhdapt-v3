@@ -281,7 +281,7 @@ export function TileMemoryGame({ onBack, sidebarOpen = true }: TileMemoryGamePro
       { bg: "bg-rose-500", icon: <LottieSafeWrapper src="/tile-photos/trolley.json" size={50} autoplay={true} loop={false} fallbackIcon="🔍"/>, shadow: "shadow-rose-200" },
       { bg: "bg-sky-500", icon: <LottieSafeWrapper src="/tile-photos/eye.json" size={50} autoplay={true} loop={false} fallbackIcon="🔍"/>, shadow: "shadow-sky-200" },
       { bg: "bg-slate-500", icon: <LottieSafeWrapper src="/tile-photos/woodpecker.json" size={50} autoplay={true} loop={false} fallbackIcon="🔍"/>, shadow: "shadow-slate-200" },
-      { bg: "bg-gray-500", icon: <LottieSafeWrapper src="/tile-photos/zoom.json" size={50} autoplay={true} loop={false} fallbackIcon="🔍"/>, shadow: "shadow-gray-200" },
+      { bg: "bg-[#17171b]0", icon: <LottieSafeWrapper src="/tile-photos/zoom.json" size={50} autoplay={true} loop={false} fallbackIcon="🔍"/>, shadow: "shadow-gray-200" },
     ]
 
     const design = tileDesigns[imageId - 1]
@@ -407,7 +407,7 @@ export function TileMemoryGame({ onBack, sidebarOpen = true }: TileMemoryGamePro
         {/* Header */}
         <div className="flex items-center justify-between mb-8 animate-fade-in-up">
           <div className="flex items-center gap-4">
-            <Button variant="outline" size="sm" onClick={onBack} className="bg-[#fdedc9] rounded-full shadow-[3px_3px_0px_0px_#d14e99] hover:bg-[#fdedc9] hover:shadow-none hover:translate-x-1 hover:translate-y-1 transition-all duration-200 ease-in-out">
+            <Button variant="outline" size="sm" onClick={onBack} className="bg-[#17171b] rounded-full shadow-[3px_3px_0px_0px_#d14e99] hover:bg-[#17171b] hover:shadow-none hover:translate-x-1 hover:translate-y-1 transition-all duration-200 ease-in-out">
               <ArrowIcon/>
               Back to Arcade
             </Button>
@@ -429,8 +429,8 @@ export function TileMemoryGame({ onBack, sidebarOpen = true }: TileMemoryGamePro
           <div
             className={`animate-slide-in transition-all duration-300 ${sidebarOpen ? "lg:col-span-3" : "lg:col-span-4"}`}
           >
-            <Card className="border shadow-[5px_5px_0px_0px_#d04f99] border-[#d04f99] rounded-3xl bg-[#fdedc9]">
-              <CardHeader className="bg-primary text-[#FFFFFF] rounded-t-3xl bg-[#d04f99]">
+            <Card className="border shadow-[5px_5px_0px_0px_#ED1C24] border-[#ED1C24] rounded-3xl bg-[#17171b]">
+              <CardHeader className="bg-primary text-[#FFFFFF] rounded-t-3xl bg-[#ED1C24]">
                 <div className="flex flex-wrap items-center justify-between gap-1">
                   <CardTitle className="flex items-center gap-2 text-xl font-semibold">
                     <div className="relative -top-5 -left-6 w-10 h-10">
@@ -453,7 +453,7 @@ export function TileMemoryGame({ onBack, sidebarOpen = true }: TileMemoryGamePro
                     </Badge>
                     <Badge
                       variant={getStreakBadgeVariant(streak)}
-                      className={`flex bg-white text-black items-center gap-1 px-3 py-1 font-medium rounded-full ${streak >= 3 ? "animate-pulse" : ""}`}
+                      className={`flex bg-[#17171b] text-[#ececf0] items-center gap-1 px-3 py-1 font-medium rounded-full ${streak >= 3 ? "animate-pulse" : ""}`}
                     >
                       <FireIcon/>
                       {streak} streak
@@ -490,7 +490,7 @@ export function TileMemoryGame({ onBack, sidebarOpen = true }: TileMemoryGamePro
                       <h3 className="text-2xl font-bold text-foreground mb-3">Ready to Challenge Your Mind?</h3>
                       <p className="text-muted-foreground font-medium">Test your memory and build amazing streaks!</p>
                     </div>
-                    <Button onClick={startGame} size="lg" className="px-8 py-4 text-lg text-black font-semibold rounded-2xl bg-[#8acfd1] shadow-[3px_3px_0px_0px_#d14e99] hover:bg-[#8acfd1] hover:shadow-none hover:translate-x-1 hover:translate-y-1 transition-all duration-200 ease-in-out">
+                    <Button onClick={startGame} size="lg" className="px-8 py-4 text-lg text-[#ececf0] font-semibold rounded-2xl bg-[#8acfd1] shadow-[3px_3px_0px_0px_#d14e99] hover:bg-[#8acfd1] hover:shadow-none hover:translate-x-1 hover:translate-y-1 transition-all duration-200 ease-in-out">
                       <Image src="/play.png" alt="Play Icon" width={24} height={24} className="w-6 h-6 mr-2" />
                       Start New Game
                     </Button>
@@ -540,7 +540,7 @@ export function TileMemoryGame({ onBack, sidebarOpen = true }: TileMemoryGamePro
                       <Button
                         onClick={startGame}
                         variant="outline"
-                        className="flex items-center gap-2 font-medium bg-transparent rounded-2xl bg-[#ffffff] shadow-[4px_4px_0px_0px_#333333] hover:bg-[#ffffff] hover:shadow-none hover:translate-y-1 hover:translate-x-1 transition-all duration-200 ease-in-out"
+                        className="flex items-center gap-2 font-medium bg-transparent rounded-2xl bg-[#17171b] shadow-[4px_4px_0px_0px_#333333] hover:bg-[#17171b] hover:shadow-none hover:translate-y-1 hover:translate-x-1 transition-all duration-200 ease-in-out"
                       >
                         <LottieSafeWrapper src="/reset.json" size={20} autoplay={true} loop={false} fallbackIcon="🔍"/>
                         New Game
@@ -565,8 +565,8 @@ export function TileMemoryGame({ onBack, sidebarOpen = true }: TileMemoryGamePro
           {/* Sidebar */}
           <div className="lg:col-span-1 space-y-6">
             {/* Current Session Stats */}
-            <Card className="border animate-slide-in-right rounded-3xl shadow-[5px_5px_0px_0px_#d04f99] border-[#d04f99] bg-[#fdedc9]">
-              <CardHeader className="bg-primary text-[#ffffff] rounded-t-3xl bg-[#d04f99]">
+            <Card className="border animate-slide-in-right rounded-3xl shadow-[5px_5px_0px_0px_#ED1C24] border-[#ED1C24] bg-[#17171b]">
+              <CardHeader className="bg-primary text-[#ffffff] rounded-t-3xl bg-[#ED1C24]">
                 <CardTitle className="text-sm flex items-center gap-2 font-semibold">
                   <CurrentSessionIcon/>
                   Current Session
@@ -598,10 +598,10 @@ export function TileMemoryGame({ onBack, sidebarOpen = true }: TileMemoryGamePro
 
             {/* Leaderboard */}
             <Card
-              className="border animate-slide-in-right rounded-3xl shadow-[5px_5px_0px_0px_#d04f99] border-[#d04f99] bg-[#fdedc9]"
+              className="border animate-slide-in-right rounded-3xl shadow-[5px_5px_0px_0px_#ED1C24] border-[#ED1C24] bg-[#17171b]"
               style={{ animationDelay: "0.1s" }}
             >
-              <CardHeader className="bg-primary text-[#ffffff] rounded-t-3xl bg-[#d04f99]">
+              <CardHeader className="bg-primary text-[#ffffff] rounded-t-3xl bg-[#ED1C24]">
                 <CardTitle className="flex items-center gap-2 font-semibold">
                   <LeaderboardIcon/>
                   Leaderboard
@@ -620,19 +620,19 @@ export function TileMemoryGame({ onBack, sidebarOpen = true }: TileMemoryGamePro
                         key={index}
                         className={`p-4 rounded-2xl border transition-all duration-200 ${
                           index === 0
-                            ? "border-primary/20 bg-[#f96f70] text-white"
+                            ? "border-primary/20 bg-[#ED1C24] text-white"
                             : index === 1
                               ? "bg-[#333333] text-white border-secondary"
                               : index === 2
                                 ? "bg-[#5b5b5b] text-white border-muted"
-                                : "bg-white text-black border-border"
+                                : "bg-[#17171b] text-[#ececf0] border-border"
                         }`}
                       >
                         <div className="flex items-center justify-between">
                           <div className="flex items-center gap-3">
                             <Badge
                               variant={index === 0 ? "default" : index <= 2 ? "secondary" : "outline"}
-                              className="w-8 h-8 bg-[#fdedc9] rounded-full flex items-center justify-center text-sm text-black font-bold p-0"
+                              className="w-8 h-8 bg-[#17171b] rounded-full flex items-center justify-center text-sm text-[#ececf0] font-bold p-0"
                             >
                               {index + 1}
                             </Badge>
@@ -659,10 +659,10 @@ export function TileMemoryGame({ onBack, sidebarOpen = true }: TileMemoryGamePro
 
             {/* Instructions */}
             <Card
-              className="border animate-slide-in-right rounded-3xl shadow-[5px_5px_0px_0px_#d04f99] border-[#d04f99] bg-[#fdedc9]"
+              className="border animate-slide-in-right rounded-3xl shadow-[5px_5px_0px_0px_#ED1C24] border-[#ED1C24] bg-[#17171b]"
               style={{ animationDelay: "0.2s" }}
             >
-              <CardHeader className="bg-primary text-[#ffffff] rounded-t-3xl bg-[#d04f99]">
+              <CardHeader className="bg-primary text-[#ffffff] rounded-t-3xl bg-[#ED1C24]">
                 <CardTitle className="text-sm font-semibold">How to Play</CardTitle>
               </CardHeader>
               <CardContent className="text-xs space-y-2 p-4 font-medium">
@@ -679,7 +679,7 @@ export function TileMemoryGame({ onBack, sidebarOpen = true }: TileMemoryGamePro
 
       {/* Game Completion Dialog */}
       <Dialog open={showCompletionDialog} onOpenChange={setShowCompletionDialog}>
-        <DialogContent className="sm:max-w-md rounded-3xl bg-[#fdedc9] text-black">
+        <DialogContent className="sm:max-w-md rounded-3xl bg-[#17171b] text-[#ececf0]">
           <DialogHeader>
             <DialogTitle className="text-center text-2xl flex items-center justify-center gap-2 font-bold">
               <LottieSafeWrapper src="/leaderboard.json" size={50} autoplay={true} loop={false} fallbackIcon="🔍"/>
@@ -718,7 +718,7 @@ export function TileMemoryGame({ onBack, sidebarOpen = true }: TileMemoryGamePro
                   value={playerName}
                   onChange={(e) => setPlayerName(e.target.value)}
                   onKeyPress={(e) => e.key === "Enter" && saveScore()}
-                  className="font-medium rounded-2xl bg-white"
+                  className="font-medium rounded-2xl bg-[#17171b]"
                 />
               </div>
             </div>
@@ -726,7 +726,7 @@ export function TileMemoryGame({ onBack, sidebarOpen = true }: TileMemoryGamePro
           <DialogFooter className="flex gap-3 sm:gap-3">
             <Button
               onClick={() => setShowCompletionDialog(false)}
-              className="flex-1 font-medium rounded-2xl bg-[#ffffff] shadow-[4px_4px_0px_0px_#333333] hover:bg-[#ffffff] hover:shadow-none hover:translate-y-1 hover:translate-x-1 transition-all duration-200 ease-in-out"
+              className="flex-1 font-medium rounded-2xl bg-[#17171b] shadow-[4px_4px_0px_0px_#333333] hover:bg-[#17171b] hover:shadow-none hover:translate-y-1 hover:translate-x-1 transition-all duration-200 ease-in-out"
             >
               Skip
             </Button>

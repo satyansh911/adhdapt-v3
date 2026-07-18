@@ -490,7 +490,7 @@ export function FocusFlowGame({ onBack, sidebarOpen = true }: FocusFlowGameProps
         {/* Header */}
         <div className="flex items-center justify-between mb-8 animate-fade-in-up">
           <div className="flex items-center gap-4">
-            <Button variant="outline" size="sm" onClick={onBack} className="rounded-full bg-[#edc9fd] shadow-[3px_3px_0px_0px_#4f99d0] hover:bg-[#edc9fd] hover:shadow-none hover:translate-x-1 hover:translate-y-1 transition-all duration-200 ease-in-out">
+            <Button variant="outline" size="sm" onClick={onBack} className="rounded-full bg-[#17171b] shadow-[3px_3px_0px_0px_#4f99d0] hover:bg-[#17171b] hover:shadow-none hover:translate-x-1 hover:translate-y-1 transition-all duration-200 ease-in-out">
               <ArrowIcon/>
               Back to Arcade
             </Button>
@@ -510,7 +510,7 @@ export function FocusFlowGame({ onBack, sidebarOpen = true }: FocusFlowGameProps
           <div
             className={`animate-slide-in transition-all duration-300 ${sidebarOpen ? "lg:col-span-3" : "lg:col-span-4"}`}
           >
-            <Card className="border shadow-[5px_5px_0px_0px_#4f99d0] border-[#4f99d0] rounded-3xl bg-[#edc9fd]">
+            <Card className="border shadow-[5px_5px_0px_0px_#4f99d0] border-[#4f99d0] rounded-3xl bg-[#17171b]">
               <CardHeader className="bg-[#4f99d0] text-white rounded-t-3xl">
                 <div className="flex flex-wrap items-center justify-between gap-1">
                   <CardTitle className="flex items-center gap-2 text-xl font-semibold">
@@ -548,7 +548,7 @@ export function FocusFlowGame({ onBack, sidebarOpen = true }: FocusFlowGameProps
                       <h3 className="text-2xl font-bold text-foreground mb-3">Ready to Find Words?</h3>
                       <p className="text-muted-foreground font-medium">Search for hidden words in all directions!</p>
                     </div>
-                    <Button onClick={startGame} size="lg" className="px-8 py-4 text-lg font-semibold rounded-2xl bg-[#ffffff] shadow-[3px_3px_0px_0px_#4f99d0] hover:bg-[#ffffff] hover:shadow-none hover:translate-x-1 hover:translate-y-1 transition-all duration-200 ease-in-out">
+                    <Button onClick={startGame} size="lg" className="px-8 py-4 text-lg font-semibold rounded-2xl bg-[#17171b] shadow-[3px_3px_0px_0px_#4f99d0] hover:bg-[#17171b] hover:shadow-none hover:translate-x-1 hover:translate-y-1 transition-all duration-200 ease-in-out">
                       <Image src="/play.png" alt="Play Icon" width={24} height={24} className="w-6 h-6 mr-2" />
                       Start New Game
                     </Button>
@@ -570,7 +570,7 @@ export function FocusFlowGame({ onBack, sidebarOpen = true }: FocusFlowGameProps
                                 ? "bg-green-200 border-green-400 text-green-800"
                                 : cell.isSelected
                                   ? "bg-blue-200 border-blue-400 text-blue-800"
-                                  : "bg-white border-gray-300 text-gray-700 hover:bg-gray-50"
+                                  : "bg-[#17171b] border-gray-300 text-[#a8a5b0] hover:bg-[#17171b]"
                             }`}
                             onMouseDown={() => handleMouseDown(rowIndex, colIndex)}
                             onMouseEnter={() => handleMouseEnter(rowIndex, colIndex)}
@@ -586,7 +586,7 @@ export function FocusFlowGame({ onBack, sidebarOpen = true }: FocusFlowGameProps
                       <Button
                         onClick={startGame}
                         variant="outline"
-                        className="flex items-center gap-2 font-medium bg-transparent rounded-2xl bg-[#ffffff] shadow-[4px_4px_0px_0px_#333333] hover:bg-[#ffffff] hover:shadow-none hover:translate-y-1 hover:translate-x-1 transition-all duration-200 ease-in-out"
+                        className="flex items-center gap-2 font-medium bg-transparent rounded-2xl bg-[#17171b] shadow-[4px_4px_0px_0px_#333333] hover:bg-[#17171b] hover:shadow-none hover:translate-y-1 hover:translate-x-1 transition-all duration-200 ease-in-out"
                       >
                         <LottieSafeWrapper src="/reset.json" size={20} autoplay={true} loop={false} fallbackIcon="🔍"/>
                         New Game
@@ -611,7 +611,7 @@ export function FocusFlowGame({ onBack, sidebarOpen = true }: FocusFlowGameProps
           {/* Sidebar */}
           <div className="lg:col-span-1 space-y-6">
             {/* Words List */}
-            <Card className="border animate-slide-in-right rounded-3xl shadow-[5px_5px_0px_0px_#4f99d0] border-[#4f99d0] bg-[#edc9fd]">
+            <Card className="border animate-slide-in-right rounded-3xl shadow-[5px_5px_0px_0px_#4f99d0] border-[#4f99d0] bg-[#17171b]">
               <CardHeader className="bg-[#4f99d0] text-white rounded-t-3xl">
                 <CardTitle className="text-sm flex items-center gap-2 font-semibold">
                   <TargetIcon/>
@@ -632,7 +632,7 @@ export function FocusFlowGame({ onBack, sidebarOpen = true }: FocusFlowGameProps
                         className={`flex items-center justify-between p-2 rounded-lg transition-all duration-200 ${
                           foundWords.has(word)
                             ? "bg-green-100 text-green-800 border border-green-200"
-                            : "bg-white border border-gray-200"
+                            : "bg-[#17171b] border border-gray-200"
                         }`}
                       >
                         <span className={`font-medium ${foundWords.has(word) ? "line-through" : ""}`}>{word}</span>
@@ -646,7 +646,7 @@ export function FocusFlowGame({ onBack, sidebarOpen = true }: FocusFlowGameProps
 
             {/* Leaderboard */}
             <Card
-              className="border animate-slide-in-right rounded-3xl shadow-[5px_5px_0px_0px_#4f99d0] border-[#4f99d0] bg-[#edc9fd]"
+              className="border animate-slide-in-right rounded-3xl shadow-[5px_5px_0px_0px_#4f99d0] border-[#4f99d0] bg-[#17171b]"
               style={{ animationDelay: "0.1s" }}
             >
               <CardHeader className="bg-[#4f99d0] text-white rounded-t-3xl">
@@ -670,7 +670,7 @@ export function FocusFlowGame({ onBack, sidebarOpen = true }: FocusFlowGameProps
                           index === 0
                             ? "bg-[#333333]"
                             : index === 1
-                              ? "bg-[#d2e284]"
+                              ? "bg-[#17171b]"
                               : index === 2
                                 ? "bg-[#5b5b5b]"
                                 : "bg-[#4f99d0]"
@@ -680,7 +680,7 @@ export function FocusFlowGame({ onBack, sidebarOpen = true }: FocusFlowGameProps
                           <div className="flex items-center gap-3">
                             <Badge
                               variant={index === 0 ? "default" : index <= 2 ? "secondary" : "outline"}
-                              className="w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold p-0 bg-[#edc9fd] text-black"
+                              className="w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold p-0 bg-[#17171b] text-[#ececf0]"
                             >
                               {index + 1}
                             </Badge>
@@ -703,7 +703,7 @@ export function FocusFlowGame({ onBack, sidebarOpen = true }: FocusFlowGameProps
 
             {/* Instructions */}
             <Card
-              className="border animate-slide-in-right rounded-3xl shadow-[5px_5px_0px_0px_#4f99d0] border-[#4f99d0] bg-[#edc9fd]"
+              className="border animate-slide-in-right rounded-3xl shadow-[5px_5px_0px_0px_#4f99d0] border-[#4f99d0] bg-[#17171b]"
               style={{ animationDelay: "0.2s" }}
             >
               <CardHeader className="bg-[#4f99d0] text-white rounded-t-3xl">
@@ -723,7 +723,7 @@ export function FocusFlowGame({ onBack, sidebarOpen = true }: FocusFlowGameProps
 
       {/* Game Completion Dialog */}
       <Dialog open={showCompletionDialog} onOpenChange={setShowCompletionDialog}>
-        <DialogContent className="sm:max-w-md rounded-3xl bg-[#4f99d0] text-black">
+        <DialogContent className="sm:max-w-md rounded-3xl bg-[#4f99d0] text-[#ececf0]">
           <DialogHeader>
             <DialogTitle className="text-center text-2xl flex items-center justify-center gap-2 font-bold">
               <LeaderboardIcon size={40} />
@@ -756,7 +756,7 @@ export function FocusFlowGame({ onBack, sidebarOpen = true }: FocusFlowGameProps
                   value={playerName}
                   onChange={(e) => setPlayerName(e.target.value)}
                   onKeyPress={(e) => e.key === "Enter" && saveScore()}
-                  className="font-medium rounded-2xl bg-white"
+                  className="font-medium rounded-2xl bg-[#17171b]"
                 />
               </div>
             </div>
@@ -765,11 +765,11 @@ export function FocusFlowGame({ onBack, sidebarOpen = true }: FocusFlowGameProps
             <Button
               onClick={() => setShowCompletionDialog(false)}
               variant="outline"
-              className="flex-1 font-medium rounded-2xl bg-[#ffffff] shadow-[4px_4px_0px_0px_#333333] hover:bg-[#ffffff] hover:shadow-none hover:translate-y-1 hover:translate-x-1 transition-all duration-200 ease-in-out"
+              className="flex-1 font-medium rounded-2xl bg-[#17171b] shadow-[4px_4px_0px_0px_#333333] hover:bg-[#17171b] hover:shadow-none hover:translate-y-1 hover:translate-x-1 transition-all duration-200 ease-in-out"
             >
               Skip
             </Button>
-            <Button onClick={saveScore} variant={"outline"} className="flex-1 font-medium rounded-2xl bg-[#e2a7fb] shadow-[4px_4px_0px_0px_#d2e284] hover:bg-[#e2a7fb] hover:shadow-none hover:translate-y-1 hover:translate-x-1 transition-all duration-200 ease-in-out" disabled={!playerName.trim()}>
+            <Button onClick={saveScore} variant={"outline"} className="flex-1 font-medium rounded-2xl bg-[#2D8EFF] shadow-[4px_4px_0px_0px_#d2e284] hover:bg-[#2D8EFF] hover:shadow-none hover:translate-y-1 hover:translate-x-1 transition-all duration-200 ease-in-out" disabled={!playerName.trim()}>
               Save Score
             </Button>
           </DialogFooter>
