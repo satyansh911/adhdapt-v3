@@ -3,21 +3,7 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import dynamic from "next/dynamic";
-import {
-  Menu,
-  Home,
-  LayoutGrid,
-  Sparkles,
-  Music,
-  Trophy,
-  Zap,
-  Star,
-  Timer,
-  Users,
-  FlaskConical,
-  ArrowLeft,
-  type LucideIcon,
-} from "lucide-react";
+import { Menu, Timer, Users, ArrowLeft } from "lucide-react";
 
 const TileMemoryGame = dynamic(
   () => import("./tile-memory-game/TileMemoryGameClient").then((m) => m.TileMemoryGame),
@@ -38,27 +24,27 @@ interface Game {
   id: GameType;
   name: string;
   description: string;
-  icon: LucideIcon;
+  img: string;
   color: string;
   difficulty: string;
   players: string;
 }
 
 const GAMES: Game[] = [
-  { id: "tile-memory", name: "TileTango", description: "Match tiles & boost your memory", icon: LayoutGrid, color: "#ED1C24", difficulty: "Medium", players: "Single Player" },
-  { id: "focus-flow", name: "SpellBound", description: "Attention-training exercises", icon: Sparkles, color: "#2D8EFF", difficulty: "Easy", players: "Single Player" },
-  { id: "sound-memory", name: "EchoCritters", description: "Sound memory game", icon: Music, color: "#0d9488", difficulty: "Medium", players: "Single Player" },
+  { id: "tile-memory", name: "TileTango", description: "Match tiles & boost your memory", img: "/arcade/tiletango.png", color: "#ED1C24", difficulty: "Medium", players: "Single Player" },
+  { id: "focus-flow", name: "SpellBound", description: "Attention-training exercises", img: "/arcade/spellbound.png", color: "#2D8EFF", difficulty: "Easy", players: "Single Player" },
+  { id: "sound-memory", name: "EchoCritters", description: "Sound memory game", img: "/arcade/echocritters.png", color: "#0d9488", difficulty: "Medium", players: "Single Player" },
 ];
 
 const STATS = [
-  { icon: Trophy, value: "3", label: "Games Available", color: "#FFC107" },
-  { icon: Zap, value: "∞", label: "Skill Building", color: "#ED1C24" },
-  { icon: Star, value: "Fun", label: "Learning Style", color: "#2D8EFF" },
+  { img: "/arcade/games%20available.png", value: "3", label: "Games Available" },
+  { img: "/arcade/skills.png", value: "∞", label: "Skill Building" },
+  { img: "/arcade/fun.png", value: "Fun", label: "Learning Style" },
 ];
 
 const FEATURES = [
-  { icon: FlaskConical, title: "Science-Based", text: "Designed with cognitive-science principles to effectively train attention and memory." },
-  { icon: Sparkles, title: "Engaging & Fun", text: "Colorful, interactive games that make brain training enjoyable and motivating." },
+  { img: "/arcade/science-based.png", title: "Science-Based", text: "Designed with cognitive-science principles to effectively train attention and memory." },
+  { img: "/arcade/engaging%20and%20fun.png", title: "Engaging & Fun", text: "Colorful, interactive games that make brain training enjoyable and motivating." },
 ];
 
 function WelcomePage({ onPlay }: { onPlay: (id: GameType) => void }) {
@@ -78,8 +64,9 @@ function WelcomePage({ onPlay }: { onPlay: (id: GameType) => void }) {
       <div className="mb-12 grid gap-5 sm:grid-cols-3">
         {STATS.map((s) => (
           <div key={s.label} className="rounded-3xl border border-white/10 bg-[#17171b] p-6 text-center">
-            <s.icon className="mx-auto h-8 w-8" style={{ color: s.color }} />
-            <h3 className="mt-3 text-2xl font-[900]" style={{ color: s.color }}>{s.value}</h3>
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src={s.img} alt="" className="mx-auto h-10 w-10 object-contain" />
+            <h3 className="mt-3 text-2xl font-[900] text-[#ececf0]">{s.value}</h3>
             <p className="mt-1 text-sm font-semibold text-[#8b8892]">{s.label}</p>
           </div>
         ))}
@@ -96,7 +83,8 @@ function WelcomePage({ onPlay }: { onPlay: (id: GameType) => void }) {
           >
             <div className="relative flex items-center gap-3 px-5 py-4" style={{ background: game.color }}>
               <span className="flex h-11 w-11 items-center justify-center rounded-xl bg-white/20">
-                <game.icon className="h-6 w-6 text-white" />
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img src={game.img} alt="" className="h-7 w-7 object-contain" />
               </span>
               <span className="text-xl font-extrabold text-white">{game.name}</span>
             </div>
@@ -120,7 +108,8 @@ function WelcomePage({ onPlay }: { onPlay: (id: GameType) => void }) {
         {FEATURES.map((f) => (
           <div key={f.title} className="rounded-3xl border border-white/10 bg-[#17171b] p-6 text-center">
             <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-[#ED1C24]/15">
-              <f.icon className="h-7 w-7 text-[#ED1C24]" />
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src={f.img} alt="" className="h-8 w-8 object-contain" />
             </div>
             <h3 className="mb-2 text-xl font-extrabold">{f.title}</h3>
             <p className="text-sm leading-relaxed text-[#a8a5b0]">{f.text}</p>
@@ -198,7 +187,8 @@ export default function GameHub() {
               currentGame === "welcome" ? "bg-[#ED1C24] text-white" : "text-[#c98fb0] hover:bg-white/5"
             }`}
           >
-            <Home className="h-[18px] w-[18px] flex-shrink-0" />
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src="/home/home.png" alt="" className="h-[18px] w-[18px] flex-shrink-0 object-contain" />
             {sidebarOpen && "Arcade Home"}
           </button>
 
@@ -213,7 +203,8 @@ export default function GameHub() {
                 currentGame === game.id ? "bg-[#ED1C24] text-white" : "text-[#c98fb0] hover:bg-white/5"
               }`}
             >
-              <game.icon className="h-[18px] w-[18px] flex-shrink-0" style={currentGame !== game.id ? { color: game.color } : undefined} />
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src={game.img} alt="" className="h-[18px] w-[18px] flex-shrink-0 object-contain" />
               {sidebarOpen && game.name}
             </button>
           ))}
