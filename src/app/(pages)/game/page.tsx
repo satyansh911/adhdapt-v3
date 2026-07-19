@@ -6,7 +6,6 @@ import dynamic from "next/dynamic";
 import {
   Menu,
   Home,
-  Gamepad2,
   LayoutGrid,
   Sparkles,
   Music,
@@ -67,9 +66,8 @@ function WelcomePage({ onPlay }: { onPlay: (id: GameType) => void }) {
     <div className="mx-auto max-w-5xl px-5 py-10 md:px-8">
       {/* Header */}
       <div className="mb-10 text-center">
-        <div className="mx-auto mb-5 flex h-20 w-20 items-center justify-center rounded-2xl bg-[#ED1C24]/15">
-          <Gamepad2 className="h-10 w-10 text-[#ED1C24]" />
-        </div>
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img src="/arcade/logo.svg" alt="ADHDapt Arcade" className="mx-auto mb-5 h-24 w-24 object-contain" />
         <h1 className="font-display text-5xl font-extrabold md:text-6xl">Focus Fest</h1>
         <p className="mx-auto mt-4 max-w-2xl text-lg font-medium leading-relaxed text-[#a8a5b0]">
           Your personal brain-training arcade. Pick a game built to boost attention, memory, and cognitive skills — playful, never pressured.
@@ -159,9 +157,8 @@ export default function GameHub() {
   if (isLoading) {
     return (
       <div className="flex min-h-screen flex-col items-center justify-center bg-[#080808] text-[#ececf0]">
-        <div className="flex h-20 w-20 animate-pulse items-center justify-center rounded-2xl bg-[#ED1C24]/15">
-          <Gamepad2 className="h-10 w-10 text-[#ED1C24]" />
-        </div>
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img src="/arcade/loading.svg" alt="Loading" className="h-24 w-24 object-contain" />
         <h2 className="mt-5 font-display text-2xl font-extrabold">Entering the arcade…</h2>
         <p className="mt-1 text-sm font-medium text-[#8b8892]">Preparing your brain-training experience…</p>
         <div className="mt-6 h-1 w-40 overflow-hidden rounded-full bg-white/10">
