@@ -158,7 +158,7 @@ export default function GameHub() {
     return (
       <div className="flex min-h-screen flex-col items-center justify-center bg-[#080808] text-[#ececf0]">
         {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src="/arcade/loading.svg" alt="Loading" className="h-24 w-24 object-contain" />
+        <img src="/arcade/loading.svg" alt="Loading" className="h-48 w-48 object-contain" />
         <h2 className="mt-5 font-display text-2xl font-extrabold">Entering the arcade…</h2>
         <p className="mt-1 text-sm font-medium text-[#8b8892]">Preparing your brain-training experience…</p>
         <div className="mt-6 h-1 w-40 overflow-hidden rounded-full bg-white/10">
