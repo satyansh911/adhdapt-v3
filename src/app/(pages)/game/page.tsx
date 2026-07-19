@@ -162,7 +162,7 @@ export default function GameHub() {
     <div className="flex min-h-screen bg-[#080808] text-[#ececf0]">
       {/* Sidebar */}
       <aside
-        className={`${sidebarOpen ? "w-64" : "w-16"} flex flex-shrink-0 flex-col border-r border-white/10 bg-[#141414] transition-all duration-300`}
+        className={`${sidebarOpen ? "w-64" : "w-16"} flex flex-shrink-0 flex-col overflow-hidden border-r border-white/10 bg-[#141414] transition-[width] duration-200 ease-out will-change-[width]`}
       >
         <div className="flex items-center justify-between gap-2 border-b border-white/10 p-3">
           {sidebarOpen && (

@@ -378,22 +378,22 @@ export function SoundMemoryGame({ onBack, sidebarOpen }: SoundMemoryGameProps) {
                 key={entry.id}
                 className={`flex items-center gap-4 p-4 rounded-2xl border-black transition-colors ${
                   index === 0
-                    ? "bg-yellow-300"
+                    ? "bg-yellow-300 text-[#3a2e05]"
                     : index === 1
-                    ? "bg-gray-300"
+                    ? "bg-gray-300 text-[#222]"
                     : index === 2
-                    ? "bg-blue-300"
-                    : "bg-[#17171b]"
+                    ? "bg-blue-300 text-[#0d2e4a]"
+                    : "bg-[#17171b] text-[#ececf0]"
                 }`}
               >
                 <div className="flex-shrink-0">{getRankIcon(index + 1)}</div>
                 <div className="flex-1 min-w-0">
                   <p className="font-semibold truncate">{entry.playerName}</p>
-                  <p className="text-sm text-muted-foreground">{entry.date}</p>
+                  <p className="text-sm opacity-70">{entry.date}</p>
                 </div>
                 <div className="text-right">
                   <p className="font-bold text-lg">{entry.score}</p>
-                  <p className="text-sm text-muted-foreground">Level {entry.level}</p>
+                  <p className="text-sm opacity-70">Level {entry.level}</p>
                 </div>
               </div>
             ))
@@ -407,38 +407,14 @@ export function SoundMemoryGame({ onBack, sidebarOpen }: SoundMemoryGameProps) {
   )
 
   return (
-    <div className={`min-h-screen bg-[#0d0d10] transition-all duration-300 ${sidebarOpen ? "ml-0" : "ml-0"}`}>
-      {/* Dynamic animated background */}
+    <div className="min-h-screen bg-[#0d0d10]">
+      {/* Static, cheap decorative background (no blur/blend-mode repaint cost) */}
       <div className="min-h-screen relative overflow-hidden">
-        {/* Enhanced background elements with animations */}
-        <div className="absolute inset-0 overflow-hidden">
-          <div className="absolute -top-40 -right-40 w-96 h-96 bg-gradient-to-br from-green-300 to-emerald-400 rounded-full mix-blend-multiply filter blur-xl opacity-60 animate-float"></div>
-          <div
-            className="absolute -bottom-40 -left-40 w-80 h-80 bg-gradient-to-br from-blue-300 to-cyan-400 rounded-full mix-blend-multiply filter blur-xl opacity-60 animate-float"
-            style={{ animationDelay: "2s" }}
-          ></div>
-          <div
-            className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-72 h-72 bg-gradient-to-br from-yellow-300 to-orange-400 rounded-full mix-blend-multiply filter blur-xl opacity-50 animate-float"
-            style={{ animationDelay: "4s" }}
-          ></div>
-          <div
-            className="absolute top-20 left-1/4 w-64 h-64 bg-gradient-to-br from-red-300 to-pink-400 rounded-full mix-blend-multiply filter blur-xl opacity-50 animate-float"
-            style={{ animationDelay: "6s" }}
-          ></div>
-
-          {/* Floating particles */}
-          {[...Array(12)].map((_, i) => (
-            <div
-              key={i}
-              className="absolute w-2 h-2 bg-white/30 rounded-full animate-float"
-              style={{
-                left: `${Math.random() * 100}%`,
-                top: `${Math.random() * 100}%`,
-                animationDelay: `${Math.random() * 8}s`,
-                animationDuration: `${4 + Math.random() * 4}s`,
-              }}
-            />
-          ))}
+        <div className="pointer-events-none absolute inset-0 overflow-hidden opacity-40">
+          <div className="absolute -top-40 -right-40 h-96 w-96 rounded-full bg-emerald-500/20" />
+          <div className="absolute -bottom-40 -left-40 h-80 w-80 rounded-full bg-cyan-500/20" />
+          <div className="absolute left-1/2 top-1/2 h-72 w-72 -translate-x-1/2 -translate-y-1/2 rounded-full bg-orange-500/15" />
+          <div className="absolute left-1/4 top-20 h-64 w-64 rounded-full bg-pink-500/15" />
         </div>
 
         {/* Header */}
@@ -448,7 +424,7 @@ export function SoundMemoryGame({ onBack, sidebarOpen }: SoundMemoryGameProps) {
               onClick={onBack}
               variant="outline"
               size="sm"
-              className={`flex relative ${sidebarOpen ? "-left-[8px]": "left-[65px]"} -top-[6px] border-black items-center gap-2 text-foreground rounded-2xl bg-[#c9fded] shadow-[3px_3px_0px_0px_#99d04f] hover:bg-[#c9fded] hover:shadow-none hover:translate-x-1 hover:translate-y-1 transition-all duration-200 ease-in-out`}
+              className={`flex relative ${sidebarOpen ? "-left-[8px]": "left-[65px]"} -top-[6px] border-black items-center gap-2 text-[#0d3f41] rounded-2xl bg-[#c9fded] shadow-[3px_3px_0px_0px_#99d04f] hover:bg-[#c9fded] hover:shadow-none hover:translate-x-1 hover:translate-y-1 transition-all duration-200 ease-in-out`}
             >
               <ArrowIcon/>
               Back to Arcade
@@ -488,9 +464,9 @@ export function SoundMemoryGame({ onBack, sidebarOpen }: SoundMemoryGameProps) {
                 <CardContent className="p-6 text-center">
                   <div className="flex items-center gap-2 mb-2">
                     <span className="text-3xl"><MusicIcon/></span>
-                    <span className="text-3xl font-bold text-foreground">{progressionTier - 1}</span>
+                    <span className="text-3xl font-bold text-[#0d3f41]">{progressionTier - 1}</span>
                   </div>
-                  <p className="text-sm text-muted-foreground font-medium">Level</p>
+                  <p className="text-sm text-[#3a615f] font-medium">Level</p>
                 </CardContent>
               </Card>
 
@@ -501,9 +477,9 @@ export function SoundMemoryGame({ onBack, sidebarOpen }: SoundMemoryGameProps) {
                 <CardContent className="p-6 text-center">
                   <div className="flex items-center gap-2 mb-2">
                     <span className="text-3xl"><Star1Icon/></span>
-                    <span className="text-3xl font-bold text-foreground">{achievementPoints}</span>
+                    <span className="text-3xl font-bold text-[#0d3f41]">{achievementPoints}</span>
                   </div>
-                  <p className="text-sm text-muted-foreground font-medium">Score</p>
+                  <p className="text-sm text-[#3a615f] font-medium">Score</p>
                 </CardContent>
               </Card>
 
@@ -515,9 +491,9 @@ export function SoundMemoryGame({ onBack, sidebarOpen }: SoundMemoryGameProps) {
                   <CardContent className="p-6 text-center">
                     <div className="flex items-center gap-2 mb-2">
                       <MedalIcon/>
-                      <span className="text-3xl font-bold text-foreground">{leaderboard[0]?.score || 0}</span>
+                      <span className="text-3xl font-bold text-[#0d3f41]">{leaderboard[0]?.score || 0}</span>
                     </div>
-                    <p className="text-sm text-muted-foreground font-medium">Best</p>
+                    <p className="text-sm text-[#3a615f] font-medium">Best</p>
                   </CardContent>
                 </Card>
               )}
@@ -619,18 +595,18 @@ export function SoundMemoryGame({ onBack, sidebarOpen }: SoundMemoryGameProps) {
                 <h3 className="text-2xl font-bold text-center mb-6 bg-gradient-to-r from-green-600 to-blue-600 bg-clip-text text-transparent">
                   How to Play
                 </h3>
-                <div className="grid md:grid-cols-2 gap-6 text-base text-muted-foreground">
+                <div className="grid md:grid-cols-2 gap-6 text-base text-[#3a615f]">
                   <div className="space-y-3">
                     <p className="flex items-center gap-3">
                       <span className="text-2xl"><MusicIcon size={30}/></span>
                       <span>
-                        <strong className="text-foreground">Listen:</strong> Watch and listen to the sequence of sounds
+                        <strong className="text-[#0d3f41]">Listen:</strong> Watch and listen to the sequence of sounds
                       </span>
                     </p>
                     <p className="flex items-center gap-3">
                       <span className="text-2xl"><TargetIcon/></span>
                       <span>
-                        <strong className="text-foreground">Repeat:</strong> Click the buttons in the same order
+                        <strong className="text-[#0d3f41]">Repeat:</strong> Click the buttons in the same order
                       </span>
                     </p>
                   </div>
@@ -638,14 +614,14 @@ export function SoundMemoryGame({ onBack, sidebarOpen }: SoundMemoryGameProps) {
                     <p className="flex items-center gap-3">
                       <span className="text-2xl"><ProgressIcon size={35}/></span>
                       <span>
-                        <strong className="text-foreground">Progress:</strong> Each level adds one more sound to
+                        <strong className="text-[#0d3f41]">Progress:</strong> Each level adds one more sound to
                         remember
                       </span>
                     </p>
                     <p className="flex items-center gap-3">
                       <span className="text-2xl"><LeaderboardIcon size={35}/></span>
                       <span>
-                        <strong className="text-foreground">Compete:</strong> Beat high scores and climb the leaderboard
+                        <strong className="text-[#0d3f41]">Compete:</strong> Beat high scores and climb the leaderboard
                       </span>
                     </p>
                   </div>
